@@ -11,6 +11,7 @@ type alias PageMetadata =
     { title : String }
 
 
+decoder : Decode.Decoder Metadata
 decoder =
     Decode.field "type" Decode.string
         |> Decode.andThen

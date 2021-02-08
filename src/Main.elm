@@ -1,79 +1,73 @@
 module Main exposing (main)
 
-import Color
 import Head
 import Html exposing (Html)
 import Layout
-import Markdown.Parser
-import Markdown.Renderer
+import Manifest exposing (manifest)
+import MarkdownParser exposing (document)
 import Metadata exposing (Metadata)
-import Pages exposing (images, pages)
-import Pages.Manifest as Manifest
-import Pages.Manifest.Category
+import Pages exposing (internals)
+import Pages.PagePath as Pages exposing (PagePath)
 import Pages.Platform
 import Pages.StaticHttp as StaticHttp
 
 
+type alias Model =
+    {}
+
+
+type alias Msg =
+    ()
+
+
+type alias Renderer =
+    List (Html Msg)
+
+
+main : Pages.Platform.Program Model Msg Metadata Renderer Pages.PathKey
 main =
     Pages.Platform.init
         { init = \_ -> init
         , view = view
         , update = update
         , subscriptions = subscriptions
-        , documents = [ markdownDocument ]
+        , documents = [ document ]
         , manifest = manifest
         , canonicalSiteUrl = "https://joyfultalks.com"
         , onPageChange = Nothing
-        , internals = Pages.internals
+        , internals = internals
         }
         |> Pages.Platform.toProgram
 
 
-manifest =
-    { backgroundColor = Just Color.white
-    , categories = [ Pages.Manifest.Category.education ]
-    , displayMode = Manifest.Standalone
-    , orientation = Manifest.Portrait
-    , description = "joyful talks about people and all the rest"
-    , iarcRatingId = Nothing
-    , name = "joyful talks"
-    , themeColor = Just Color.white
-    , startUrl = pages.index
-    , shortName = Just "joyful talks"
-    , sourceIcon = images.iconPng
-    , icons = []
-    }
-
-
-markdownDocument =
-    { extension = "md"
-    , metadata = Metadata.decoder
-    , body =
-        \markdownBody ->
-            Markdown.Parser.parse markdownBody
-                |> Result.withDefault []
-                |> Markdown.Renderer.render Markdown.Renderer.defaultHtmlRenderer
-                |> Result.withDefault [ Html.text "" ]
-                |> Html.div []
-                |> List.singleton
-                |> Ok
-    }
-
-
+init : ( Model, Cmd Msg )
 init =
     ( {}, Cmd.none )
 
 
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         () ->
             ( model, Cmd.none )
 
 
+subscriptions : Metadata -> PagePath Pages.PathKey -> Model -> Sub msg
 subscriptions _ _ _ =
     Sub.none
 
 
+view :
+    List ( PagePath Pages.PathKey, Metadata )
+    ->
+        { path : PagePath Pages.PathKey
+        , frontmatter : Metadata
+        }
+    ->
+        StaticHttp.Request
+            { view : Model -> Renderer -> { title : String, body : Html Msg }
+            , head : List (Head.Tag Pages.PathKey)
+            }
 view siteMetadata page =
     StaticHttp.succeed
         { view =
@@ -86,7 +80,13 @@ view siteMetadata page =
         }
 
 
-pageView model siteMetadata page viewForPage =
+pageView :
+    Model
+    -> List ( PagePath Pages.PathKey, Metadata )
+    -> { path : PagePath Pages.PathKey, frontmatter : Metadata }
+    -> Renderer
+    -> { title : String, body : Renderer }
+pageView _ _ page viewForPage =
     case page.frontmatter of
         Metadata.Page metadata ->
             { title = metadata.title
