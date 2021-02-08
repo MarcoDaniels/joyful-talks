@@ -1,4 +1,4 @@
-import './style/index.css'
+import './style/index.scss'
 
 const {Elm} = require('./src/Main.elm')
 const pagesInit = require('elm-pages')

@@ -1,0 +1,9 @@
+@import './utils/settings';
+
+body {
+  @include primaryColor;
+  @include container;
+  padding: 0;
+  position: relative;
+  min-height: 92vh;
+}

@@ -1,0 +1,9 @@
+@mixin primaryColor {
+  color: #000;
+  background: #737373;
+}
+
+@mixin container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
