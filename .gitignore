@@ -1,0 +1,10 @@
+.idea/
+
+.cache/
+
+node_modules/
+
+elm-stuff/
+gen/
+
+dist/

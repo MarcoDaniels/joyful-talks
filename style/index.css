@@ -1,0 +1,8 @@
+body {
+    background: gray;
+    color: black;
+    margin: auto;
+    padding: 0;
+    position: relative;
+    min-height: 92vh;
+}
