@@ -1,7 +1,7 @@
 module Layout exposing (view)
 
 import Html exposing (Html)
-import Metadata exposing (PageMetadata)
+import Page
 import Pages
 import Pages.PagePath exposing (PagePath)
 
@@ -10,7 +10,7 @@ view :
     { title : String, body : Html msg }
     ->
         { path : PagePath Pages.PathKey
-        , frontmatter : PageMetadata
+        , frontmatter : Page.Page
         }
     -> { title : String, body : Html msg }
 view document _ =

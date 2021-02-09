@@ -4,7 +4,7 @@ import Head
 import Html exposing (Html)
 import Layout
 import Manifest exposing (manifest)
-import Metadata exposing (PageMetadata)
+import Page
 import Pages exposing (internals)
 import Pages.PagePath as Pages exposing (PagePath)
 import Pages.Platform
@@ -23,7 +23,7 @@ type alias Renderer =
     List (Html Msg)
 
 
-main : Pages.Platform.Program Model Msg PageMetadata Renderer Pages.PathKey
+main : Pages.Platform.Program Model Msg Page.Page Renderer Pages.PathKey
 main =
     Pages.Platform.init
         { init = \_ -> init
@@ -32,7 +32,7 @@ main =
         , subscriptions = subscriptions
         , documents =
             [ { extension = "md"
-              , metadata = Metadata.decoder
+              , metadata = Page.pageDecoder
               , body = \_ -> Ok (Html.div [] [ Html.text "" ] |> List.singleton)
               }
             ]
@@ -56,16 +56,16 @@ update msg model =
             ( model, Cmd.none )
 
 
-subscriptions : PageMetadata -> PagePath Pages.PathKey -> Model -> Sub msg
+subscriptions : Page.Page -> PagePath Pages.PathKey -> Model -> Sub msg
 subscriptions _ _ _ =
     Sub.none
 
 
 view :
-    List ( PagePath Pages.PathKey, PageMetadata )
+    List ( PagePath Pages.PathKey, Page.Page )
     ->
         { path : PagePath Pages.PathKey
-        , frontmatter : PageMetadata
+        , frontmatter : Page.Page
         }
     ->
         StaticHttp.Request
@@ -86,11 +86,18 @@ view siteMetadata page =
 
 pageView :
     Model
-    -> List ( PagePath Pages.PathKey, PageMetadata )
-    -> { path : PagePath Pages.PathKey, frontmatter : PageMetadata }
+    -> List ( PagePath Pages.PathKey, Page.Page )
+    -> { path : PagePath Pages.PathKey, frontmatter : Page.Page }
     -> Renderer
     -> { title : String, body : Html Msg }
 pageView _ _ page _ =
     { title = page.frontmatter.title
-    , body = Html.text page.frontmatter.content
+    , body =
+        Html.div []
+            (page.frontmatter.content
+                |> List.map
+                    (\content ->
+                        Html.text ""
+                    )
+            )
     }
