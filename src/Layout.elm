@@ -1,19 +1,13 @@
 module Layout exposing (view)
 
+import Context exposing (DataContext, PageContext)
 import Html exposing (Html)
 import Html.Attributes exposing (href)
-import Page
 import Pages
 import Pages.PagePath exposing (PagePath)
 
 
-view :
-    { title : String, body : Html msg }
-    ->
-        { path : PagePath Pages.PathKey
-        , frontmatter : Page.Page
-        }
-    -> { title : String, body : Html msg }
+view : PageContext -> DataContext -> PageContext
 view document _ =
     { title = document.title
     , body =

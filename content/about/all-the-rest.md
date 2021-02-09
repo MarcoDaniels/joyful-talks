@@ -1,6 +1,6 @@
 ---
 {
-"title": "page title",
+"title": "about all the rest",
 "description": "some description",
 "pageType": "page",
 "content": [
@@ -9,7 +9,7 @@
 "type": "markdown",
 "label": "Text"
 },
-"value": "Text content\n\nnew line"
+"value": "this is about all the rest"
 },
 {
 "field": {
@@ -17,7 +17,7 @@
 "label": "Image"
 },
 "value": {
-"path": "https://placekitten.com/300/300"
+"path": "https://placekitten.com/350/350"
 }
 }
 ]

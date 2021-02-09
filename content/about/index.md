@@ -1,15 +1,15 @@
 ---
 {
-"title": "page title",
+"title": "about page",
 "description": "some description",
 "pageType": "page",
 "content": [
 {
 "field": {
-"type": "markdown",
+"type": "text",
 "label": "Text"
 },
-"value": "Text content\n\nnew line"
+"value": "this is about"
 },
 {
 "field": {
@@ -17,7 +17,16 @@
 "label": "Image"
 },
 "value": {
-"path": "https://placekitten.com/300/300"
+"path": "https://placekitten.com/320/320"
+}
+},
+{
+"field": {
+"type": "images",
+"label": "Image"
+},
+"value": {
+"url": "https://placekitten.com/320/320"
 }
 }
 ]

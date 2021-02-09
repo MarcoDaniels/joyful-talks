@@ -1,11 +1,13 @@
 module Main exposing (main)
 
+import Context exposing (DataContext, Msg, PageContext)
 import Head
 import Html exposing (Html)
-import Html.Attributes exposing (src)
 import Layout
 import Manifest exposing (manifest)
-import Page exposing (PageContent(..))
+import Metadata exposing (head)
+import Page.Decoder as Decoder
+import Page.Render exposing (pageRender)
 import Pages exposing (internals)
 import Pages.PagePath as Pages exposing (PagePath)
 import Pages.Platform
@@ -16,15 +18,11 @@ type alias Model =
     {}
 
 
-type alias Msg =
-    ()
-
-
 type alias Renderer =
-    List (Html Msg)
+    List (Html ())
 
 
-main : Pages.Platform.Program Model Msg Page.Page Renderer Pages.PathKey
+main : Pages.Platform.Program Model Msg Decoder.Page Renderer Pages.PathKey
 main =
     Pages.Platform.init
         { init = \_ -> init
@@ -33,7 +31,7 @@ main =
         , subscriptions = subscriptions
         , documents =
             [ { extension = "md"
-              , metadata = Page.pageDecoder
+              , metadata = Decoder.pageDecoder
               , body = \_ -> Ok (Html.div [] [] |> List.singleton)
               }
             ]
@@ -45,64 +43,33 @@ main =
         |> Pages.Platform.toProgram
 
 
-init : ( Model, Cmd Msg )
+init : ( Model, Cmd msg )
 init =
     ( {}, Cmd.none )
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        () ->
-            ( model, Cmd.none )
+update : msg -> Model -> ( Model, Cmd msg )
+update _ model =
+    ( model, Cmd.none )
 
 
-subscriptions : Page.Page -> PagePath Pages.PathKey -> Model -> Sub msg
+subscriptions : Decoder.Page -> PagePath Pages.PathKey -> Model -> Sub msg
 subscriptions _ _ _ =
     Sub.none
 
 
 view :
-    List ( PagePath Pages.PathKey, Page.Page )
-    ->
-        { path : PagePath Pages.PathKey
-        , frontmatter : Page.Page
-        }
+    List ( PagePath Pages.PathKey, Decoder.Page )
+    -> DataContext
     ->
         StaticHttp.Request
-            { view : Model -> Renderer -> { title : String, body : Html Msg }
+            { view : Model -> Renderer -> PageContext
             , head : List (Head.Tag Pages.PathKey)
             }
-view siteMetadata page =
+view siteMetadata pageContext =
     StaticHttp.succeed
         { view =
-            \model _ ->
-                Layout.view (pageView model siteMetadata page) page
-        , head =
-            [ Head.rssLink "/feed.xml"
-            , Head.sitemapLink "/sitemap.xml"
-            ]
+            \_ _ ->
+                Layout.view (pageRender siteMetadata pageContext) pageContext
+        , head = head pageContext
         }
-
-
-pageView :
-    Model
-    -> List ( PagePath Pages.PathKey, Page.Page )
-    -> { path : PagePath Pages.PathKey, frontmatter : Page.Page }
-    -> { title : String, body : Html Msg }
-pageView _ _ page =
-    { title = page.frontmatter.title
-    , body =
-        Html.div []
-            (page.frontmatter.content
-                |> List.map
-                    (\content ->
-                        case content of
-                            PageText text ->
-                                Html.text text.value
-
-                            PageImage image ->
-                                Html.img [ src image.value.path ] []
-                    )
-            )
-    }

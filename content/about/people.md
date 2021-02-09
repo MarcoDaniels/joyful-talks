@@ -1,6 +1,6 @@
 ---
 {
-"title": "page title",
+"title": "about people",
 "description": "some description",
 "pageType": "page",
 "content": [
@@ -9,7 +9,7 @@
 "type": "markdown",
 "label": "Text"
 },
-"value": "Text content\n\nnew line"
+"value": "about people"
 },
 {
 "field": {
@@ -17,7 +17,7 @@
 "label": "Image"
 },
 "value": {
-"path": "https://placekitten.com/300/300"
+"path": "https://placekitten.com/310/310"
 }
 }
 ]

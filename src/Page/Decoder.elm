@@ -1,11 +1,11 @@
-module Page exposing (..)
+module Page.Decoder exposing (..)
 
 import Json.Decode as Decode exposing (list, string)
 import Json.Decode.Pipeline exposing (required)
 
 
 type alias Field =
-    { fieldType : String, label : String }
+    { fieldType : String }
 
 
 type alias PageTextContent =
@@ -25,8 +25,9 @@ type alias PageImageContent =
 
 
 type PageContent
-    = PageText PageTextContent
-    | PageImage PageImageContent
+    = TextContent PageTextContent
+    | ImageContent PageImageContent
+    | EmptyContent
 
 
 type alias Page =
@@ -41,7 +42,6 @@ fieldTypeDecoder : Decode.Decoder Field
 fieldTypeDecoder =
     Decode.succeed Field
         |> required "type" string
-        |> required "label" string
 
 
 contentTextDecoder : Decode.Decoder PageTextContent
@@ -65,9 +65,10 @@ contentDecoder : Decode.Decoder PageContent
 contentDecoder =
     Decode.oneOf
         [ contentTextDecoder
-            |> Decode.map PageText
+            |> Decode.map TextContent
         , contentImageDecoder
-            |> Decode.map PageImage
+            |> Decode.map ImageContent
+        , Decode.succeed EmptyContent
         ]
 
 
