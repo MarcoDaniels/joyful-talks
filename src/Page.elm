@@ -44,15 +44,15 @@ fieldTypeDecoder =
         |> required "label" string
 
 
-contentTxDecoder : Decode.Decoder PageTextContent
-contentTxDecoder =
+contentTextDecoder : Decode.Decoder PageTextContent
+contentTextDecoder =
     Decode.succeed PageTextContent
         |> required "field" fieldTypeDecoder
         |> required "value" string
 
 
-contentImDecoder : Decode.Decoder PageImageContent
-contentImDecoder =
+contentImageDecoder : Decode.Decoder PageImageContent
+contentImageDecoder =
     Decode.succeed PageImageContent
         |> required "field" fieldTypeDecoder
         |> required "value"
@@ -64,9 +64,9 @@ contentImDecoder =
 contentDecoder : Decode.Decoder PageContent
 contentDecoder =
     Decode.oneOf
-        [ contentTxDecoder
+        [ contentTextDecoder
             |> Decode.map PageText
-        , contentImDecoder
+        , contentImageDecoder
             |> Decode.map PageImage
         ]
 

@@ -7,3 +7,16 @@ body {
   position: relative;
   min-height: 92vh;
 }
+
+a {
+  text-decoration: none;
+  @include primaryLink;
+}
+
+nav {
+  padding: 10px 0;
+
+  > a {
+    margin-right: 10px;
+  }
+}

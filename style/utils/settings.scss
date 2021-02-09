@@ -1,6 +1,10 @@
 @mixin primaryColor {
   color: #000;
-  background: #737373;
+  background: #fff;
+}
+
+@mixin primaryLink {
+  color: #0187ba;
 }
 
 @mixin container {

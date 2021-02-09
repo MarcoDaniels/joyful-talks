@@ -49,13 +49,13 @@ u =
 
 t : Page -> List String
 t page =
-    List.map
-        (\content ->
-            case content of
-                PageText { field, value } ->
-                    value
+    page.content
+        |> List.map
+            (\content ->
+                case content of
+                    PageText { field, value } ->
+                        value
 
-                PageImage { field, value } ->
-                    value.path
-        )
-        page.content
+                    PageImage { field, value } ->
+                        value.path
+            )
