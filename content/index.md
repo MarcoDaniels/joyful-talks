@@ -1,6 +1,7 @@
 ---
-title: joyful talks
-type: page
+{
+"title": "joyful talks",
+"type": "page",
+"content": "home page"
+}
 ---
-
-home page

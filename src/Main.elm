@@ -4,8 +4,7 @@ import Head
 import Html exposing (Html)
 import Layout
 import Manifest exposing (manifest)
-import MarkdownParser exposing (document)
-import Metadata exposing (Metadata)
+import Metadata exposing (PageMetadata)
 import Pages exposing (internals)
 import Pages.PagePath as Pages exposing (PagePath)
 import Pages.Platform
@@ -24,14 +23,19 @@ type alias Renderer =
     List (Html Msg)
 
 
-main : Pages.Platform.Program Model Msg Metadata Renderer Pages.PathKey
+main : Pages.Platform.Program Model Msg PageMetadata Renderer Pages.PathKey
 main =
     Pages.Platform.init
         { init = \_ -> init
         , view = view
         , update = update
         , subscriptions = subscriptions
-        , documents = [ document ]
+        , documents =
+            [ { extension = "md"
+              , metadata = Metadata.decoder
+              , body = \_ -> Ok (Html.div [] [ Html.text "" ] |> List.singleton)
+              }
+            ]
         , manifest = manifest
         , canonicalSiteUrl = "https://joyfultalks.com"
         , onPageChange = Nothing
@@ -52,16 +56,16 @@ update msg model =
             ( model, Cmd.none )
 
 
-subscriptions : Metadata -> PagePath Pages.PathKey -> Model -> Sub msg
+subscriptions : PageMetadata -> PagePath Pages.PathKey -> Model -> Sub msg
 subscriptions _ _ _ =
     Sub.none
 
 
 view :
-    List ( PagePath Pages.PathKey, Metadata )
+    List ( PagePath Pages.PathKey, PageMetadata )
     ->
         { path : PagePath Pages.PathKey
-        , frontmatter : Metadata
+        , frontmatter : PageMetadata
         }
     ->
         StaticHttp.Request
@@ -82,13 +86,11 @@ view siteMetadata page =
 
 pageView :
     Model
-    -> List ( PagePath Pages.PathKey, Metadata )
-    -> { path : PagePath Pages.PathKey, frontmatter : Metadata }
+    -> List ( PagePath Pages.PathKey, PageMetadata )
+    -> { path : PagePath Pages.PathKey, frontmatter : PageMetadata }
     -> Renderer
-    -> { title : String, body : Renderer }
-pageView _ _ page viewForPage =
-    case page.frontmatter of
-        Metadata.Page metadata ->
-            { title = metadata.title
-            , body = viewForPage
-            }
+    -> { title : String, body : Html Msg }
+pageView _ _ page _ =
+    { title = page.frontmatter.title
+    , body = Html.text page.frontmatter.content
+    }

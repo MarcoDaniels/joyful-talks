@@ -1,20 +1,19 @@
 module Layout exposing (view)
 
-import Html exposing (Html, div)
-import Metadata exposing (Metadata)
+import Html exposing (Html)
+import Metadata exposing (PageMetadata)
 import Pages
 import Pages.PagePath exposing (PagePath)
 
 
 view :
-    { title : String, body : List (Html msg) }
+    { title : String, body : Html msg }
     ->
         { path : PagePath Pages.PathKey
-        , frontmatter : Metadata
+        , frontmatter : PageMetadata
         }
     -> { title : String, body : Html msg }
 view document _ =
     { title = document.title
-    , body =
-        div [] (List.map (\x -> x) document.body)
+    , body = document.body
     }

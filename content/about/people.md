@@ -1,6 +1,7 @@
 ---
-title: joyful talks about people
-type: page
+{
+"title": "joyful talks about people",
+"type": "page",
+"content": "about people page"
+}
 ---
-
-about people page
