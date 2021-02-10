@@ -1,14 +1,14 @@
 module Context exposing (..)
 
+import Data.Types exposing (StandardPage)
 import Html exposing (Html)
-import Page.Decoder as Decoder
 import Pages
 import Pages.PagePath exposing (PagePath)
 
 
 type alias DataContext =
     { path : PagePath Pages.PathKey
-    , frontmatter : Decoder.Page
+    , frontmatter : StandardPage
     }
 
 
