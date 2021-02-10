@@ -5,7 +5,7 @@ import Head
 import Html exposing (Html)
 import Layout
 import Manifest exposing (manifest)
-import Metadata exposing (head)
+import Metadata exposing (metadataHead)
 import Page.Decoder as Decoder
 import Page.Render exposing (pageRender)
 import Pages exposing (internals)
@@ -66,10 +66,10 @@ view :
             { view : Model -> Renderer -> PageContext
             , head : List (Head.Tag Pages.PathKey)
             }
-view siteMetadata pageContext =
+view siteMetadata dataContext =
     StaticHttp.succeed
         { view =
             \_ _ ->
-                Layout.view (pageRender siteMetadata pageContext) pageContext
-        , head = head pageContext
+                Layout.view (pageRender siteMetadata dataContext) dataContext
+        , head = metadataHead dataContext
         }
