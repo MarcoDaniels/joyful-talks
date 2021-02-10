@@ -2,7 +2,7 @@
 {
 "title": "about all the rest",
 "description": "some description",
-"pageType": "page",
+"pageType": "base",
 "content": [
 {
 "field": {
