@@ -1,13 +1,14 @@
 module Main exposing (main)
 
 import Context exposing (DataContext, Msg, PageContext)
+import Data.Decoder exposing (pageDecoder)
+import Data.Render exposing (dataRender)
+import Data.Types exposing (StandardPage)
 import Head
 import Html exposing (Html)
 import Layout
 import Manifest exposing (manifest)
 import Metadata exposing (metadataHead)
-import Page.Decoder as Decoder
-import Page.Render exposing (pageRender)
 import Pages exposing (internals)
 import Pages.PagePath as Pages exposing (PagePath)
 import Pages.Platform
@@ -19,10 +20,10 @@ type alias Model =
 
 
 type alias Renderer =
-    List (Html ())
+    List (Html Msg)
 
 
-main : Pages.Platform.Program Model Msg Decoder.Page Renderer Pages.PathKey
+main : Pages.Platform.Program Model Msg StandardPage Renderer Pages.PathKey
 main =
     Pages.Platform.init
         { init = \_ -> init
@@ -31,7 +32,7 @@ main =
         , subscriptions = subscriptions
         , documents =
             [ { extension = "md"
-              , metadata = Decoder.pageDecoder
+              , metadata = pageDecoder
               , body = \_ -> Ok (Html.div [] [] |> List.singleton)
               }
             ]
@@ -53,13 +54,13 @@ update _ model =
     ( model, Cmd.none )
 
 
-subscriptions : Decoder.Page -> PagePath Pages.PathKey -> Model -> Sub msg
+subscriptions : StandardPage -> PagePath Pages.PathKey -> Model -> Sub msg
 subscriptions _ _ _ =
     Sub.none
 
 
 view :
-    List ( PagePath Pages.PathKey, Decoder.Page )
+    List ( PagePath Pages.PathKey, StandardPage )
     -> DataContext
     ->
         StaticHttp.Request
@@ -70,6 +71,6 @@ view siteMetadata dataContext =
     StaticHttp.succeed
         { view =
             \_ _ ->
-                Layout.view (pageRender siteMetadata dataContext) dataContext
+                Layout.view (dataRender siteMetadata dataContext) dataContext
         , head = metadataHead dataContext
         }
