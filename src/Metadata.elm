@@ -6,19 +6,19 @@ import Head.Seo as Seo
 import Pages exposing (images)
 
 
-head : DataContext -> List (Head.Tag Pages.PathKey)
-head data =
+metadataHead : DataContext -> List (Head.Tag Pages.PathKey)
+metadataHead dataContext =
     Seo.summary
         { canonicalUrlOverride = Nothing
         , siteName = ""
         , image =
             { url = images.iconPng
-            , alt = data.frontmatter.title
+            , alt = dataContext.frontmatter.title
             , dimensions = Nothing
             , mimeType = Nothing
             }
-        , description = data.frontmatter.description
+        , description = dataContext.frontmatter.description
         , locale = Nothing
-        , title = data.frontmatter.title
+        , title = dataContext.frontmatter.title
         }
         |> Seo.website

@@ -8,8 +8,8 @@ import Pages.PagePath exposing (PagePath)
 
 
 view : PageContext -> DataContext -> PageContext
-view document _ =
-    { title = document.title
+view pageContext _ =
+    { title = pageContext.title
     , body =
         Html.div []
             [ Html.nav []
@@ -18,6 +18,6 @@ view document _ =
                 , Html.a [ href (Pages.pages.about.people |> Pages.PagePath.toString) ] [ Html.text "people" ]
                 , Html.a [ href (Pages.pages.about.allTheRest |> Pages.PagePath.toString) ] [ Html.text "and all the rest" ]
                 ]
-            , document.body
+            , pageContext.body
             ]
     }
