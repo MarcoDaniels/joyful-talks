@@ -11,16 +11,16 @@ fieldTypeDecoder =
         |> required "type" string
 
 
-contentTextDecoder : Decoder StandardPageContentText
+contentTextDecoder : Decoder BaseContentTextField
 contentTextDecoder =
-    succeed StandardPageContentText
+    succeed BaseContentTextField
         |> required "field" fieldTypeDecoder
         |> required "value" string
 
 
-contentImageDecoder : Decoder StandardPageContentImage
+contentImageDecoder : Decoder BaseContentImageField
 contentImageDecoder =
-    succeed StandardPageContentImage
+    succeed BaseContentImageField
         |> required "field" fieldTypeDecoder
         |> required "value"
             (succeed ImagePath
@@ -28,20 +28,20 @@ contentImageDecoder =
             )
 
 
-contentDecoder : Decoder StandardPageContent
+contentDecoder : Decoder BaseContent
 contentDecoder =
     oneOf
         [ contentTextDecoder
-            |> map StandardPageText
+            |> map BaseContentText
         , contentImageDecoder
-            |> map StandardPageImage
-        , succeed StandardPageEmpty
+            |> map BaseContentImage
+        , succeed BaseContentEmpty
         ]
 
 
-pageDecoder : Decoder StandardPage
+pageDecoder : Decoder Base
 pageDecoder =
-    succeed StandardPage
+    succeed Base
         |> required "pageType" string
         |> required "title" string
         |> required "description" string

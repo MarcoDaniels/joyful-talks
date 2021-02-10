@@ -2,7 +2,7 @@
 {
 "title": "page title",
 "description": "some description",
-"pageType": "page",
+"pageType": "base",
 "content": [
 {
 "field": {

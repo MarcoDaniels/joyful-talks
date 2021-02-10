@@ -3,7 +3,7 @@ module Main exposing (main)
 import Context exposing (DataContext, Msg, PageContext)
 import Data.Decoder exposing (pageDecoder)
 import Data.Render exposing (dataRender)
-import Data.Types exposing (StandardPage)
+import Data.Types exposing (Base)
 import Head
 import Html exposing (Html)
 import Layout
@@ -23,7 +23,7 @@ type alias Renderer =
     List (Html Msg)
 
 
-main : Pages.Platform.Program Model Msg StandardPage Renderer Pages.PathKey
+main : Pages.Platform.Program Model Msg Base Renderer Pages.PathKey
 main =
     Pages.Platform.init
         { init = \_ -> init
@@ -54,13 +54,13 @@ update _ model =
     ( model, Cmd.none )
 
 
-subscriptions : StandardPage -> PagePath Pages.PathKey -> Model -> Sub msg
+subscriptions : Base -> PagePath Pages.PathKey -> Model -> Sub msg
 subscriptions _ _ _ =
     Sub.none
 
 
 view :
-    List ( PagePath Pages.PathKey, StandardPage )
+    List ( PagePath Pages.PathKey, Base )
     -> DataContext
     ->
         StaticHttp.Request

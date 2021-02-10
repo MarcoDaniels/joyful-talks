@@ -5,7 +5,7 @@ type alias Field =
     { fieldType : String }
 
 
-type alias StandardPageContentText =
+type alias BaseContentTextField =
     { field : Field
     , value : String
     }
@@ -15,39 +15,39 @@ type alias ImagePath =
     { path : String }
 
 
-type alias StandardPageContentImage =
+type alias BaseContentImageField =
     { field : Field
     , value : ImagePath
     }
 
 
-type StandardPageContent
-    = StandardPageText StandardPageContentText
-    | StandardPageImage StandardPageContentImage
-    | StandardPageEmpty
+type BaseContent
+    = BaseContentText BaseContentTextField
+    | BaseContentImage BaseContentImageField
+    | BaseContentEmpty
 
 
-type alias StandardPage =
+type alias Base =
     { pageType : String
     , title : String
     , description : String
-    , content : List StandardPageContent
+    , content : List BaseContent
     }
 
 
-type PostPageContent
-    = PostPageText StandardPageContentText
-    | PostPageEmpty
+type PostContent
+    = PostContentText BaseContentTextField
+    | PostContentEmpty
 
 
-type alias PostPage =
+type alias Post =
     { pageType : String
     , title : String
     , description : String
-    , content : List PostPageContent
+    , content : List PostContent
     }
 
 
 type Data
-    = DataPostPage PostPage
-    | DataStandardPage StandardPage
+    = DataPost Post
+    | DataBase Base

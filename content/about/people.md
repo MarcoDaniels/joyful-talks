@@ -2,7 +2,7 @@
 {
 "title": "about people",
 "description": "some description",
-"pageType": "page",
+"pageType": "base",
 "content": [
 {
 "field": {
