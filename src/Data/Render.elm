@@ -5,12 +5,10 @@ import Data.Types exposing (Base, BaseContentValue(..), Data, DataContent(..), P
 import Html exposing (Html)
 import Html.Attributes
 import Markdown exposing (markdownRender)
-import Pages
-import Pages.PagePath exposing (PagePath)
 
 
-dataRender : List ( PagePath Pages.PathKey, Data ) -> DataContext -> PageContext
-dataRender _ data =
+dataRender : DataContext -> PageContext
+dataRender data =
     case data.frontmatter.data of
         BaseData base ->
             { title = base.title
