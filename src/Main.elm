@@ -67,10 +67,10 @@ view :
             { view : Model -> Renderer -> PageContext
             , head : List (Head.Tag Pages.PathKey)
             }
-view siteMetadata dataContext =
+view _ dataContext =
     StaticHttp.succeed
         { view =
             \_ _ ->
-                Layout.view (dataRender siteMetadata dataContext) dataContext
+                Layout.view (dataRender dataContext) dataContext
         , head = metadataHead dataContext
         }
