@@ -1,7 +1,8 @@
 ---
 {
-"title": "something new",
 "pageType": "post",
+"data": {
+"title": "something new",
 "description": "mhm",
 "content": [
 {
@@ -49,4 +50,6 @@
 }
 ]
 }
+}
+
 ---
