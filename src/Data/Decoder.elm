@@ -1,42 +1,46 @@
-module Data.Decoder exposing (..)
+module Data.Decoder exposing (pageDecoder)
 
 import Data.Types exposing (..)
-import Json.Decode exposing (Decoder, list, map, oneOf, string, succeed)
-import Json.Decode.Pipeline exposing (required)
+import Json.Decode exposing (Decoder, andThen, field, list, string, succeed)
+import Json.Decode.Pipeline exposing (custom, required)
 
 
-fieldTypeDecoder : Decoder Field
-fieldTypeDecoder =
+fieldDecoder : Decoder Field
+fieldDecoder =
     succeed Field
         |> required "type" string
 
 
-contentTextDecoder : Decoder BaseContentTextField
-contentTextDecoder =
-    succeed BaseContentTextField
-        |> required "field" fieldTypeDecoder
-        |> required "value" string
+imageDecoder : Decoder ImagePath
+imageDecoder =
+    succeed ImagePath
+        |> required "path" string
 
 
-contentImageDecoder : Decoder BaseContentImageField
-contentImageDecoder =
-    succeed BaseContentImageField
-        |> required "field" fieldTypeDecoder
-        |> required "value"
-            (succeed ImagePath
-                |> required "path" string
-            )
+baseContentValueDecoder : Field -> Decoder BaseContentValue
+baseContentValueDecoder field =
+    case field.fieldType of
+        "text" ->
+            succeed BaseContentValueText
+                |> required "value" string
+
+        "markdown" ->
+            succeed BaseContentValueMarkdown
+                |> required "value" string
+
+        "image" ->
+            succeed BaseContentValueImage
+                |> required "value" imageDecoder
+
+        _ ->
+            succeed BaseContentValueUnknown
 
 
-contentDecoder : Decoder BaseContent
-contentDecoder =
-    oneOf
-        [ contentTextDecoder
-            |> map BaseContentText
-        , contentImageDecoder
-            |> map BaseContentImage
-        , succeed BaseContentEmpty
-        ]
+baseContentDecoder : Decoder BaseContent
+baseContentDecoder =
+    succeed BaseContent
+        |> required "field" fieldDecoder
+        |> custom (field "field" fieldDecoder |> andThen baseContentValueDecoder)
 
 
 pageDecoder : Decoder Base
@@ -45,4 +49,4 @@ pageDecoder =
         |> required "pageType" string
         |> required "title" string
         |> required "description" string
-        |> required "content" (list contentDecoder)
+        |> required "content" (list baseContentDecoder)

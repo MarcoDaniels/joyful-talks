@@ -1,7 +1,7 @@
 module Data.Render exposing (dataRender)
 
 import Context exposing (DataContext, PageContext)
-import Data.Types exposing (Base, BaseContent(..))
+import Data.Types exposing (Base, BaseContentValue(..))
 import Html exposing (Html)
 import Html.Attributes
 import Markdown exposing (markdownRender)
@@ -19,22 +19,17 @@ dataRender _ data =
                     (data.frontmatter.content
                         |> List.map
                             (\content ->
-                                case content of
-                                    BaseContentText text ->
-                                        case text.field.fieldType of
-                                            "text" ->
-                                                Html.div [] [ Html.text text.value ]
+                                case content.value of
+                                    BaseContentValueMarkdown markdown ->
+                                        markdownRender markdown
 
-                                            "markdown" ->
-                                                markdownRender text.value
+                                    BaseContentValueText text ->
+                                        Html.text text
 
-                                            _ ->
-                                                Html.div [] []
+                                    BaseContentValueImage image ->
+                                        Html.img [ Html.Attributes.src image.path ] []
 
-                                    BaseContentImage image ->
-                                        Html.div [] [ Html.img [ Html.Attributes.src image.value.path ] [] ]
-
-                                    BaseContentEmpty ->
+                                    BaseContentValueUnknown ->
                                         Html.div [] []
                             )
                     )
