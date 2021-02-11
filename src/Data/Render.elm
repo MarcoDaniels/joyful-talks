@@ -1,7 +1,7 @@
 module Data.Render exposing (dataRender)
 
 import Context exposing (DataContext, PageContext)
-import Data.Types exposing (Base, BaseContentValue(..))
+import Data.Types exposing (Base, BaseContentValue(..), Data, DataContent(..), PostContentRepeaterType(..), PostContentValue(..))
 import Html exposing (Html)
 import Html.Attributes
 import Markdown exposing (markdownRender)
@@ -9,14 +9,14 @@ import Pages
 import Pages.PagePath exposing (PagePath)
 
 
-dataRender : List ( PagePath Pages.PathKey, Base ) -> DataContext -> PageContext
+dataRender : List ( PagePath Pages.PathKey, Data ) -> DataContext -> PageContext
 dataRender _ data =
-    { title = data.frontmatter.title
-    , body =
-        case data.frontmatter.pageType of
-            "base" ->
+    case data.frontmatter.data of
+        BaseData base ->
+            { title = base.title
+            , body =
                 Html.div [ Html.Attributes.class "center" ]
-                    (data.frontmatter.content
+                    (base.content
                         |> List.map
                             (\content ->
                                 case content.value of
@@ -33,11 +33,44 @@ dataRender _ data =
                                         Html.div [] []
                             )
                     )
+            }
 
-            "post" ->
-                --TODO: handle post type
-                Html.div [ Html.Attributes.class "center" ] [ Html.text "hey" ]
+        PostData post ->
+            { title = post.title
+            , body =
+                Html.div [ Html.Attributes.class "center" ]
+                    (post.content
+                        |> List.map
+                            (\content ->
+                                case content.value of
+                                    PostContentValueMarkdown markdown ->
+                                        markdownRender markdown
 
-            _ ->
-                Html.div [] []
-    }
+                                    PostContentValueImage image ->
+                                        Html.img [ Html.Attributes.src image.path ] []
+
+                                    PostContentValueRepeater repeater ->
+                                        Html.div []
+                                            (repeater
+                                                |> List.map
+                                                    (\rep ->
+                                                        case rep.value of
+                                                            PostContentRepeaterMarkdown markdown ->
+                                                                markdownRender markdown
+
+                                                            PostContentRepeaterImage image ->
+                                                                Html.img [ Html.Attributes.src image.path ] []
+
+                                                            PostContentRepeaterUnknown ->
+                                                                Html.div [] []
+                                                    )
+                                            )
+
+                                    PostContentValueUnknown ->
+                                        Html.div [] []
+                            )
+                    )
+            }
+
+        UnknownData ->
+            { title = "", body = Html.div [] [] }

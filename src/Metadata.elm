@@ -1,24 +1,42 @@
 module Metadata exposing (..)
 
 import Context exposing (DataContext)
+import Data.Types exposing (DataContent(..))
 import Head
 import Head.Seo as Seo
 import Pages exposing (images)
 
 
-metadataHead : DataContext -> List (Head.Tag Pages.PathKey)
-metadataHead dataContext =
+type alias SEO =
+    { title : String, description : String }
+
+
+seoSummary : SEO -> List (Head.Tag Pages.PathKey)
+seoSummary seo =
     Seo.summary
         { canonicalUrlOverride = Nothing
         , siteName = ""
         , image =
             { url = images.iconPng
-            , alt = dataContext.frontmatter.title
+            , alt = seo.title
             , dimensions = Nothing
             , mimeType = Nothing
             }
-        , description = dataContext.frontmatter.description
+        , description = seo.description
         , locale = Nothing
-        , title = dataContext.frontmatter.title
+        , title = seo.title
         }
         |> Seo.website
+
+
+metadataHead : DataContext -> List (Head.Tag Pages.PathKey)
+metadataHead dataContext =
+    case dataContext.frontmatter.data of
+        BaseData base ->
+            seoSummary { title = base.title, description = base.description }
+
+        PostData post ->
+            seoSummary { title = post.title, description = post.description }
+
+        UnknownData ->
+            []

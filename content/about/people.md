@@ -1,8 +1,9 @@
 ---
 {
+"pageType": "base",
+"data": {
 "title": "about people",
 "description": "some description",
-"pageType": "base",
 "content": [
 {
 "field": {
@@ -22,4 +23,6 @@
 }
 ]
 }
+}
+
 ---
