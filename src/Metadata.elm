@@ -1,6 +1,6 @@
 module Metadata exposing (..)
 
-import Data exposing (DataContent(..), DataContext)
+import Content exposing (ContentContext, Data(..))
 import Head
 import Head.Seo as Seo
 import Pages exposing (images)
@@ -28,9 +28,9 @@ seoSummary seo =
         |> Seo.website
 
 
-metadataHead : DataContext -> List (Head.Tag Pages.PathKey)
-metadataHead dataContext =
-    case dataContext.frontmatter.data of
+metadataHead : ContentContext -> List (Head.Tag Pages.PathKey)
+metadataHead { frontmatter } =
+    case frontmatter.data of
         BaseData base ->
             seoSummary { title = base.title, description = base.description }
 
