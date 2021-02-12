@@ -1,9 +1,7 @@
 module Main exposing (main)
 
-import Context exposing (DataContext, Msg, PageContext)
-import Data.Decoder exposing (dataDecoder)
-import Data.Render exposing (dataRender)
-import Data.Types exposing (Data)
+import Context exposing (Msg, PageContext)
+import Data exposing (Data, DataContext, dataDecoder, dataView)
 import Head
 import Html exposing (Html)
 import Layout
@@ -69,8 +67,6 @@ view :
             }
 view _ dataContext =
     StaticHttp.succeed
-        { view =
-            \_ _ ->
-                Layout.view (dataRender dataContext) dataContext
+        { view = \_ _ -> Layout.view (dataView dataContext) dataContext
         , head = metadataHead dataContext
         }

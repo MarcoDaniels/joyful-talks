@@ -1,7 +1,6 @@
 module Metadata exposing (..)
 
-import Context exposing (DataContext)
-import Data.Types exposing (DataContent(..))
+import Data exposing (DataContent(..), DataContext)
 import Head
 import Head.Seo as Seo
 import Pages exposing (images)

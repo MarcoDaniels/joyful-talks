@@ -1,6 +1,7 @@
 module Layout exposing (view)
 
-import Context exposing (DataContext, PageContext)
+import Context exposing (PageContext)
+import Data exposing (DataContext)
 import Html exposing (Html)
 import Html.Attributes exposing (href)
 import Pages
