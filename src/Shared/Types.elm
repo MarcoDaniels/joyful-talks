@@ -53,3 +53,15 @@ type alias Post =
     , description : String
     , content : List PostContent
     }
+
+
+type alias Link =
+    { text : String, url : String }
+
+
+type alias CookieInformation =
+    { title : String, content : String }
+
+
+type alias Meta =
+    { navigation : List Link, footer : List Link, cookie : CookieInformation }

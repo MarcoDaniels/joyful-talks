@@ -1,20 +1,22 @@
 module Data exposing (Data, DataContent(..), DataContext, dataDecoder, dataView)
 
 import Context exposing (PageContext)
-import Shared.Types exposing (Base, Post)
 import Html
-import Json.Decode exposing (Decoder, andThen, field, string, succeed)
+import Json.Decode exposing (Decoder, andThen, field, list, string, succeed)
 import Json.Decode.Pipeline exposing (custom, required)
 import Pages
 import Pages.Base exposing (baseDecoder, baseView)
 import Pages.PagePath exposing (PagePath)
 import Pages.Post exposing (postDecoder, postView)
+import Shared.Decoder exposing (linkDecoder)
+import Shared.Types exposing (Base, CookieInformation, Meta, Post)
 
 
 type alias DataContext =
     { path : PagePath Pages.PathKey
     , frontmatter : Data
     }
+
 
 type DataContent
     = BaseData Base
@@ -23,18 +25,19 @@ type DataContent
 
 
 type alias Data =
-    { pageType : String, data : DataContent }
+    { collection : String, data : DataContent, meta : Meta }
 
 
 dataDecoder : Decoder Data
 dataDecoder =
     succeed Data
-        |> required "pageType" string
+        |> required "collection" string
         |> custom
-            (field "pageType" string
+            -- decoding "data" object based on collection
+            (field "collection" string
                 |> andThen
-                    (\pageType ->
-                        case pageType of
+                    (\collection ->
+                        case collection of
                             "base" ->
                                 succeed BaseData |> required "data" baseDecoder
 
@@ -44,6 +47,12 @@ dataDecoder =
                             _ ->
                                 succeed UnknownData
                     )
+            )
+        |> required "meta"
+            (succeed Meta
+                |> required "navigation" (list linkDecoder)
+                |> required "footer" (list linkDecoder)
+                |> required "cookie" (succeed CookieInformation |> required "title" string |> required "content" string)
             )
 
 
