@@ -1,4 +1,4 @@
-module Data.Types exposing (..)
+module Shared.Types exposing (..)
 
 
 type alias Field =
@@ -53,13 +53,3 @@ type alias Post =
     , description : String
     , content : List PostContent
     }
-
-
-type DataContent
-    = BaseData Base
-    | PostData Post
-    | UnknownData
-
-
-type alias Data =
-    { pageType : String, data : DataContent }
