@@ -1,36 +1,36 @@
-module Data exposing (Data, DataContent(..), DataContext, dataDecoder, dataView)
+module Content exposing (Content, ContentContext, Data(..), contentDecoder, contentView)
 
-import Context exposing (PageContext)
+import MainContext exposing (PageContext)
 import Html
 import Json.Decode exposing (Decoder, andThen, field, list, string, succeed)
 import Json.Decode.Pipeline exposing (custom, required)
+import Page.Base exposing (baseDecoder, baseView)
+import Page.Post exposing (postDecoder, postView)
 import Pages
-import Pages.Base exposing (baseDecoder, baseView)
 import Pages.PagePath exposing (PagePath)
-import Pages.Post exposing (postDecoder, postView)
 import Shared.Decoder exposing (linkDecoder)
 import Shared.Types exposing (Base, CookieInformation, Meta, Post)
 
 
-type alias DataContext =
+type alias ContentContext =
     { path : PagePath Pages.PathKey
-    , frontmatter : Data
+    , frontmatter : Content
     }
 
 
-type DataContent
+type Data
     = BaseData Base
     | PostData Post
     | UnknownData
 
 
-type alias Data =
-    { collection : String, data : DataContent, meta : Meta }
+type alias Content =
+    { collection : String, data : Data, meta : Meta }
 
 
-dataDecoder : Decoder Data
-dataDecoder =
-    succeed Data
+contentDecoder : Decoder Content
+contentDecoder =
+    succeed Content
         |> required "collection" string
         |> custom
             -- decoding "data" object based on collection
@@ -56,8 +56,8 @@ dataDecoder =
             )
 
 
-dataView : DataContext -> PageContext
-dataView data =
+contentView : ContentContext -> PageContext
+contentView data =
     case data.frontmatter.data of
         BaseData base ->
             baseView base

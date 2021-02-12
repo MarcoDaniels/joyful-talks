@@ -1,13 +1,14 @@
 module Layout exposing (view)
 
-import Context exposing (PageContext)
-import Data exposing (DataContext)
+import Content exposing (ContentContext)
+import MainContext exposing (Model, Msg(..), PageContext)
+import Element.Counter exposing (counterView)
 import Html exposing (Html)
 import Html.Attributes exposing (href)
 
 
-view : PageContext -> DataContext -> PageContext
-view pageContext { frontmatter } =
+view : PageContext -> ContentContext -> Model -> PageContext
+view pageContext { frontmatter } model =
     { title = pageContext.title
     , body =
         Html.div []
@@ -19,6 +20,7 @@ view pageContext { frontmatter } =
                         )
                 )
             , pageContext.body
+            , counterView model.count
             , Html.footer []
                 (frontmatter.meta.footer
                     |> List.map

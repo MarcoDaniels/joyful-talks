@@ -1,7 +1,7 @@
 module Main exposing (main)
 
-import Context exposing (Msg, PageContext)
-import Data exposing (Data, DataContext, dataDecoder, dataView)
+import Content exposing (Content, ContentContext, contentDecoder, contentView)
+import MainContext exposing (Model, Msg(..), PageContext)
 import Head
 import Html exposing (Html)
 import Layout
@@ -13,15 +13,11 @@ import Pages.Platform
 import Pages.StaticHttp as StaticHttp
 
 
-type alias Model =
-    {}
-
-
 type alias Renderer =
     List (Html Msg)
 
 
-main : Pages.Platform.Program Model Msg Data Renderer Pages.PathKey
+main : Pages.Platform.Program Model Msg Content Renderer Pages.PathKey
 main =
     Pages.Platform.init
         { init = \_ -> init
@@ -30,7 +26,7 @@ main =
         , subscriptions = subscriptions
         , documents =
             [ { extension = "md"
-              , metadata = dataDecoder
+              , metadata = contentDecoder
               , body = \_ -> Ok (Html.div [] [] |> List.singleton)
               }
             ]
@@ -44,22 +40,33 @@ main =
 
 init : ( Model, Cmd msg )
 init =
-    ( {}, Cmd.none )
+    ( { count = 0 }, Cmd.none )
 
 
-update : msg -> Model -> ( Model, Cmd msg )
-update _ model =
-    ( model, Cmd.none )
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        Increment ->
+            ( { model | count = model.count + 1 }, Cmd.none )
+
+        Decrement ->
+            ( { model | count = model.count - 1 }, Cmd.none )
+
+        Reset ->
+            ( { model | count = 0 }, Cmd.none )
+
+        NoOp _ ->
+            ( model, Cmd.none )
 
 
-subscriptions : Data -> PagePath Pages.PathKey -> Model -> Sub msg
+subscriptions : Content -> PagePath Pages.PathKey -> Model -> Sub msg
 subscriptions _ _ _ =
     Sub.none
 
 
 view :
-    List ( PagePath Pages.PathKey, Data )
-    -> DataContext
+    List ( PagePath Pages.PathKey, Content )
+    -> ContentContext
     ->
         StaticHttp.Request
             { view : Model -> Renderer -> PageContext
@@ -67,6 +74,6 @@ view :
             }
 view _ dataContext =
     StaticHttp.succeed
-        { view = \_ _ -> Layout.view (dataView dataContext) dataContext
+        { view = \model _ -> Layout.view (contentView dataContext) dataContext model
         , head = metadataHead dataContext
         }

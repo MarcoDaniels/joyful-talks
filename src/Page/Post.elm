@@ -1,6 +1,6 @@
-module Pages.Post exposing (postDecoder, postView)
+module Page.Post exposing (postDecoder, postView)
 
-import Context exposing (PageContext)
+import MainContext exposing (PageContext)
 import Shared.Types exposing (Field, Post, PostContent, PostContentRepeaterField, PostContentRepeaterType(..), PostContentValue(..))
 import Html
 import Html.Attributes

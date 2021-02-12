@@ -1,6 +1,6 @@
-module Pages.Base exposing (baseDecoder, baseView)
+module Page.Base exposing (baseDecoder, baseView)
 
-import Context exposing (PageContext)
+import MainContext exposing (PageContext)
 import Shared.Types exposing (Base, BaseContent, BaseContentValue(..), Field)
 import Html
 import Html.Attributes
