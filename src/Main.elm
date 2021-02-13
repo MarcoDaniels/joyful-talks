@@ -1,14 +1,13 @@
-module Main exposing (main)
+port module Main exposing (main)
 
 import Content exposing (Content, ContentContext, contentDecoder, contentView)
-import MainContext exposing (Model, Msg(..), PageContext)
 import Head
 import Html exposing (Html)
 import Layout
+import MainContext exposing (Model, Msg(..), PageContext)
 import Manifest exposing (manifest)
 import Metadata exposing (metadataHead)
 import Pages exposing (internals)
-import Pages.PagePath as Pages exposing (PagePath)
 import Pages.Platform
 import Pages.StaticHttp as StaticHttp
 
@@ -21,9 +20,9 @@ main : Pages.Platform.Program Model Msg Content Renderer Pages.PathKey
 main =
     Pages.Platform.init
         { init = \_ -> init
-        , view = view
-        , update = update
-        , subscriptions = subscriptions
+        , view = \_ -> view
+        , update = updateWithStorage
+        , subscriptions = \_ _ _ -> subscriptions
         , documents =
             [ { extension = "md"
               , metadata = contentDecoder
@@ -38,41 +37,48 @@ main =
         |> Pages.Platform.toProgram
 
 
-init : ( Model, Cmd msg )
+init : ( Model, Cmd Msg )
 init =
-    ( { count = 0 }, Cmd.none )
+    ( { cookieConsent = False }, Cmd.none )
+
+
+port cookieState : (Model -> msg) -> Sub msg
+
+
+port cookieAccept : Model -> Cmd msg
+
+
+updateWithStorage : Msg -> Model -> ( Model, Cmd Msg )
+updateWithStorage msg model =
+    let
+        ( newModel, cmd ) =
+            update msg model
+    in
+    ( newModel
+    , Cmd.batch [ cookieAccept newModel, cmd ]
+    )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Increment ->
-            ( { model | count = model.count + 1 }, Cmd.none )
+        CookieState state ->
+            ( { model | cookieConsent = state.cookieConsent }, Cmd.none )
 
-        Decrement ->
-            ( { model | count = model.count - 1 }, Cmd.none )
-
-        Reset ->
-            ( { model | count = 0 }, Cmd.none )
+        CookieAccept ->
+            ( { model | cookieConsent = True }, Cmd.none )
 
         NoOp _ ->
             ( model, Cmd.none )
 
 
-subscriptions : Content -> PagePath Pages.PathKey -> Model -> Sub msg
-subscriptions _ _ _ =
-    Sub.none
+subscriptions : Sub Msg
+subscriptions =
+    cookieState CookieState
 
 
-view :
-    List ( PagePath Pages.PathKey, Content )
-    -> ContentContext
-    ->
-        StaticHttp.Request
-            { view : Model -> Renderer -> PageContext
-            , head : List (Head.Tag Pages.PathKey)
-            }
-view _ dataContext =
+view : ContentContext -> StaticHttp.Request { view : Model -> Renderer -> PageContext, head : List (Head.Tag Pages.PathKey) }
+view dataContext =
     StaticHttp.succeed
         { view = \model _ -> Layout.view (contentView dataContext) dataContext model
         , head = metadataHead dataContext

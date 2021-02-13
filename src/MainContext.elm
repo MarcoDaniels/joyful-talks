@@ -5,13 +5,12 @@ import Html exposing (Html)
 
 type Msg
     = NoOp (Html ())
-    | Increment
-    | Decrement
-    | Reset
+    | CookieState Model
+    | CookieAccept
 
 
 type alias Model =
-    { count : Int }
+    { cookieConsent : Bool }
 
 
 type alias PageContext =
