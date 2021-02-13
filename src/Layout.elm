@@ -1,10 +1,10 @@
 module Layout exposing (view)
 
 import Content exposing (ContentContext)
-import MainContext exposing (Model, Msg(..), PageContext)
-import Element.Counter exposing (counterView)
+import Element.Cookie exposing (cookieView)
 import Html exposing (Html)
 import Html.Attributes exposing (href)
+import MainContext exposing (Model, Msg(..), PageContext)
 
 
 view : PageContext -> ContentContext -> Model -> PageContext
@@ -20,7 +20,7 @@ view pageContext { frontmatter } model =
                         )
                 )
             , pageContext.body
-            , counterView model.count
+            , cookieView model.cookieConsent
             , Html.footer []
                 (frontmatter.meta.footer
                     |> List.map
