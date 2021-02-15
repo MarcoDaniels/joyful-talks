@@ -4,17 +4,24 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "contentCreate": "ts-node contentCreate/index.ts",
+    "contentCreate:build": "tsc",
     "start": "elm-pages develop",
     "build": "elm-pages build",
     "clean": "rm -rf dist",
     "postinstall": "elm-tooling install"
   },
   "dependencies": {
-    "elm-pages": "1.5.4"
+    "dotenv": "8.2.0",
+    "elm-pages": "1.5.4",
+    "got": "11.8.1"
   },
   "devDependencies": {
+    "@types/node": "14.14.28",
     "elm-format": "0.8.4",
     "elm-tooling": "1.1.0",
-    "node-sass": "5.0.0"
+    "node-sass": "5.0.0",
+    "ts-node": "9.1.1",
+    "typescript": "4.1.5"
   }
 }
