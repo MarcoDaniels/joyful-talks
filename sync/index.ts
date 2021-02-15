@@ -29,7 +29,7 @@ const createFile = (url: string, content: Content) => {
     })
 }
 
-const createContent = async () => {
+const syncContent = async () => {
     const collections = await cockpitClient.collections()
     const singletons = await cockpitClient.singletons()
 
@@ -62,6 +62,6 @@ const cleanupContent = () =>
 cleanupContent().then(() => {
     console.log(`💢 content clear`)
 
-    createContent().then(() => console.log(`🚀 content sync`))
+    syncContent().then(() => console.log(`🚀 content sync`))
 })
 

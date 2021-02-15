@@ -1,7 +1,7 @@
 module Shared.Decoder exposing (fieldDecoder, imageDecoder, linkDecoder)
 
 import Json.Decode exposing (Decoder, string, succeed)
-import Json.Decode.Pipeline exposing (required)
+import Json.Decode.Pipeline exposing (required, requiredAt)
 import Shared.Types exposing (CookieInformation, Field, ImagePath, Link)
 
 
@@ -17,4 +17,4 @@ imageDecoder =
 
 linkDecoder : Decoder Link
 linkDecoder =
-    succeed Link |> required "text" string |> required "url" string
+    succeed Link |> requiredAt [ "value", "title" ] string |> requiredAt [ "value", "url" ] string
