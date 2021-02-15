@@ -4,8 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "contentCreate": "ts-node contentCreate/index.ts",
-    "contentCreate:build": "tsc",
+    "sync": "ts-node sync/index.ts",
+    "sync:build": "tsc --noEmit",
+    "sync:tsc": "tsc --noEmit",
     "start": "elm-pages develop",
     "build": "elm-pages build",
     "clean": "rm -rf dist",
