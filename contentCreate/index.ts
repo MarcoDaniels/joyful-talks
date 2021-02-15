@@ -2,7 +2,7 @@ import {cockpitClient} from './cockiptClient'
 import * as fs from 'fs'
 import * as path from 'path'
 
-// TODO: log to command line
+const contentFolder = `content`
 
 type Entry = {
     url: string
@@ -20,7 +20,7 @@ type Content = {
 }
 
 const createFile = (url: string, content: Content) => {
-    const fileContent = `content${url === '/' ? '/index.md' : `/${url}.md`}`
+    const fileContent = `${contentFolder}${url === '/' ? '/index.md' : `/${url}.md`}`
 
     fs.mkdir(path.dirname(fileContent), {recursive: true}, (err) => {
         if (err) return
@@ -29,11 +29,12 @@ const createFile = (url: string, content: Content) => {
     })
 }
 
-const fetchData = async () => {
+const createContent = async () => {
     const collections = await cockpitClient.collections()
     const singletons = await cockpitClient.singletons()
+
     if (collections.success && singletons.success) {
-        const singletonData = await Promise.all(singletons.data.map(cockpitClient.singletonData)).then(([singleton]) => {
+        const singletonData = await Promise.all(singletons.data.map((s) => cockpitClient.singletonData(s))).then(([singleton]) => {
             if (singleton && singleton.success) return singleton.data
         })
 
@@ -54,4 +55,13 @@ const fetchData = async () => {
 
 }
 
-fetchData()
+const cleanupContent = () =>
+    new Promise((resolve => resolve(fs.rmdirSync(contentFolder, {recursive: true}))))
+
+
+cleanupContent().then(() => {
+    console.log(`💢 content clear`)
+
+    createContent().then(() => console.log(`🚀 content sync`))
+})
+
