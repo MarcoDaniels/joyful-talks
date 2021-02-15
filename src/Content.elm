@@ -38,10 +38,10 @@ contentDecoder =
                 |> andThen
                     (\collection ->
                         case collection of
-                            "base" ->
+                            "joyfulPage" ->
                                 succeed BaseData |> required "data" baseDecoder
 
-                            "post" ->
+                            "joyfulPost" ->
                                 succeed PostData |> required "data" postDecoder
 
                             _ ->

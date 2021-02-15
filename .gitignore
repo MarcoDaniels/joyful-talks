@@ -10,3 +10,9 @@ elm-stuff/
 gen/
 
 dist/
+
+.env
+
+content
+
+contentCreateBuild
