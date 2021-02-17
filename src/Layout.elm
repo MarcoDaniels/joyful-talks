@@ -1,15 +1,14 @@
 module Layout exposing (view)
 
-import Content exposing (ContentContext)
+import Context exposing (ContentContext, Model, Msg(..), PageData)
 import Element.Cookie exposing (cookieView)
 import Html exposing (Html)
 import Html.Attributes exposing (href)
-import MainContext exposing (Model, Msg(..), PageContext)
 
 
-view : PageContext -> ContentContext -> Model -> PageContext
-view pageContext { frontmatter } model =
-    { title = pageContext.title
+view : PageData -> ContentContext -> Model -> PageData
+view pageData { frontmatter } model =
+    { title = pageData.title
     , body =
         Html.div []
             [ Html.nav []
@@ -19,7 +18,7 @@ view pageContext { frontmatter } model =
                             Html.a [ href navigation.url ] [ Html.text navigation.text ]
                         )
                 )
-            , pageContext.body
+            , pageData.body
             , cookieView model.cookieConsent
             , Html.footer []
                 (frontmatter.meta.footer

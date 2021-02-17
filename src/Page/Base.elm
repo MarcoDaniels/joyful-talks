@@ -1,13 +1,13 @@
 module Page.Base exposing (baseDecoder, baseView)
 
-import MainContext exposing (PageContext)
-import Shared.Types exposing (Base, BaseContent, BaseContentValue(..), Field)
 import Html
 import Html.Attributes
 import Json.Decode exposing (Decoder, andThen, field, list, string, succeed)
 import Json.Decode.Pipeline exposing (custom, required)
+import Context exposing (PageData)
 import Markdown exposing (markdownRender)
 import Shared.Decoder exposing (fieldDecoder, imageDecoder)
+import Shared.Types exposing (Base, BaseContent, BaseContentValue(..), Field)
 
 
 baseDecoder : Decoder Base
@@ -41,7 +41,7 @@ baseDecoder =
             )
 
 
-baseView : Base -> PageContext
+baseView : Base -> PageData
 baseView base =
     { title = base.title
     , body =

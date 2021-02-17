@@ -1,31 +1,12 @@
-module Content exposing (Content, ContentContext, Data(..), contentDecoder, contentView)
+module Content exposing (contentDecoder)
 
-import MainContext exposing (PageContext)
-import Html
+import Context exposing (Content, Data(..))
 import Json.Decode exposing (Decoder, andThen, field, list, string, succeed)
 import Json.Decode.Pipeline exposing (custom, required)
-import Page.Base exposing (baseDecoder, baseView)
-import Page.Post exposing (postDecoder, postView)
-import Pages
-import Pages.PagePath exposing (PagePath)
+import Page.Base exposing (baseDecoder)
+import Page.Post exposing (postDecoder)
 import Shared.Decoder exposing (linkDecoder)
 import Shared.Types exposing (Base, CookieInformation, Meta, Post)
-
-
-type alias ContentContext =
-    { path : PagePath Pages.PathKey
-    , frontmatter : Content
-    }
-
-
-type Data
-    = BaseData Base
-    | PostData Post
-    | UnknownData
-
-
-type alias Content =
-    { collection : String, data : Data, meta : Meta }
 
 
 contentDecoder : Decoder Content
@@ -54,16 +35,3 @@ contentDecoder =
                 |> required "footer" (list linkDecoder)
                 |> required "cookie" (succeed CookieInformation |> required "title" string |> required "content" string)
             )
-
-
-contentView : ContentContext -> PageContext
-contentView data =
-    case data.frontmatter.data of
-        BaseData base ->
-            baseView base
-
-        PostData post ->
-            postView post
-
-        UnknownData ->
-            { title = "", body = Html.div [] [] }
