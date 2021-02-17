@@ -3,7 +3,7 @@ module Element.Cookie exposing (..)
 import Html exposing (Html)
 import Html.Attributes
 import Html.Events
-import MainContext exposing (Msg(..))
+import Context exposing (Msg(..))
 
 
 cookieView : Bool -> Html Msg

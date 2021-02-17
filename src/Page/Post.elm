@@ -1,6 +1,6 @@
 module Page.Post exposing (postDecoder, postView)
 
-import MainContext exposing (PageContext)
+import Context exposing (PageData)
 import Shared.Types exposing (Field, Post, PostContent, PostContentRepeaterField, PostContentRepeaterType(..), PostContentValue(..))
 import Html
 import Html.Attributes
@@ -62,7 +62,7 @@ postDecoder =
             )
 
 
-postView : Post -> PageContext
+postView : Post -> PageData
 postView post =
     { title = post.title
     , body =
