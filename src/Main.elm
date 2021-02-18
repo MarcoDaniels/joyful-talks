@@ -1,9 +1,11 @@
 port module Main exposing (main)
 
-import Content exposing (contentDecoder, contentView)
+import Content exposing (contentDecoder, contentFeed)
 import Context exposing (Content, ContentContext, Data(..), Model, Msg(..), PageData, Renderer, StaticRequest)
 import Html exposing (Html)
+import Layout
 import Manifest exposing (manifest)
+import Metadata exposing (metadataHead)
 import Page.Base exposing (baseView)
 import Page.Post exposing (postView)
 import Pages exposing (internals)
@@ -78,10 +80,30 @@ view :
 view contentContext =
     case contentContext.frontmatter.data of
         BaseData baseData ->
-            contentView baseData.postsFeed contentContext (baseView baseData)
+            case baseData.postsFeed of
+                Just filterFeed ->
+                    contentFeed filterFeed
+                        |> StaticHttp.map
+                            (\feed ->
+                                { view = \model _ -> Layout.view (baseView baseData (Just feed)) contentContext model
+                                , head = metadataHead { title = baseData.title, description = baseData.description }
+                                }
+                            )
+
+                Nothing ->
+                    StaticHttp.succeed
+                        { view = \model _ -> Layout.view (baseView baseData Nothing) contentContext model
+                        , head = metadataHead { title = baseData.title, description = baseData.description }
+                        }
 
         PostData postData ->
-            contentView Nothing contentContext (postView postData)
+            StaticHttp.succeed
+                { view = \model _ -> Layout.view (postView postData) contentContext model
+                , head = metadataHead { title = postData.title, description = postData.description }
+                }
 
         UnknownData ->
-            contentView Nothing contentContext { title = "", body = Html.div [] [] }
+            StaticHttp.succeed
+                { view = \model _ -> Layout.view { title = "", body = Html.div [] [] } contentContext model
+                , head = []
+                }
