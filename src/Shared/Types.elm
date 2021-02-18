@@ -23,6 +23,7 @@ type alias BaseContent =
 type alias Base =
     { title : String
     , description : String
+    , postsFeed: Maybe (List String)
     , content : List BaseContent
     }
 

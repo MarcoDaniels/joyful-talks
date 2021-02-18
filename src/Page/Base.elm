@@ -1,10 +1,10 @@
 module Page.Base exposing (baseDecoder, baseView)
 
+import Context exposing (PageData)
 import Html
 import Html.Attributes
-import Json.Decode exposing (Decoder, andThen, field, list, string, succeed)
+import Json.Decode exposing (Decoder, andThen, field, list, maybe, string, succeed)
 import Json.Decode.Pipeline exposing (custom, required)
-import Context exposing (PageData)
 import Markdown exposing (markdownRender)
 import Shared.Decoder exposing (fieldDecoder, imageDecoder)
 import Shared.Types exposing (Base, BaseContent, BaseContentValue(..), Field)
@@ -15,6 +15,7 @@ baseDecoder =
     succeed Base
         |> required "title" string
         |> required "description" string
+        |> required "postsFeed" (maybe (list string))
         |> required "content"
             (list
                 (succeed BaseContent
@@ -60,7 +61,16 @@ baseView base =
                                 Html.img [ Html.Attributes.src image.path ] []
 
                             BaseContentValueUnknown ->
-                                Html.div [] []
+                                Html.div []
+                                    [ Html.text
+                                        (case base.postsFeed of
+                                            Just n ->
+                                                String.concat n
+
+                                            Nothing ->
+                                                ""
+                                        )
+                                    ]
                     )
             )
     }
