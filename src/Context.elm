@@ -1,5 +1,6 @@
 module Context exposing (..)
 
+import Head
 import Html exposing (Html)
 import Pages
 import Pages.PagePath exposing (PagePath)
@@ -38,3 +39,7 @@ type alias ContentContext =
     { path : PagePath Pages.PathKey
     , frontmatter : Content
     }
+
+
+type alias StaticRequest =
+    { view : Model -> Renderer -> PageData, head : List (Head.Tag Pages.PathKey) }
