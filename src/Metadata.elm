@@ -1,6 +1,5 @@
-module Metadata exposing (..)
+module Metadata exposing (metadataHead)
 
-import Context exposing (ContentContext, Data(..))
 import Head
 import Head.Seo as Seo
 import Pages exposing (images)
@@ -10,8 +9,8 @@ type alias SEO =
     { title : String, description : String }
 
 
-seoSummary : SEO -> List (Head.Tag Pages.PathKey)
-seoSummary seo =
+metadataHead : SEO -> List (Head.Tag Pages.PathKey)
+metadataHead seo =
     Seo.summary
         { canonicalUrlOverride = Nothing
         , siteName = ""
@@ -26,16 +25,3 @@ seoSummary seo =
         , title = seo.title
         }
         |> Seo.website
-
-
-metadataHead : ContentContext -> List (Head.Tag Pages.PathKey)
-metadataHead { frontmatter } =
-    case frontmatter.data of
-        BaseData base ->
-            seoSummary { title = base.title, description = base.description }
-
-        PostData post ->
-            seoSummary { title = post.title, description = post.description }
-
-        UnknownData ->
-            []

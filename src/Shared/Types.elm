@@ -23,7 +23,7 @@ type alias BaseContent =
 type alias Base =
     { title : String
     , description : String
-    , postsFeed: Maybe (List String)
+    , postsFeed : Maybe (List String)
     , content : List BaseContent
     }
 
@@ -66,3 +66,11 @@ type alias CookieInformation =
 
 type alias Meta =
     { navigation : List Link, footer : List Link, cookie : CookieInformation }
+
+
+type alias FeedItem =
+    { title : String, description : String, url : String }
+
+
+type alias Feed =
+    { entries : List FeedItem }

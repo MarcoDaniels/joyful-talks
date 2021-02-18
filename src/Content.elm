@@ -1,17 +1,16 @@
-module Content exposing (contentDecoder, contentView)
+module Content exposing (contentDecoder, contentFeed)
 
 import Context exposing (Content, ContentContext, Data(..), PageData, StaticRequest)
 import Json.Decode exposing (Decoder, andThen, field, list, string, succeed)
 import Json.Decode.Pipeline exposing (custom, required)
-import Layout
-import Metadata exposing (metadataHead)
 import OptimizedDecoder as Decoder
+import OptimizedDecoder.Pipeline as Decoder
 import Page.Base exposing (baseDecoder)
 import Page.Post exposing (postDecoder)
 import Pages.Secrets as Secrets
 import Pages.StaticHttp as StaticHttp
 import Shared.Decoder exposing (linkDecoder)
-import Shared.Types exposing (Base, CookieInformation, Meta, Post)
+import Shared.Types exposing (Base, CookieInformation, Feed, FeedItem, Meta, Post)
 
 
 contentDecoder : Decoder Content
@@ -42,37 +41,34 @@ contentDecoder =
             )
 
 
-
--- TODO: implement feed fetch and filter
-
-
-request : StaticHttp.Request String
-request =
-    StaticHttp.get
+contentFeed : List String -> StaticHttp.Request Feed
+contentFeed categoryList =
+    let
+        buildFilter : List String -> String
+        buildFilter filter =
+            filter
+                |> List.map (\category -> "&filter[$or][][category]=" ++ category)
+                |> String.concat
+    in
+    StaticHttp.request
         (Secrets.succeed
-            "https://api.github.com/repos/marcodaniels/joyful-talks"
-        )
-        (Decoder.field "full_name" Decoder.string)
-
-
-contentView :
-    Maybe (List String)
-    -> ContentContext
-    -> PageData
-    -> StaticHttp.Request StaticRequest
-contentView maybeFeed contentContext pageData =
-    case maybeFeed of
-        Just feed ->
-            request
-                |> StaticHttp.map
-                    (\_ ->
-                        { view = \model _ -> Layout.view pageData contentContext model
-                        , head = metadataHead contentContext
-                        }
-                    )
-
-        Nothing ->
-            StaticHttp.succeed
-                { view = \model _ -> Layout.view pageData contentContext model
-                , head = metadataHead contentContext
+            (\apiURL apiToken ->
+                { url = apiURL ++ "/collections/entries/joyfulPost?" ++ buildFilter categoryList
+                , method = "GET"
+                , headers = [ ( "Cockpit-Token", apiToken ) ]
+                , body = StaticHttp.emptyBody
                 }
+            )
+            |> Secrets.with "COCKPIT_API_URL"
+            |> Secrets.with "COCKPIT_API_TOKEN"
+        )
+        (Decoder.succeed Feed
+            |> Decoder.required "entries"
+                (Decoder.list
+                    (Decoder.succeed FeedItem
+                        |> Decoder.required "title" Decoder.string
+                        |> Decoder.required "description" Decoder.string
+                        |> Decoder.required "url" Decoder.string
+                    )
+                )
+        )

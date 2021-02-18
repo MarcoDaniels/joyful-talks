@@ -7,7 +7,7 @@ import Json.Decode exposing (Decoder, andThen, field, list, maybe, string, succe
 import Json.Decode.Pipeline exposing (custom, required)
 import Markdown exposing (markdownRender)
 import Shared.Decoder exposing (fieldDecoder, imageDecoder)
-import Shared.Types exposing (Base, BaseContent, BaseContentValue(..), Field)
+import Shared.Types exposing (Base, BaseContent, BaseContentValue(..), Feed, Field)
 
 
 baseDecoder : Decoder Base
@@ -42,35 +42,45 @@ baseDecoder =
             )
 
 
-baseView : Base -> PageData
-baseView base =
+baseView : Base -> Maybe Feed -> PageData
+baseView base maybeFeed =
     { title = base.title
     , body =
-        Html.div [ Html.Attributes.class "center" ]
-            (base.content
-                |> List.map
-                    (\content ->
-                        case content.value of
-                            BaseContentValueMarkdown markdown ->
-                                markdownRender markdown
+        Html.div []
+            [ Html.div [ Html.Attributes.class "center" ]
+                (base.content
+                    |> List.map
+                        (\content ->
+                            case content.value of
+                                BaseContentValueMarkdown markdown ->
+                                    markdownRender markdown
 
-                            BaseContentValueText text ->
-                                Html.text text
+                                BaseContentValueText text ->
+                                    Html.text text
 
-                            BaseContentValueImage image ->
-                                Html.img [ Html.Attributes.src image.path ] []
+                                BaseContentValueImage image ->
+                                    Html.img [ Html.Attributes.src image.path ] []
 
-                            BaseContentValueUnknown ->
-                                Html.div []
-                                    [ Html.text
-                                        (case base.postsFeed of
-                                            Just n ->
-                                                String.concat n
+                                BaseContentValueUnknown ->
+                                    Html.div [] []
+                        )
+                )
+            , case maybeFeed of
+                Just feed ->
+                    Html.div [ Html.Attributes.class "feed" ]
+                        (feed.entries
+                            |> List.map
+                                (\gridItem ->
+                                    Html.a [ Html.Attributes.href gridItem.url ]
+                                        [ Html.div []
+                                            [ Html.h4 [] [ Html.text gridItem.title ]
+                                            , Html.p [] [ Html.text gridItem.description ]
+                                            ]
+                                        ]
+                                )
+                        )
 
-                                            Nothing ->
-                                                ""
-                                        )
-                                    ]
-                    )
-            )
+                Nothing ->
+                    Html.div [] []
+            ]
     }
