@@ -65,7 +65,7 @@ const cleanupContent = () =>
 
 const runSync = () => {
     if (!process.env.COCKPIT_API_URL || !process.env.COCKPIT_API_TOKEN) {
-        console.error(`💥 environment configuration missing, check .env file`)
+        console.error(`💥 environment configuration (COCKPIT_API_URL and COCKPIT_API_TOKEN) missing`)
         process.exit(1)
     }
 
