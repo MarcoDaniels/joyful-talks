@@ -1,4 +1,4 @@
-import {cockpitClient} from './cockiptClient'
+import {cockpitClient} from 'cockpit-http-client'
 import * as fs from 'fs'
 import * as path from 'path'
 
@@ -8,15 +8,28 @@ type Entry = {
     url: string
 }
 
-type Data = {
+type CollectionData = {
     entries: Entry[]
     total: number
 }
 
+type Collections = {
+    [n: string]: CollectionData
+}
+
+type Singletons = {
+    [n: string]: unknown
+}
+
 type Content = {
     collection: string
-    data: any,
-    meta: any
+    data: unknown,
+    meta: unknown
+}
+
+export type Config = {
+    cockpitAPIURL: string
+    cockpitAPIToken: string
 }
 
 const createFile = (url: string, content: Content) => {
@@ -29,39 +42,43 @@ const createFile = (url: string, content: Content) => {
     })
 }
 
-const syncContent = async () => {
-    const collections = await cockpitClient.collections()
-    const singletons = await cockpitClient.singletons()
+const syncContent = async ({cockpitAPIURL, cockpitAPIToken}: Config) => {
+    const client = cockpitClient({apiURL: cockpitAPIURL, apiToken: cockpitAPIToken})
 
-    if (collections.success && singletons.success) {
-        const singletonData = await Promise.all(singletons.data.map((s) => cockpitClient.singletonData(s))).then(([singleton]) => {
-            if (singleton && singleton.success) return singleton.data
-        })
+    const sync = await client.sync<Collections, Singletons>()
 
-        collections.data.map(collection => {
-            cockpitClient.collectionData<Data>(collection).then(collectionData => {
-                if (collectionData.success) {
-                    collectionData.data.entries.map(data => {
-                        createFile(data.url, {
-                            collection: collection,
-                            data: data,
-                            meta: singletonData
-                        })
-                    })
-                }
-            })
+    if (sync.collections && sync.singletons) {
+        const [meta] = Object.values(sync.singletons)
+
+        Object.entries(sync.collections).map(([collection, data]) => {
+            data.entries.map(entry => createFile(entry.url, {
+                collection: collection,
+                data: entry,
+                meta: meta
+            }))
         })
     }
-
 }
 
 const cleanupContent = () =>
     new Promise((resolve => resolve(fs.rmdirSync(contentFolder, {recursive: true}))))
 
+const runSync = () => {
+    if (!process.env.COCKPIT_API_URL || !process.env.COCKPIT_API_TOKEN) {
+        console.error(`💥 environment configuration missing, check .env file`)
+        process.exit(1)
+    }
 
-cleanupContent().then(() => {
-    console.log(`💢 content clear`)
+    const config: Config = {
+        cockpitAPIURL: process.env.COCKPIT_API_URL,
+        cockpitAPIToken: process.env.COCKPIT_API_TOKEN,
+    }
 
-    syncContent().then(() => console.log(`🚀 content sync`))
-})
+    cleanupContent().then(() => {
+        console.log(`💢 content clear`)
 
+        syncContent(config).then(() => console.log(`🚀 content sync`))
+    })
+}
+
+runSync()
