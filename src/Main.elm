@@ -11,8 +11,6 @@ import Page.Post exposing (postView)
 import Pages exposing (internals)
 import Pages.Platform
 import Pages.StaticHttp as StaticHttp
-import Task
-import Time
 
 
 main : Pages.Platform.Program Model Msg Content Renderer Pages.PathKey
@@ -20,7 +18,7 @@ main =
     Pages.Platform.init
         { init = \_ -> init
         , view = \_ -> view
-        , update = updateWithStorage
+        , update = updateWithPort
         , subscriptions = \_ _ _ -> subscriptions
         , documents =
             [ { extension = "md"
@@ -38,25 +36,25 @@ main =
 
 init : ( Model, Cmd Msg )
 init =
-    ( { cookieConsent = { accept = False, date = Nothing } }
+    ( { cookieConsent = { accept = False } }
     , Cmd.none
     )
 
 
-port cookieState : (Model -> msg) -> Sub msg
+port cookieState : (CookieConsent -> msg) -> Sub msg
 
 
-port cookieAccept : Model -> Cmd msg
+port cookieAccept : CookieConsent -> Cmd msg
 
 
-updateWithStorage : Msg -> Model -> ( Model, Cmd Msg )
-updateWithStorage msg model =
+updateWithPort : Msg -> Model -> ( Model, Cmd Msg )
+updateWithPort msg model =
     let
         ( newModel, cmd ) =
             update msg model
     in
     ( newModel
-    , Cmd.batch [ cookieAccept newModel, cmd ]
+    , Cmd.batch [ cookieAccept newModel.cookieConsent, cmd ]
     )
 
 
@@ -64,10 +62,10 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         CookieState state ->
-            ( { model | cookieConsent = state.cookieConsent }, Cmd.none )
+            ( { model | cookieConsent = state }, Cmd.none )
 
         CookieAccept ->
-            ( { model | cookieConsent = { accept = True, date = Just 1 } }, Cmd.none )
+            ( { model | cookieConsent = { accept = True } }, Cmd.none )
 
         NoOp _ ->
             ( model, Cmd.none )
@@ -78,9 +76,7 @@ subscriptions =
     cookieState CookieState
 
 
-view :
-    ContentContext
-    -> StaticHttp.Request StaticRequest
+view : ContentContext -> StaticHttp.Request StaticRequest
 view contentContext =
     case contentContext.frontmatter.data of
         BaseData baseData ->

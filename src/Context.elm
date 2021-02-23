@@ -9,12 +9,12 @@ import Shared.Types exposing (Base, Meta, Post)
 
 type Msg
     = NoOp (Html ())
-    | CookieState Model
+    | CookieState CookieConsent
     | CookieAccept
 
 
 type alias CookieConsent =
-    { accept : Bool, date : Maybe Int }
+    { accept : Bool }
 
 
 type alias Model =
