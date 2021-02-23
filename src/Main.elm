@@ -36,7 +36,7 @@ main =
 
 init : ( Model, Cmd Msg )
 init =
-    ( { cookieConsent = { accept = False } }
+    ( { cookieConsent = { accept = True } }
     , Cmd.none
     )
 

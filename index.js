@@ -7,13 +7,14 @@ const pagesInit = require('elm-pages')
 pagesInit({
     mainElmModule: Elm.Main
 }).then(app => {
-    // TODO: make it better
     const cookieName = 'jt-cookies'
     const expirationDays = 30
-    const value = '; ' + document.cookie
-    const parts = value.split('; ' + cookieName + '=')
-    if (parts[1]) {
-        app.ports.cookieState.send(JSON.parse(parts[1]))
+
+    const cookie = document.cookie.match(`(^| )${cookieName}=([^;]+)`)
+    if (cookie && cookie[2]) {
+        app.ports.cookieState.send(JSON.parse(cookie[2]))
+    } else {
+        app.ports.cookieState.send({accept: false})
     }
 
     app.ports.cookieAccept.subscribe((state) => {

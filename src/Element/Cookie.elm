@@ -8,8 +8,8 @@ import Shared.Types exposing (CookieInformation)
 
 
 cookieView : CookieConsent -> CookieInformation -> Html Msg
-cookieView cookie { title, content } =
-    if cookie.accept then
+cookieView consent { title, content } =
+    if consent.accept then
         div [] []
 
     else
