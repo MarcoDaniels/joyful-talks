@@ -1,7 +1,7 @@
 port module Main exposing (main)
 
 import Content exposing (contentDecoder, contentFeed)
-import Context exposing (Content, ContentContext, CookieConsent, Data(..), Model, Msg(..), PageData, Renderer, StaticRequest)
+import Context exposing (Content, ContentContext, CookieConsent, CookieMsg(..), Data(..), Model, Msg(..), PageData, Renderer, StaticRequest)
 import Html exposing (Html)
 import Layout
 import Manifest exposing (manifest)
@@ -61,11 +61,13 @@ updateWithPort msg model =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        CookieState state ->
-            ( { model | cookieConsent = state }, Cmd.none )
+        Cookie consent ->
+            case consent of
+                CookieState state ->
+                    ( { model | cookieConsent = state }, Cmd.none )
 
-        CookieAccept ->
-            ( { model | cookieConsent = { accept = True } }, Cmd.none )
+                CookieAccept ->
+                    ( { model | cookieConsent = { accept = True } }, Cmd.none )
 
         NoOp _ ->
             ( model, Cmd.none )
@@ -73,7 +75,7 @@ update msg model =
 
 subscriptions : Sub Msg
 subscriptions =
-    cookieState CookieState
+    Sub.map Cookie (cookieState CookieState)
 
 
 view : ContentContext -> StaticHttp.Request StaticRequest
