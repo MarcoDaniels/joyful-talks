@@ -1,0 +1,24 @@
+@import './utils/settings';
+
+.cookie-overlay {
+  display: block;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  padding: 10px;
+  position: fixed;
+  z-index: 1;
+
+  opacity: 0.9;
+  border-top: 1px solid gray;
+
+  &-wrapper {
+    @include container;
+    display: block;
+    padding: 0 15px 10px;
+
+      &-close {
+        @include primaryButton;
+      }
+  }
+}

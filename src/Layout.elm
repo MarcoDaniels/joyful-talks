@@ -19,7 +19,7 @@ view pageData { frontmatter } model =
                         )
                 )
             , pageData.body
-            , cookieView model.cookieConsent
+            , cookieView model.cookieConsent frontmatter.meta.cookie
             , Html.footer []
                 (frontmatter.meta.footer
                     |> List.map
