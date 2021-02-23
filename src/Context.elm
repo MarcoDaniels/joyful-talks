@@ -13,8 +13,12 @@ type Msg
     | CookieAccept
 
 
+type alias CookieConsent =
+    { accept : Bool, date : Maybe Int }
+
+
 type alias Model =
-    { cookieConsent : Bool }
+    { cookieConsent : CookieConsent }
 
 
 type alias Renderer =

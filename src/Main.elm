@@ -1,7 +1,7 @@
 port module Main exposing (main)
 
 import Content exposing (contentDecoder, contentFeed)
-import Context exposing (Content, ContentContext, Data(..), Model, Msg(..), PageData, Renderer, StaticRequest)
+import Context exposing (Content, ContentContext, CookieConsent, Data(..), Model, Msg(..), PageData, Renderer, StaticRequest)
 import Html exposing (Html)
 import Layout
 import Manifest exposing (manifest)
@@ -11,6 +11,8 @@ import Page.Post exposing (postView)
 import Pages exposing (internals)
 import Pages.Platform
 import Pages.StaticHttp as StaticHttp
+import Task
+import Time
 
 
 main : Pages.Platform.Program Model Msg Content Renderer Pages.PathKey
@@ -36,7 +38,9 @@ main =
 
 init : ( Model, Cmd Msg )
 init =
-    ( { cookieConsent = False }, Cmd.none )
+    ( { cookieConsent = { accept = False, date = Nothing } }
+    , Cmd.none
+    )
 
 
 port cookieState : (Model -> msg) -> Sub msg
@@ -63,7 +67,7 @@ update msg model =
             ( { model | cookieConsent = state.cookieConsent }, Cmd.none )
 
         CookieAccept ->
-            ( { model | cookieConsent = True }, Cmd.none )
+            ( { model | cookieConsent = { accept = True, date = Just 1 } }, Cmd.none )
 
         NoOp _ ->
             ( model, Cmd.none )

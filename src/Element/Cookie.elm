@@ -1,16 +1,26 @@
 module Element.Cookie exposing (..)
 
-import Html exposing (Html)
-import Html.Attributes
-import Html.Events
-import Context exposing (Msg(..))
+import Context exposing (CookieConsent, Msg(..))
+import Html exposing (Html, button, div, h4, p, text)
+import Html.Attributes exposing (class)
+import Html.Events exposing (onClick)
+import Shared.Types exposing (CookieInformation)
 
 
-cookieView : Bool -> Html Msg
-cookieView accept =
-    if accept then
-        Html.div [] []
+cookieView : CookieConsent -> CookieInformation -> Html Msg
+cookieView cookie { title, content } =
+    if cookie.accept then
+        div [] []
 
     else
-        Html.div [ Html.Attributes.class "center" ]
-            [ Html.button [ Html.Events.onClick CookieAccept ] [ Html.text "Accept" ] ]
+        div [ class "cookie-overlay" ]
+            [ div [ class "cookie-overlay-wrapper" ]
+                [ h4 [] [ text title ]
+                , p [] [ text content ]
+                , div []
+                    [ button
+                        [ class "cookie-overlay-wrapper-close", onClick CookieAccept ]
+                        [ text "Accept" ]
+                    ]
+                ]
+            ]
