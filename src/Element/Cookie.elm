@@ -1,6 +1,6 @@
 module Element.Cookie exposing (..)
 
-import Context exposing (CookieConsent, Msg(..))
+import Context exposing (CookieConsent, CookieMsg(..), Msg(..))
 import Html exposing (Html, button, div, h4, p, text)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
@@ -19,7 +19,7 @@ cookieView cookie { title, content } =
                 , p [] [ text content ]
                 , div []
                     [ button
-                        [ class "cookie-overlay-wrapper-close", onClick CookieAccept ]
+                        [ class "cookie-overlay-wrapper-close", onClick (Cookie <| CookieAccept) ]
                         [ text "Accept" ]
                     ]
                 ]

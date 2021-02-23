@@ -7,10 +7,14 @@ import Pages.PagePath exposing (PagePath)
 import Shared.Types exposing (Base, Meta, Post)
 
 
+type CookieMsg
+    = CookieState CookieConsent
+    | CookieAccept
+
+
 type Msg
     = NoOp (Html ())
-    | CookieState CookieConsent
-    | CookieAccept
+    | Cookie CookieMsg
 
 
 type alias CookieConsent =
