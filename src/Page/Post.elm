@@ -75,7 +75,7 @@ postView post =
                                 markdownRender markdown
 
                             PostContentValueImage image ->
-                                Html.img [ Html.Attributes.src image.path ] []
+                                Html.img [ Html.Attributes.src (image.path ++ "?w=500&o=1") ] []
 
                             PostContentValueRepeater repeater ->
                                 Html.div [ Html.Attributes.class "side"]
@@ -87,7 +87,7 @@ postView post =
                                                         markdownRender markdown
 
                                                     PostContentRepeaterImage image ->
-                                                        Html.img [ Html.Attributes.src image.path ] []
+                                                        Html.img [ Html.Attributes.src (image.path ++ "?w=500&o=1") ] []
 
                                                     PostContentRepeaterUnknown ->
                                                         Html.div [] []
