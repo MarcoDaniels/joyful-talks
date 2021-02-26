@@ -33,7 +33,7 @@ export type Config = {
 }
 
 const createFile = (url: string, content: Content) => {
-    const fileContent = `${contentFolder}${url === '/' ? '/index.md' : `/${url}.md`}`
+    const fileContent = `${contentFolder}${url === '/' ? '/index.md' : url.slice(-1) === '/' ? `/${url.slice(0, -1)}.md` : `/${url}.md`}`
 
     fs.mkdir(path.dirname(fileContent), {recursive: true}, (err) => {
         if (err) return
