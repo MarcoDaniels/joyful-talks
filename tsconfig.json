@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "rootDir": "sync",
-    "outDir": "syncBuild",
+    "rootDir": "utils",
+    "outDir": "utilsBuild",
     "target": "ES2020",
     "lib": ["ES2020"],
     "module": "commonjs",
@@ -23,5 +23,5 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "exclude": ["node_modules", "syncBuild", "dist", "build"]
+  "exclude": ["node_modules", "utilsBuild", "dist", "build"]
 }
