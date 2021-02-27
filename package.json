@@ -5,9 +5,10 @@
   "license": "MIT",
   "scripts": {
     "sync": "ts-node utils/sync.ts",
-    "start:assets": "ts-node utils/serve.ts",
+    "start:assets": "COCKPIT_MODE=start ts-node utils/serve.ts",
     "start:elm": "elm-pages develop",
-    "start": "npm-run-all --parallel start:assets start:elm",
+    "start": "npm-run-all --parallel start:elm start:assets",
+    "serve": "COCKPIT_MODE=serve ts-node utils/serve.ts",
     "build": "elm-pages build",
     "clean": "rm -rf dist",
     "postinstall": "elm-tooling install"
