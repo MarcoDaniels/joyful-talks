@@ -1891,6 +1891,13 @@ author-regex@^1.0.0:
   resolved "https://registry.yarnpkg.com/author-regex/-/author-regex-1.0.0.tgz#d08885be6b9bbf9439fe087c76287245f0a81450"
   integrity sha1-0IiFvmubv5Q5/gh8dihyRfCoFFA=
 
+aws-cli-js@2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/aws-cli-js/-/aws-cli-js-2.2.0.tgz#9a32f2ffb3fe6c3f36553dbe0eb6ccc67f72cddd"
+  integrity sha512-kugHP/yJYyHpEPEQb1zqRwClDedBUVJysZoETD4FgaczTXD8LhDHHKvzeUahrSFJuakw/tXwv7T5tAcwcKVaqQ==
+  dependencies:
+    nodeify-ts "1.0.6"
+
 aws-sign2@~0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/aws-sign2/-/aws-sign2-0.7.0.tgz#b46e890934a9591f2d2f6f86d7e6a9f1b3fe76a8"
@@ -6414,6 +6421,11 @@ node-sass@^4.12.0:
     sass-graph "2.2.5"
     stdout-stream "^1.4.0"
     "true-case-path" "^1.0.2"
+
+nodeify-ts@1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/nodeify-ts/-/nodeify-ts-1.0.6.tgz#ceef172c4fad1a45a1ae60a31c7e295150b5e221"
+  integrity sha512-jq+8sqVG1aLqy5maMTceL8NUJ1CvarWztlxvrYh3G0aao9BsVeoVmVedUnrUSBLetP7oLIAJrPrw4+iIo7v3GA==
 
 noop-logger@^0.1.1:
   version "0.1.1"
