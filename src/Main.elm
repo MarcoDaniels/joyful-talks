@@ -6,6 +6,7 @@ import Html exposing (Html)
 import Layout
 import Manifest exposing (manifest)
 import Metadata exposing (metadataHead)
+import OptimizedDecoder exposing (decoder)
 import Page.Base exposing (baseView)
 import Page.Post exposing (postView)
 import Pages exposing (internals)
@@ -22,7 +23,7 @@ main =
         , subscriptions = \_ _ _ -> subscriptions
         , documents =
             [ { extension = "md"
-              , metadata = contentDecoder
+              , metadata = decoder contentDecoder
               , body = \_ -> Ok (Html.div [] [] |> List.singleton)
               }
             ]

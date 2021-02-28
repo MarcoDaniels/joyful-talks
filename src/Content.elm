@@ -1,17 +1,13 @@
 module Content exposing (contentDecoder, contentFeed)
 
--- TODO: remove decoder pipeline dependency as optimized exposes it
-
 import Context exposing (Content, ContentContext, Data(..), PageData, StaticRequest)
-import Json.Decode exposing (Decoder, andThen, field, list, string, succeed)
-import Json.Decode.Pipeline exposing (custom, required)
-import OptimizedDecoder as Decoder
-import OptimizedDecoder.Pipeline as DecoderPipe
+import OptimizedDecoder exposing (Decoder, andThen, field, list, string, succeed)
+import OptimizedDecoder.Pipeline exposing (custom, required)
 import Page.Base exposing (baseDecoder)
 import Page.Post exposing (postDecoder)
 import Pages.Secrets as Secrets
 import Pages.StaticHttp as StaticHttp
-import Shared.Decoder exposing (linkDecoder)
+import Shared.Decoder exposing (imageDecoder, linkDecoder)
 import Shared.Types exposing (Base, CookieInformation, Feed, FeedItem, ImagePath, Meta, Post)
 
 
@@ -64,14 +60,14 @@ contentFeed categoryList =
             |> Secrets.with "COCKPIT_API_URL"
             |> Secrets.with "COCKPIT_API_TOKEN"
         )
-        (Decoder.succeed Feed
-            |> DecoderPipe.required "entries"
-                (Decoder.list
-                    (Decoder.succeed FeedItem
-                        |> DecoderPipe.required "title" Decoder.string
-                        |> DecoderPipe.required "description" Decoder.string
-                        |> DecoderPipe.required "url" Decoder.string
-                        |> DecoderPipe.required "image" (Decoder.succeed ImagePath |> DecoderPipe.required "path" Decoder.string)
+        (succeed Feed
+            |> required "entries"
+                (list
+                    (succeed FeedItem
+                        |> required "title" string
+                        |> required "description" string
+                        |> required "url" string
+                        |> required "image" imageDecoder
                     )
                 )
         )
