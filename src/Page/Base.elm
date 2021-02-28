@@ -5,8 +5,8 @@ import Element.Feed exposing (feedView)
 import Element.Image exposing (imageView)
 import Html
 import Html.Attributes
-import Json.Decode exposing (Decoder, andThen, field, list, maybe, string, succeed)
-import Json.Decode.Pipeline exposing (custom, required)
+import OptimizedDecoder exposing (Decoder, andThen, field, list, maybe, string, succeed)
+import OptimizedDecoder.Pipeline exposing (custom, required)
 import Markdown exposing (markdownRender)
 import Shared.Decoder exposing (fieldDecoder, imageDecoder)
 import Shared.Types exposing (Base, BaseContent, BaseContentValue(..), Feed, Field)
