@@ -69,7 +69,7 @@ type alias Meta =
 
 
 type alias FeedItem =
-    { title : String, description : String, url : String }
+    { title : String, description : String, url : String, image : ImagePath }
 
 
 type alias Feed =

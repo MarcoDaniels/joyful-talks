@@ -1,13 +1,14 @@
 module Page.Post exposing (postDecoder, postView)
 
 import Context exposing (PageData)
-import Shared.Types exposing (Field, Post, PostContent, PostContentRepeaterField, PostContentRepeaterType(..), PostContentValue(..))
+import Element.Image exposing (imageView)
 import Html
 import Html.Attributes
 import Json.Decode exposing (Decoder, andThen, field, list, string, succeed)
 import Json.Decode.Pipeline exposing (custom, required)
 import Markdown exposing (markdownRender)
 import Shared.Decoder exposing (fieldDecoder, imageDecoder)
+import Shared.Types exposing (Field, Post, PostContent, PostContentRepeaterField, PostContentRepeaterType(..), PostContentValue(..))
 
 
 repeaterFieldDecoder : Decoder PostContentRepeaterField
@@ -75,10 +76,10 @@ postView post =
                                 markdownRender markdown
 
                             PostContentValueImage image ->
-                                Html.img [ Html.Attributes.src (image.path ++ "?w=500&o=1") ] []
+                                imageView image.path
 
                             PostContentValueRepeater repeater ->
-                                Html.div [ Html.Attributes.class "side"]
+                                Html.div [ Html.Attributes.class "side" ]
                                     (repeater
                                         |> List.map
                                             (\rep ->
@@ -87,7 +88,7 @@ postView post =
                                                         markdownRender markdown
 
                                                     PostContentRepeaterImage image ->
-                                                        Html.img [ Html.Attributes.src (image.path ++ "?w=500&o=1") ] []
+                                                        imageView image.path
 
                                                     PostContentRepeaterUnknown ->
                                                         Html.div [] []
