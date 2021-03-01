@@ -2,6 +2,7 @@ module Layout exposing (view)
 
 import Context exposing (ContentContext, Model, Msg(..), PageData)
 import Element.Cookie exposing (cookieView)
+import Element.Footer exposing (footerView)
 import Html exposing (Html)
 import Html.Attributes exposing (href)
 
@@ -12,7 +13,7 @@ view pageData { frontmatter } model =
     , body =
         Html.div []
             [ Html.nav []
-                (frontmatter.meta.navigation
+                (frontmatter.meta.navigation.menu
                     |> List.map
                         (\navigation ->
                             Html.a [ href navigation.url ] [ Html.text navigation.text ]
@@ -20,12 +21,6 @@ view pageData { frontmatter } model =
                 )
             , pageData.body
             , cookieView model.cookieConsent frontmatter.meta.cookie
-            , Html.footer []
-                (frontmatter.meta.footer
-                    |> List.map
-                        (\footer ->
-                            Html.a [ href footer.url ] [ Html.text footer.text ]
-                        )
-                )
+            , footerView frontmatter.meta.footer
             ]
     }

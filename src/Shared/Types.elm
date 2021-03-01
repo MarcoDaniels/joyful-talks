@@ -60,12 +60,20 @@ type alias Link =
     { text : String, url : String }
 
 
-type alias CookieInformation =
+type alias CookieBanner =
     { title : String, content : String }
 
 
+type alias Footer =
+    { links : List Link, info : String }
+
+
+type alias Navigation =
+    { menu : List Link }
+
+
 type alias Meta =
-    { navigation : List Link, footer : List Link, cookie : CookieInformation }
+    { navigation : Navigation, footer : Footer, cookie : CookieBanner }
 
 
 type alias FeedItem =
