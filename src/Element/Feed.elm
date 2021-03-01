@@ -1,7 +1,7 @@
 module Element.Feed exposing (feedView)
 
 import Context exposing (Msg)
-import Element.Image exposing (imageView)
+import Element.Image exposing (ImageType(..), imageView)
 import Html exposing (Html, a, div, h4, p, text)
 import Html.Attributes exposing (class, href)
 import Shared.Types exposing (Feed)
@@ -16,7 +16,7 @@ feedView feed =
                     a [ href item.url ]
                         [ div []
                             [ h4 [] [ text item.title ]
-                            , imageView item.image.path
+                            , imageView { src = item.image.path, alt = item.title } ImageFeed
                             , p [] [ text item.description ]
                             ]
                         ]

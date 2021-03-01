@@ -1,4 +1,5 @@
 @import './utils/settings';
+@import './feed';
 @import './cookie';
 
 body {
@@ -33,12 +34,6 @@ nav {
 .side {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-}
-
-.feed {
-  display: flex;
-  justify-content: space-around;
   align-items: center;
 }
 
