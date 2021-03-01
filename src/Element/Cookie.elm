@@ -4,10 +4,10 @@ import Context exposing (CookieConsent, CookieMsg(..), Msg(..))
 import Html exposing (Html, button, div, h4, p, text)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
-import Shared.Types exposing (CookieInformation)
+import Shared.Types exposing (CookieBanner)
 
 
-cookieView : CookieConsent -> CookieInformation -> Html Msg
+cookieView : CookieConsent -> CookieBanner -> Html Msg
 cookieView consent { title, content } =
     if consent.accept then
         div [] []

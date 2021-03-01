@@ -2,7 +2,7 @@ module Shared.Decoder exposing (fieldDecoder, imageDecoder, linkDecoder)
 
 import OptimizedDecoder exposing (Decoder, string, succeed)
 import OptimizedDecoder.Pipeline exposing (required, requiredAt)
-import Shared.Types exposing (CookieInformation, Field, ImagePath, Link)
+import Shared.Types exposing (CookieBanner, Field, ImagePath, Link)
 
 
 fieldDecoder : Decoder Field
