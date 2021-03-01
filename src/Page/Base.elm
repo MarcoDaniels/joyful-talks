@@ -2,12 +2,12 @@ module Page.Base exposing (baseDecoder, baseView)
 
 import Context exposing (PageData)
 import Element.Feed exposing (feedView)
-import Element.Image exposing (imageView)
+import Element.Image exposing (ImageType(..), imageView)
 import Html
 import Html.Attributes
+import Markdown exposing (markdownRender)
 import OptimizedDecoder exposing (Decoder, andThen, field, list, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, required)
-import Markdown exposing (markdownRender)
 import Shared.Decoder exposing (fieldDecoder, imageDecoder)
 import Shared.Types exposing (Base, BaseContent, BaseContentValue(..), Feed, Field)
 
@@ -61,7 +61,7 @@ baseView base maybeFeed =
                                     Html.text text
 
                                 BaseContentValueImage image ->
-                                    imageView image.path
+                                    imageView { src = image.path, alt = "" } ImageDefault
 
                                 BaseContentValueUnknown ->
                                     Html.div [] []

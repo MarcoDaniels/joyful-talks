@@ -1,12 +1,12 @@
 module Page.Post exposing (postDecoder, postView)
 
 import Context exposing (PageData)
-import Element.Image exposing (imageView)
+import Element.Image exposing (ImageType(..), imageView)
 import Html
 import Html.Attributes
+import Markdown exposing (markdownRender)
 import OptimizedDecoder exposing (Decoder, andThen, field, list, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, required)
-import Markdown exposing (markdownRender)
 import Shared.Decoder exposing (fieldDecoder, imageDecoder)
 import Shared.Types exposing (Field, Post, PostContent, PostContentRepeaterField, PostContentRepeaterType(..), PostContentValue(..))
 
@@ -76,7 +76,7 @@ postView post =
                                 markdownRender markdown
 
                             PostContentValueImage image ->
-                                imageView image.path
+                                imageView { src = image.path, alt = "" } ImagePost
 
                             PostContentValueRepeater repeater ->
                                 Html.div [ Html.Attributes.class "side" ]
@@ -88,7 +88,7 @@ postView post =
                                                         markdownRender markdown
 
                                                     PostContentRepeaterImage image ->
-                                                        imageView image.path
+                                                        imageView { src = image.path, alt = "" } ImageDefault
 
                                                     PostContentRepeaterUnknown ->
                                                         Html.div [] []

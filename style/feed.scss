@@ -1,0 +1,11 @@
+@import './utils/devices';
+
+.feed {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  @include small {
+    flex-direction: column;
+  }
+}
