@@ -1,21 +1,16 @@
 @import './utils/settings';
 @import './element';
+@import './header';
 @import './feed';
 @import './cookie';
-
-nav {
-  padding: 10px 0;
-  margin-bottom: 10px;
-  border-bottom: 1px solid;
-
-  > a {
-    margin-right: 10px;
-  }
-}
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
+
+  @include extra-large {
+    padding: 0 10px;
+  }
 }
 
 .contentWrapper {
@@ -37,7 +32,6 @@ nav {
 
 .footer {
   margin-top: auto;
-  @include centerContent;
   border-top: $borderPrimary;
 
   &-links {
