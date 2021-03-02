@@ -1,3 +1,5 @@
+$borderPrimary: 1px solid lightgray;
+
 @mixin primaryColor {
   color: #000;
   background: #fff;
@@ -8,17 +10,19 @@
   text-decoration: none;
 }
 
-@mixin container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
 @mixin primaryButton {
   color: #000;
   background: #fff;
-  border: 1px solid gray;
+  border: $borderPrimary;
   border-radius: 5px;
   display: flex;
   cursor: pointer;
   padding: 5px 7px;
 }
+
+@mixin centerContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+

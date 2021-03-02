@@ -1,18 +1,7 @@
 @import './utils/settings';
+@import './element';
 @import './feed';
 @import './cookie';
-
-body {
-  @include primaryColor;
-  @include container;
-  padding: 0;
-  position: relative;
-  min-height: 92vh;
-}
-
-a {
-  @include primaryLink;
-}
 
 nav {
   padding: 10px 0;
@@ -24,10 +13,19 @@ nav {
   }
 }
 
-.center {
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.contentWrapper {
+  height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+}
+
+.center {
+  @include centerContent;
   flex-direction: column;
 }
 
@@ -37,22 +35,20 @@ nav {
   align-items: center;
 }
 
-footer {
-  padding: 10px 0;
-  margin-top: 10px;
-  border-top: 1px solid;
+.footer {
+  margin-top: auto;
+  @include centerContent;
+  border-top: $borderPrimary;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  &-links {
+    margin-top: 20px;
 
-  > a {
-    margin-right: 10px;
+    > a:not(:last-child) {
+      margin-right: 10px;
+    }
   }
-}
 
-img {
-  display: block;
-  max-width: 100%;
-  height: auto;
+  &-info {
+    margin-top: 20px;
+  }
 }

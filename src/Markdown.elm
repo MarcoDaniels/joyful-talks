@@ -5,6 +5,10 @@ import Markdown.Parser
 import Markdown.Renderer
 
 
+
+-- TODO: markdown should handle links
+
+
 markdownRender : String -> Html msg
 markdownRender markdownBody =
     Markdown.Parser.parse markdownBody
