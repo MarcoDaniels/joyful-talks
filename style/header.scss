@@ -1,0 +1,42 @@
+@import './utils/settings';
+
+.skipNavigation {
+  display: block;
+}
+
+.navigation {
+  @include primaryColor;
+  border-bottom: $borderPrimary;
+  position: fixed;
+  padding: 10px 0;
+  height: 50px;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+
+  &-menu {
+    &-item-active {
+      opacity: 0.5;
+    }
+
+    > a {
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.5;
+      }
+
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+#mainContent::before {
+  content: '';
+  display: block;
+  height: 60px;
+}

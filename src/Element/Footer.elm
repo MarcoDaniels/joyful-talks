@@ -10,7 +10,7 @@ import Shared.Types exposing (Footer)
 footerView : Footer -> Html Msg
 footerView footerData =
     footer [ class "footer" ]
-        [ div [ class "container" ]
+        [ div [ class "container center" ]
             [ div [ class "footer-links" ]
                 (footerData.links
                     |> List.map
