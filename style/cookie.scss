@@ -1,23 +1,34 @@
 @import './utils/settings';
 
-.cookie-overlay {
+.cookie {
+  @include primaryColor;
   display: block;
   bottom: 0;
   right: 0;
   left: 0;
-  padding: 10px;
   position: fixed;
   z-index: 1;
+  border-top: $borderPrimary;
 
-  opacity: 0.9;
-  border-top: 1px solid gray;
+  box-shadow: 0 -10px 20px 10px rgba(0, 0, 0, 0.1);
 
   &-wrapper {
     display: block;
-    padding: 0 15px 10px;
+    width: 50%;
+    padding: 20px;
 
-      &-close {
+    &-text {
+      text-align: justify;
+      text-justify: inter-word;
+    }
+
+    &-close {
+      display: flex;
+      justify-content: center;
+
+      &-button {
         @include primaryButton;
       }
+    }
   }
 }
