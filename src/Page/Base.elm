@@ -1,6 +1,7 @@
 module Page.Base exposing (baseDecoder, baseView)
 
 import Context exposing (PageData)
+import Element.Empty exposing (emptyNode)
 import Element.Feed exposing (feedView)
 import Element.Image exposing (ImageType(..), imageView)
 import Html
@@ -64,7 +65,7 @@ baseView base maybeFeed =
                                     imageView { src = image.path, alt = "" } ImageDefault
 
                                 BaseContentValueUnknown ->
-                                    Html.div [] []
+                                    emptyNode
                         )
                 )
             , case maybeFeed of
@@ -72,6 +73,6 @@ baseView base maybeFeed =
                     feedView feed
 
                 Nothing ->
-                    Html.div [] []
+                    emptyNode
             ]
     }
