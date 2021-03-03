@@ -17,12 +17,27 @@ $borderPrimary: 1px solid lightgray;
   border-radius: 5px;
   display: flex;
   cursor: pointer;
-  padding: 5px 7px;
+  padding: 5px 10px;
 }
 
 @mixin centerContent {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@mixin expand {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+  visibility: hidden;
+  max-height: 0;
+  transition: all 0.4s ease;
+
+  &.show {
+    max-height: 1000px;
+    visibility: visible;
+  }
 }
 

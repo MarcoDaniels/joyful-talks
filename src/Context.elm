@@ -15,6 +15,7 @@ type CookieMsg
 type Msg
     = NoOp (Html ())
     | Cookie CookieMsg
+    | MenuExpand Bool
 
 
 type alias CookieConsent =
@@ -22,7 +23,7 @@ type alias CookieConsent =
 
 
 type alias Model =
-    { cookieConsent : CookieConsent }
+    { cookieConsent : CookieConsent, menuExpand : Bool }
 
 
 type alias Renderer =
