@@ -7,7 +7,7 @@ import Page.Base exposing (baseDecoder)
 import Page.Post exposing (postDecoder)
 import Pages.Secrets as Secrets
 import Pages.StaticHttp as StaticHttp
-import Shared.Decoder exposing (imageDecoder, linkDecoder)
+import Shared.Decoder exposing (imageDecoder, linkDecoder, linkValueDecoder)
 import Shared.Types exposing (Base, CookieBanner, Feed, FeedItem, Footer, ImagePath, Meta, Navigation, Post)
 
 
@@ -34,10 +34,14 @@ contentDecoder =
         |> required "meta"
             (succeed Meta
                 |> required "navigation"
-                    (succeed Navigation |> required "menu" (list linkDecoder))
+                    (succeed Navigation
+                        |> required "brand" linkDecoder
+                        |> required "menu" (list linkValueDecoder)
+                        |> required "social" (list linkValueDecoder)
+                    )
                 |> required "footer"
                     (succeed Footer
-                        |> required "links" (list linkDecoder)
+                        |> required "links" (list linkValueDecoder)
                         |> required "info" string
                     )
                 |> required "cookie"

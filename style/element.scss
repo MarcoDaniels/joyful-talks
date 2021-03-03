@@ -1,9 +1,17 @@
 @import './utils/settings';
 
+html * {
+  font-family: 'Raleway', sans-serif;
+}
+
 body {
   @include primaryColor;
   padding: 0;
   margin: 0;
+}
+
+article {
+  padding-bottom: 40px;
 }
 
 a {
