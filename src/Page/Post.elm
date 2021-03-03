@@ -1,6 +1,7 @@
 module Page.Post exposing (postDecoder, postView)
 
 import Context exposing (PageData)
+import Element.Empty exposing (emptyNode)
 import Element.Image exposing (ImageType(..), imageView)
 import Html
 import Html.Attributes
@@ -91,12 +92,12 @@ postView post =
                                                         imageView { src = image.path, alt = "" } ImageDefault
 
                                                     PostContentRepeaterUnknown ->
-                                                        Html.div [] []
+                                                        emptyNode
                                             )
                                     )
 
                             PostContentValueUnknown ->
-                                Html.div [] []
+                                emptyNode
                     )
             )
     }

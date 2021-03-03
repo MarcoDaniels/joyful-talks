@@ -2,7 +2,7 @@ port module Main exposing (main)
 
 import Content exposing (contentDecoder, contentFeed)
 import Context exposing (Content, ContentContext, CookieConsent, CookieMsg(..), Data(..), Model, Msg(..), PageData, Renderer, StaticRequest)
-import Html exposing (Html)
+import Element.Empty exposing (emptyNode)
 import Layout
 import Manifest exposing (manifest)
 import Metadata exposing (metadataHead)
@@ -24,7 +24,7 @@ main =
         , documents =
             [ { extension = "md"
               , metadata = decoder contentDecoder
-              , body = \_ -> Ok (Html.div [] [] |> List.singleton)
+              , body = \_ -> Ok (emptyNode |> List.singleton)
               }
             ]
         , manifest = manifest
@@ -110,6 +110,6 @@ view contentContext =
 
         UnknownData ->
             StaticHttp.succeed
-                { view = \model _ -> Layout.view { title = "", body = Html.div [] [] } contentContext model
+                { view = \model _ -> Layout.view { title = "", body = emptyNode } contentContext model
                 , head = []
                 }
