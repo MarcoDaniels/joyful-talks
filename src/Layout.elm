@@ -14,7 +14,7 @@ view pageData context model =
     , body =
         Html.div [ class "contentWrapper" ]
             [ headerView context
-            , article [ id "mainContent", class "container" ] [ pageData.body ]
+            , article [ id "content", class "container" ] [ pageData.body ]
             , cookieView model.cookieConsent context.frontmatter.meta.cookie
             , footerView context.frontmatter.meta.footer
             ]
