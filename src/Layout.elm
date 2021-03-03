@@ -13,7 +13,7 @@ view pageData context model =
     { title = pageData.title
     , body =
         Html.div [ class "contentWrapper" ]
-            [ headerView context
+            [ headerView context model.menuExpand
             , article [ id "content", class "container" ] [ pageData.body ]
             , cookieView model.cookieConsent context.frontmatter.meta.cookie
             , footerView context.frontmatter.meta.footer

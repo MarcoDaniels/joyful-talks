@@ -37,7 +37,7 @@ main =
 
 init : ( Model, Cmd Msg )
 init =
-    ( { cookieConsent = { accept = True } }
+    ( { cookieConsent = { accept = True }, menuExpand = False }
     , Cmd.none
     )
 
@@ -69,6 +69,9 @@ update msg model =
 
                 CookieAccept ->
                     ( { model | cookieConsent = { accept = True } }, Cmd.none )
+
+        MenuExpand expand ->
+            ( { model | menuExpand = expand }, Cmd.none )
 
         NoOp _ ->
             ( model, Cmd.none )
