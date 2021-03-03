@@ -1,4 +1,4 @@
-module Shared.Decoder exposing (fieldDecoder, imageDecoder, linkDecoder)
+module Shared.Decoder exposing (fieldDecoder, imageDecoder, linkDecoder, linkValueDecoder)
 
 import OptimizedDecoder exposing (Decoder, string, succeed)
 import OptimizedDecoder.Pipeline exposing (required, requiredAt)
@@ -17,4 +17,9 @@ imageDecoder =
 
 linkDecoder : Decoder Link
 linkDecoder =
+    succeed Link |> required "title" string |> required "url" string
+
+
+linkValueDecoder : Decoder Link
+linkValueDecoder =
     succeed Link |> requiredAt [ "value", "title" ] string |> requiredAt [ "value", "url" ] string

@@ -69,7 +69,7 @@ type alias Footer =
 
 
 type alias Navigation =
-    { menu : List Link }
+    { brand: Link, menu : List Link, social : List Link }
 
 
 type alias Meta =

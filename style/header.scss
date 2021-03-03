@@ -1,42 +1,72 @@
+@import './utils/devices';
 @import './utils/settings';
 
 .skipNavigation {
   display: block;
 }
 
+#mainContent::before {
+  content: '';
+  display: block;
+  height: 80px;
+}
+
 .navigation {
+  height: 70px;
   @include primaryColor;
   border-bottom: $borderPrimary;
   position: fixed;
   padding: 10px 0;
-  height: 50px;
   top: 0;
   right: 0;
   left: 0;
-  display: flex;
-  align-items: center;
 
-  &-menu {
-    &-item-active {
-      opacity: 0.5;
-    }
+  &-content {
+    position: relative;
 
-    > a {
-      cursor: pointer;
+    &-menu {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      transform: translateY(25%);
 
-      &:hover {
-        opacity: 0.5;
+      &-brand {
+        margin-bottom: 10px;
       }
 
-      &:not(:last-child) {
+      &-item {
+        font-size: 14px;
+        cursor: pointer;
+
+        &.active {
+          opacity: 0.5;
+        }
+
+        &:hover {
+          opacity: 0.5;
+        }
+
+        &:not(:last-child) {
+          margin-right: 10px;
+        }
+      }
+    }
+
+    &-social {
+      position: absolute;
+      top: 0;
+      right: 0;
+
+      @include extra-large {
         margin-right: 10px;
+      }
+
+      > a {
+        &:not(:last-child) {
+          margin-right: 10px;
+        }
       }
     }
   }
-}
-
-#mainContent::before {
-  content: '';
-  display: block;
-  height: 60px;
 }
