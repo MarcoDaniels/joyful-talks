@@ -79,7 +79,7 @@ update msg model =
 
 subscriptions : Sub Msg
 subscriptions =
-    Sub.map Cookie (cookieState CookieState)
+    Sub.batch [ Sub.map Cookie (cookieState CookieState) ]
 
 
 view : ContentContext -> StaticHttp.Request StaticRequest

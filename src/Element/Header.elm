@@ -55,6 +55,5 @@ headerView { path, frontmatter } expand =
                     ]
                 ]
             ]
-        , div [
-        class ("overlay" ++ ternary expand " show" ""), onClick (MenuExpand False) ] []
+        , div [ class ("overlay" ++ ternary expand " show" ""), onClick (MenuExpand False) ] []
         ]
