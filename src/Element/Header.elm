@@ -1,6 +1,7 @@
 module Element.Header exposing (headerView)
 
 import Context exposing (ContentContext, Model, Msg(..))
+import Element.Icon exposing (Icons(..), iconView)
 import Html exposing (Html, a, button, div, header, li, nav, text, ul)
 import Html.Attributes exposing (class, href, rel, target)
 import Html.Events exposing (onClick)
@@ -21,7 +22,10 @@ headerView { path, frontmatter } expand =
                                 [ href frontmatter.meta.navigation.brand.url, onClick (MenuExpand False) ]
                                 [ text frontmatter.meta.navigation.brand.text ]
                             , button [ class "header-nav-main-button", onClick (MenuExpand (not expand)) ]
-                                [ text (ternary expand "X" "=") ]
+                                [ ternary expand
+                                    (iconView Close { size = "15", color = "#3f3f3f" })
+                                    (iconView Burger { size = "15", color = "#3f3f3f" })
+                                ]
                             ]
                         ]
                     , ul [ class ("header-nav-main-items" ++ ternary expand " show" "") ]
@@ -48,7 +52,7 @@ headerView { path, frontmatter } expand =
                                     li [ class "header-nav-item" ]
                                         [ a
                                             [ href item.url, target "_blank", rel "noopener noreferrer" ]
-                                            [ text item.text ]
+                                            [ iconView Facebook { size = "15", color = "#000" } ]
                                         ]
                                 )
                         )
