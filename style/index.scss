@@ -1,4 +1,5 @@
 @import './utils/settings';
+@import './font';
 @import './element';
 @import './header';
 @import './feed';
@@ -9,7 +10,7 @@
   margin: 0 auto;
 
   @include extra-large {
-    padding: 0 10px;
+    padding: 0 15px;
   }
 }
 

@@ -15,7 +15,22 @@ article {
 }
 
 a {
-  @include primaryLink;
+  text-decoration: none;
+  cursor: pointer;
+
+  &.link {
+    &-primary {
+      color: #000;
+
+      &:hover {
+        opacity: 0.5;
+      }
+
+      &.active {
+        opacity: 0.5;
+      }
+    }
+  }
 }
 
 ul {

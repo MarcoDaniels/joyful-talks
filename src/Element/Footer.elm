@@ -15,7 +15,7 @@ footerView footerData =
                 (footerData.links
                     |> List.map
                         (\link ->
-                            a [ href link.url ] [ text link.text ]
+                            a [ class "link-primary font-m", href link.url ] [ text link.text ]
                         )
                 )
             , div [ class "footer-info" ] [ markdownRender footerData.info ]

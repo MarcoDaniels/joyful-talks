@@ -1,6 +1,7 @@
 module Element.Header exposing (headerView)
 
 import Context exposing (ContentContext, Model, Msg(..))
+import Element.Empty exposing (emptyNode)
 import Element.Icon exposing (Icons(..), iconView)
 import Html exposing (Html, a, button, div, header, li, nav, text, ul)
 import Html.Attributes exposing (class, href, rel, target)
@@ -19,7 +20,10 @@ headerView { path, frontmatter } expand =
                     [ ul []
                         [ li [ class "header-nav-main-brand" ]
                             [ a
-                                [ href frontmatter.meta.navigation.brand.url, onClick (MenuExpand False) ]
+                                [ class "link-primary font-l font-dancing"
+                                , href frontmatter.meta.navigation.brand.url
+                                , onClick (MenuExpand False)
+                                ]
                                 [ text frontmatter.meta.navigation.brand.text ]
                             , button [ class "header-nav-main-button", onClick (MenuExpand (not expand)) ]
                                 [ ternary expand
@@ -33,14 +37,14 @@ headerView { path, frontmatter } expand =
                             |> List.map
                                 (\item ->
                                     li
-                                        [ class
-                                            (ternary
-                                                (item.url == ("/" ++ PagePath.toString path))
-                                                "header-nav-item active"
-                                                "header-nav-item"
-                                            )
+                                        [ class "header-nav-item" ]
+                                        [ a
+                                            [ class ("link-primary font-m" ++ ternary (item.url == ("/" ++ PagePath.toString path)) "active" "")
+                                            , href item.url
+                                            , onClick (MenuExpand False)
+                                            ]
+                                            [ text item.text ]
                                         ]
-                                        [ a [ href item.url, onClick (MenuExpand False) ] [ text item.text ] ]
                                 )
                         )
                     ]
@@ -52,7 +56,22 @@ headerView { path, frontmatter } expand =
                                     li [ class "header-nav-item" ]
                                         [ a
                                             [ href item.url, target "_blank", rel "noopener noreferrer" ]
-                                            [ iconView Facebook { size = "15", color = "#000" } ]
+                                            [ case String.toLower item.text of
+                                                "facebook" ->
+                                                    iconView Facebook { size = "12", color = "#000" }
+
+                                                "instagram" ->
+                                                    iconView Instagram { size = "12", color = "#000" }
+
+                                                "pinterest" ->
+                                                    iconView Pinterest { size = "12", color = "#000" }
+
+                                                "rss" ->
+                                                    iconView Rss { size = "12", color = "#000" }
+
+                                                _ ->
+                                                    emptyNode
+                                            ]
                                         ]
                                 )
                         )
