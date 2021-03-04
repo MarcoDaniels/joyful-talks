@@ -9,13 +9,19 @@
   position: fixed;
   z-index: 1;
   border-top: $borderPrimary;
+  opacity: 0.9;
 
   box-shadow: 0 -10px 20px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
 
   &-wrapper {
     display: block;
     width: 50%;
-    padding: 20px;
+
+    &-title {
+      display: flex;
+      justify-content: space-between;
+    }
 
     &-text {
       text-align: justify;

@@ -5,11 +5,6 @@ $borderPrimary: 1px solid lightgray;
   background: #fff;
 }
 
-@mixin primaryLink {
-  color: #0187ba;
-  text-decoration: none;
-}
-
 @mixin primaryButton {
   color: #000;
   background: #fff;

@@ -1,0 +1,30 @@
+@font-face {
+  font-family: "Dancing Script";
+  src: url('./fonts/DancingScript.ttf');
+}
+
+.font {
+  &-s {
+    font-size: 12px;
+  }
+
+  &-m {
+    font-size: 14px;
+  }
+
+  &-l {
+    font-size: 35px;
+  }
+
+  &-xl {
+    font-size: 50px;
+  }
+
+  &-b {
+    font-weight: bold;
+  }
+
+  &-dancing {
+    font-family: "Dancing Script", cursive;
+  }
+}
