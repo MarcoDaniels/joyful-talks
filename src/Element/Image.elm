@@ -60,7 +60,7 @@ imageWithSizes image sizes =
             , attribute "srcset" (imageAPI image.src (Just sizes.xl))
             ]
             []
-        , img [ src (imageAPI image.src Nothing), alt image.alt ] []
+        , img [ src (imageAPI image.src Nothing), alt image.alt, attribute "loading" "lazy" ] []
         ]
 
 
