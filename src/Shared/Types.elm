@@ -6,7 +6,12 @@ type alias Field =
 
 
 type alias ImagePath =
-    { path : String, title : String, width : Int, height : Int }
+    { path : String
+    , title : String
+    , width : Int
+    , height : Int
+    , colors : Maybe (List String)
+    }
 
 
 type BaseContentValue
@@ -69,15 +74,25 @@ type alias Footer =
 
 
 type alias Navigation =
-    { brand : Link, menu : List Link, social : List Link }
+    { brand : Link
+    , menu : List Link
+    , social : List Link
+    }
 
 
 type alias Meta =
-    { navigation : Navigation, footer : Footer, cookie : CookieBanner }
+    { navigation : Navigation
+    , footer : Footer
+    , cookie : CookieBanner
+    }
 
 
 type alias FeedItem =
-    { title : String, description : String, url : String, image : ImagePath }
+    { title : String
+    , description : String
+    , url : String
+    , image : ImagePath
+    }
 
 
 type alias Feed =

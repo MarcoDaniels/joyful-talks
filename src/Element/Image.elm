@@ -23,7 +23,7 @@ imageView : Image -> ImageType -> Html Msg
 imageView image imageType =
     case imageType of
         ImageFeed ->
-            imageWithSizes image { s = "300", m = "300", l = "400", xl = "400" }
+            imageWithSizes image { s = "500", m = "300", l = "400", xl = "400" }
 
         ImagePost ->
             imageWithSizes image { s = "500", m = "700", l = "900", xl = "1200" }

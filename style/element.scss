@@ -1,9 +1,5 @@
 @import './utils/settings';
 
-html * {
-  font-family: 'Raleway', sans-serif;
-}
-
 body {
   @include primaryColor;
   padding: 0;
