@@ -6,7 +6,7 @@ type alias Field =
 
 
 type alias ImagePath =
-    { path : String }
+    { path : String, title : String, width : Int, height : Int }
 
 
 type BaseContentValue
@@ -69,7 +69,7 @@ type alias Footer =
 
 
 type alias Navigation =
-    { brand: Link, menu : List Link, social : List Link }
+    { brand : Link, menu : List Link, social : List Link }
 
 
 type alias Meta =

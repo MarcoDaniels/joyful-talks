@@ -5,7 +5,7 @@ import Element.Cookie exposing (cookieView)
 import Element.Footer exposing (footerView)
 import Element.Header exposing (headerView)
 import Html exposing (article, div)
-import Html.Attributes exposing (class, id)
+import Html.Attributes exposing (id)
 
 
 view : PageData -> ContentContext -> Model -> PageData
@@ -14,7 +14,7 @@ view pageData context model =
     , body =
         div [ id "app" ]
             [ headerView context model.menuExpand
-            , article [ id "content", class "container" ] [ pageData.body ]
+            , article [ id "content" ] [ pageData.body ]
             , cookieView model.cookieConsent context.frontmatter.meta.cookie
             , footerView context.frontmatter.meta.footer
             ]
