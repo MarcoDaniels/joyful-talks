@@ -1,7 +1,7 @@
 module Shared.Decoder exposing (fieldDecoder, imageDecoder, linkDecoder, linkValueDecoder)
 
-import OptimizedDecoder exposing (Decoder, int, string, succeed)
-import OptimizedDecoder.Pipeline exposing (required, requiredAt)
+import OptimizedDecoder exposing (Decoder, int, list, maybe, string, succeed)
+import OptimizedDecoder.Pipeline exposing (optional, required, requiredAt)
 import Shared.Types exposing (CookieBanner, Field, ImagePath, Link)
 
 
@@ -17,6 +17,7 @@ imageDecoder =
         |> required "title" string
         |> required "width" int
         |> required "height" int
+        |> optional "colors" (maybe (list string)) Nothing
 
 
 linkDecoder : Decoder Link

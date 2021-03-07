@@ -4,6 +4,22 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Raleway";
+  src: url('./fonts/Raleway.ttf');
+  font-display: swap;
+}
+
+html * {
+  font-family: 'Raleway', sans-serif;
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: unset;
+  margin-block-start: unset;
+  margin-block-end: unset;
+}
+
 .font {
   &-s {
     font-size: 12px;
@@ -14,7 +30,7 @@
   }
 
   &-l {
-    font-size: 35px;
+    font-size: 30px;
   }
 
   &-xl {
