@@ -15,7 +15,7 @@ const mode = process.env.COCKPIT_MODE
 
 const app = express()
 
-app.use('/storage/uploads', (req, res) => {
+app.use('/image/api', (req, res) => {
     const parsedURL = parseUrl(req)
     if (parsedURL) {
         const assetURL = `${baseURL}/api/cockpit/image?token=${token}&src=${baseURL}/storage/uploads${parsedURL.pathname}&${parsedURL.query}`
