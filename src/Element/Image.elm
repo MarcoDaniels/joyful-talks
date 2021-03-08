@@ -1,7 +1,7 @@
 module Element.Image exposing (ImageType(..), imageView)
 
-import Context exposing (Msg)
-import Html exposing (Html, img, node, source)
+import Context exposing (Element)
+import Html exposing (img, node, source)
 import Html.Attributes exposing (alt, attribute, media, src)
 
 
@@ -20,7 +20,7 @@ type alias Image =
     { src : String, alt : String }
 
 
-imageView : Image -> ImageType -> Html Msg
+imageView : Image -> ImageType -> Element
 imageView image imageType =
     case imageType of
         ImageFeed ->
@@ -36,7 +36,7 @@ imageView image imageType =
             imageWithSizes image { s = "550", m = "750", l = "1000", xl = "1200" }
 
 
-imageWithSizes : Image -> DeviceSizes -> Html Msg
+imageWithSizes : Image -> DeviceSizes -> Element
 imageWithSizes image sizes =
     node "picture"
         []

@@ -1,15 +1,15 @@
 module Element.Cookie exposing (..)
 
-import Context exposing (CookieConsent, CookieMsg(..), Msg(..))
+import Context exposing (CookieConsent, CookieMsg(..), Element, Msg(..))
 import Element.Empty exposing (emptyNode)
 import Element.Icon exposing (Icons(..), iconView)
-import Html exposing (Html, button, div, h4, p, text)
+import Html exposing (button, div, h4, p, text)
 import Html.Attributes exposing (class, tabindex)
 import Html.Events exposing (onClick)
 import Shared.Types exposing (CookieBanner)
 
 
-cookieView : CookieConsent -> CookieBanner -> Html Msg
+cookieView : CookieConsent -> CookieBanner -> Element
 cookieView consent { title, content } =
     if consent.accept then
         emptyNode

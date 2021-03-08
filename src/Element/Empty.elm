@@ -1,9 +1,9 @@
 module Element.Empty exposing (emptyNode)
 
-import Context exposing (Msg)
-import Html exposing (Html, text)
+import Context exposing (Element)
+import Html exposing (text)
 
 
-emptyNode : Html Msg
+emptyNode : Element
 emptyNode =
     text ""

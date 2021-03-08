@@ -1,16 +1,16 @@
 module Element.Header exposing (headerView)
 
-import Context exposing (ContentContext, Model, Msg(..))
+import Context exposing (ContentContext, Element, Model, Msg(..))
 import Element.Empty exposing (emptyNode)
 import Element.Icon exposing (Icons(..), iconView)
-import Html exposing (Html, a, button, div, header, li, nav, text, ul)
+import Html exposing (a, button, div, header, li, nav, text, ul)
 import Html.Attributes exposing (class, href, rel, target)
 import Html.Events exposing (onClick)
 import Pages.PagePath as PagePath exposing (PagePath)
 import Shared.Ternary exposing (ternary)
 
 
-headerView : ContentContext -> Bool -> Html Msg
+headerView : ContentContext -> Bool -> Element
 headerView { path, frontmatter } expand =
     header []
         [ div [ class "header" ]
