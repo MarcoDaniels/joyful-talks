@@ -7,7 +7,9 @@ import Shared.Types exposing (CookieBanner, Field, ImagePath, Link)
 
 fieldDecoder : Decoder Field
 fieldDecoder =
-    succeed Field |> required "type" string
+    succeed Field
+        |> required "type" string
+        |> required "label" string
 
 
 imageDecoder : Decoder ImagePath

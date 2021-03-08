@@ -12,6 +12,7 @@ type alias DeviceSizes =
 type ImageType
     = ImageFeed
     | ImagePost
+    | ImageHero
     | ImageDefault
 
 
@@ -26,6 +27,9 @@ imageView image imageType =
             imageWithSizes image { s = "500", m = "300", l = "400", xl = "400" }
 
         ImagePost ->
+            imageWithSizes image { s = "500", m = "700", l = "900", xl = "1200" }
+
+        ImageHero ->
             imageWithSizes image { s = "500", m = "700", l = "900", xl = "1200" }
 
         ImageDefault ->

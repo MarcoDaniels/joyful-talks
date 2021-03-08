@@ -18,6 +18,10 @@ type Msg
     | MenuExpand Bool
 
 
+type alias Element
+    = Html Msg
+
+
 type alias CookieConsent =
     { accept : Bool }
 

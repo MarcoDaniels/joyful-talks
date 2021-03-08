@@ -4,10 +4,10 @@
 #content::before {
   content: '';
   display: block;
-  height: 140px;
+  height: 120px;
 
   @include small {
-    height: 100px;
+    height: 77px;
   }
 }
 

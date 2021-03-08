@@ -2,7 +2,7 @@ module Shared.Types exposing (..)
 
 
 type alias Field =
-    { fieldType : String }
+    { fieldType : String, label : String }
 
 
 type alias ImagePath =
@@ -14,10 +14,14 @@ type alias ImagePath =
     }
 
 
+type alias HeroContent =
+    { title : String, image : ImagePath }
+
+
 type BaseContentValue
-    = BaseContentValueText String
-    | BaseContentValueMarkdown String
+    = BaseContentValueMarkdown String
     | BaseContentValueImage ImagePath
+    | BaseContentValueHero HeroContent
     | BaseContentValueUnknown
 
 
