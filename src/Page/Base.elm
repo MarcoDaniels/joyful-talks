@@ -3,14 +3,15 @@ module Page.Base exposing (baseDecoder, baseView)
 import Context exposing (PageData)
 import Element.Empty exposing (emptyNode)
 import Element.Feed exposing (feedView)
+import Element.Hero exposing (heroView)
 import Element.Image exposing (ImageType(..), imageView)
-import Html
-import Html.Attributes
+import Html exposing (div, h1, img, text)
+import Html.Attributes exposing (class, src)
 import Markdown exposing (markdownRender)
 import OptimizedDecoder exposing (Decoder, andThen, field, list, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, required)
 import Shared.Decoder exposing (fieldDecoder, imageDecoder)
-import Shared.Types exposing (Base, BaseContent, BaseContentValue(..), Feed, Field)
+import Shared.Types exposing (Base, BaseContent, BaseContentValue(..), Feed, Field, HeroContent)
 
 
 baseDecoder : Decoder Base
@@ -27,15 +28,20 @@ baseDecoder =
                         (field "field" fieldDecoder
                             |> andThen
                                 (\field ->
-                                    case field.fieldType of
-                                        "text" ->
-                                            succeed BaseContentValueText |> required "value" string
-
-                                        "markdown" ->
+                                    case ( field.fieldType, field.label ) of
+                                        ( "markdown", _ ) ->
                                             succeed BaseContentValueMarkdown |> required "value" string
 
-                                        "image" ->
+                                        ( "image", _ ) ->
                                             succeed BaseContentValueImage |> required "value" imageDecoder
+
+                                        ( "set", "Hero" ) ->
+                                            succeed BaseContentValueHero
+                                                |> required "value"
+                                                    (succeed HeroContent
+                                                        |> required "title" string
+                                                        |> required "image" imageDecoder
+                                                    )
 
                                         _ ->
                                             succeed BaseContentValueUnknown
@@ -49,30 +55,32 @@ baseView : Base -> Maybe Feed -> PageData
 baseView base maybeFeed =
     { title = base.title
     , body =
-        Html.div []
-            [ Html.div [ Html.Attributes.class "center" ]
-                (base.content
+        div []
+            (List.concat
+                [ base.content
                     |> List.map
                         (\content ->
                             case content.value of
                                 BaseContentValueMarkdown markdown ->
                                     markdownRender markdown
 
-                                BaseContentValueText text ->
-                                    Html.text text
-
                                 BaseContentValueImage image ->
-                                    imageView { src = image.path, alt = "" } ImageDefault
+                                    imageView { src = image.path, alt = image.title } ImageDefault
+
+                                BaseContentValueHero hero ->
+                                    heroView hero
 
                                 BaseContentValueUnknown ->
                                     emptyNode
                         )
-                )
-            , case maybeFeed of
-                Just feed ->
-                    feedView feed
+                , List.singleton
+                    (case maybeFeed of
+                        Just feed ->
+                            feedView feed
 
-                Nothing ->
-                    emptyNode
-            ]
+                        Nothing ->
+                            emptyNode
+                    )
+                ]
+            )
     }
