@@ -5,7 +5,7 @@ type alias Field =
     { fieldType : String, label : String }
 
 
-type alias ImagePath =
+type alias AssetPath =
     { path : String
     , title : String
     , width : Int
@@ -15,13 +15,24 @@ type alias ImagePath =
 
 
 type alias HeroContent =
-    { title : String, image : ImagePath }
+    { title : String, asset : AssetPath }
+
+
+type ColumnContent
+    = ColumnContentMarkdown String
+    | ColumnContentAsset AssetPath
+    | ColumnContentUnknown
+
+
+type alias ColumnContentField =
+    { field : Field, value : ColumnContent }
 
 
 type BaseContentValue
     = BaseContentValueMarkdown String
-    | BaseContentValueImage ImagePath
+    | BaseContentValueAsset AssetPath
     | BaseContentValueHero HeroContent
+    | BaseContentValueColumn (List ColumnContentField)
     | BaseContentValueUnknown
 
 
@@ -39,8 +50,12 @@ type alias Base =
 
 type PostContentRepeaterType
     = PostContentRepeaterMarkdown String
-    | PostContentRepeaterImage ImagePath
+    | PostContentRepeaterAsset AssetPath
     | PostContentRepeaterUnknown
+
+
+
+-- TODO: update to use ColumnContentField
 
 
 type alias PostContentRepeaterField =
@@ -49,7 +64,7 @@ type alias PostContentRepeaterField =
 
 type PostContentValue
     = PostContentValueMarkdown String
-    | PostContentValueImage ImagePath
+    | PostContentValueAsset AssetPath
     | PostContentValueRepeater (List PostContentRepeaterField)
     | PostContentValueUnknown
 
@@ -95,7 +110,7 @@ type alias FeedItem =
     { title : String
     , description : String
     , url : String
-    , image : ImagePath
+    , asset : AssetPath
     }
 
 

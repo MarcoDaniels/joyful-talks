@@ -4,12 +4,13 @@ import Context exposing (PageData)
 import Element.Empty exposing (emptyNode)
 import Element.Feed exposing (feedView)
 import Element.Hero exposing (heroView)
-import Element.Image exposing (ImageType(..), imageView)
-import Html exposing (div)
+import Element.Asset exposing (AssetType(..), assetView)
+import Html exposing (div, text)
+import Html.Attributes exposing (class, style)
 import Markdown exposing (markdownRender)
 import OptimizedDecoder exposing (Decoder, andThen, field, list, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, required)
-import Shared.Decoder exposing (fieldDecoder, imageDecoder)
+import Shared.Decoder exposing (columnContentDecoder, fieldDecoder, assetDecoder)
 import Shared.Types exposing (Base, BaseContent, BaseContentValue(..), Feed, Field, HeroContent)
 
 
@@ -31,16 +32,20 @@ baseDecoder =
                                         ( "markdown", _ ) ->
                                             succeed BaseContentValueMarkdown |> required "value" string
 
-                                        ( "image", _ ) ->
-                                            succeed BaseContentValueImage |> required "value" imageDecoder
+                                        ( "asset", _ ) ->
+                                            succeed BaseContentValueAsset |> required "value" assetDecoder
 
                                         ( "set", "Hero" ) ->
                                             succeed BaseContentValueHero
                                                 |> required "value"
                                                     (succeed HeroContent
                                                         |> required "title" string
-                                                        |> required "image" imageDecoder
+                                                        |> required "image" assetDecoder
                                                     )
+
+                                        ( "repeater", "Column" ) ->
+                                            succeed BaseContentValueColumn
+                                                |> required "value" (list columnContentDecoder)
 
                                         _ ->
                                             succeed BaseContentValueUnknown
@@ -61,15 +66,19 @@ baseView base maybeFeed =
                         (\content ->
                             case content.value of
                                 BaseContentValueMarkdown markdown ->
-                                    markdownRender markdown
+                                    div [ class "container" ] [ text "markdown -> ", markdownRender markdown ]
 
-                                BaseContentValueImage image ->
-                                    imageView { src = image.path, alt = image.title } ImageDefault
+                                BaseContentValueAsset asset ->
+                                    assetView { src = asset.path, alt = asset.title } AssetDefault
+                                    -- emptyNode
 
                                 BaseContentValueHero hero ->
                                     heroView hero
 
-                                BaseContentValueUnknown ->
+                                BaseContentValueColumn col ->
+                                    div [] [ text (Debug.toString col) ]
+
+                                _ ->
                                     emptyNode
                         )
                 , List.singleton

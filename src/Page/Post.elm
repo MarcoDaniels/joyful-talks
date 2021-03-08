@@ -2,13 +2,13 @@ module Page.Post exposing (postDecoder, postView)
 
 import Context exposing (PageData)
 import Element.Empty exposing (emptyNode)
-import Element.Image exposing (ImageType(..), imageView)
+import Element.Asset exposing (AssetType(..), assetView)
 import Html
 import Html.Attributes
 import Markdown exposing (markdownRender)
 import OptimizedDecoder exposing (Decoder, andThen, field, list, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, required)
-import Shared.Decoder exposing (fieldDecoder, imageDecoder)
+import Shared.Decoder exposing (fieldDecoder, assetDecoder)
 import Shared.Types exposing (Field, Post, PostContent, PostContentRepeaterField, PostContentRepeaterType(..), PostContentValue(..))
 
 
@@ -25,7 +25,7 @@ repeaterFieldDecoder =
                                 succeed PostContentRepeaterMarkdown |> required "value" string
 
                             "image" ->
-                                succeed PostContentRepeaterImage |> required "value" imageDecoder
+                                succeed PostContentRepeaterAsset |> required "value" assetDecoder
 
                             _ ->
                                 succeed PostContentRepeaterUnknown
@@ -51,7 +51,7 @@ postDecoder =
                                             succeed PostContentValueMarkdown |> required "value" string
 
                                         "image" ->
-                                            succeed PostContentValueImage |> required "value" imageDecoder
+                                            succeed PostContentValueAsset |> required "value" assetDecoder
 
                                         "repeater" ->
                                             succeed PostContentValueRepeater |> required "value" (list repeaterFieldDecoder)
@@ -76,8 +76,8 @@ postView post =
                             PostContentValueMarkdown markdown ->
                                 markdownRender markdown
 
-                            PostContentValueImage image ->
-                                imageView { src = image.path, alt = "" } ImagePost
+                            PostContentValueAsset image ->
+                                assetView { src = image.path, alt = "" } AssetPost
 
                             PostContentValueRepeater repeater ->
                                 Html.div [ Html.Attributes.class "side" ]
@@ -88,8 +88,8 @@ postView post =
                                                     PostContentRepeaterMarkdown markdown ->
                                                         markdownRender markdown
 
-                                                    PostContentRepeaterImage image ->
-                                                        imageView { src = image.path, alt = "" } ImageDefault
+                                                    PostContentRepeaterAsset image ->
+                                                        assetView { src = image.path, alt = "" } AssetDefault
 
                                                     PostContentRepeaterUnknown ->
                                                         emptyNode
