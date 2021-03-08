@@ -7,8 +7,8 @@ import Page.Base exposing (baseDecoder)
 import Page.Post exposing (postDecoder)
 import Pages.Secrets as Secrets
 import Pages.StaticHttp as StaticHttp
-import Shared.Decoder exposing (imageDecoder, linkDecoder, linkValueDecoder)
-import Shared.Types exposing (Base, CookieBanner, Feed, FeedItem, Footer, ImagePath, Meta, Navigation, Post)
+import Shared.Decoder exposing (assetDecoder, linkDecoder, linkValueDecoder)
+import Shared.Types exposing (Base, CookieBanner, Feed, FeedItem, Footer, AssetPath, Meta, Navigation, Post)
 
 
 contentDecoder : Decoder Content
@@ -80,7 +80,7 @@ contentFeed categoryList =
                         |> required "title" string
                         |> required "description" string
                         |> required "url" string
-                        |> required "image" imageDecoder
+                        |> required "image" assetDecoder
                     )
                 )
         )
