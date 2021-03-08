@@ -1,13 +1,13 @@
 module Element.Footer exposing (footerView)
 
-import Context exposing (Msg)
-import Html exposing (Html, a, div, footer, text)
+import Context exposing (Element)
+import Html exposing (a, div, footer, text)
 import Html.Attributes exposing (class, href)
 import Markdown exposing (markdownRender)
 import Shared.Types exposing (Footer)
 
 
-footerView : Footer -> Html Msg
+footerView : Footer -> Element
 footerView footerData =
     footer [ class "footer" ]
         [ div [ class "container center" ]

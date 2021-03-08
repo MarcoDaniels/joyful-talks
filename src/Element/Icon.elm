@@ -1,7 +1,6 @@
 module Element.Icon exposing (Icons(..), iconView)
 
-import Context exposing (Msg)
-import Html exposing (Html)
+import Context exposing (Element)
 import Svg exposing (Attribute, path, svg)
 import Svg.Attributes exposing (d, fill, height, viewBox, width)
 
@@ -24,7 +23,7 @@ type Icons
     | CookieIcon
 
 
-iconView : Icons -> IconSettings -> Html Msg
+iconView : Icons -> IconSettings -> Element
 iconView icon settings =
     case icon of
         Facebook ->
@@ -70,7 +69,7 @@ iconView icon settings =
                 }
 
 
-drawSVG : IconSettings -> SvgSettings -> Html Msg
+drawSVG : IconSettings -> SvgSettings -> Element
 drawSVG { size, color } { view, draw } =
     svg [ viewBox view, width size, height size ]
         [ path [ fill color, d draw ] []

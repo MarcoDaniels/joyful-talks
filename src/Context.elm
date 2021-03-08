@@ -18,8 +18,8 @@ type Msg
     | MenuExpand Bool
 
 
-type alias Element
-    = Html Msg
+type alias Element =
+    Html Msg
 
 
 type alias CookieConsent =
@@ -31,11 +31,11 @@ type alias Model =
 
 
 type alias Renderer =
-    List (Html Msg)
+    List Element
 
 
 type alias PageData =
-    { title : String, body : Html Msg }
+    { title : String, body : Element }
 
 
 type Data
