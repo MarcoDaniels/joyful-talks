@@ -1,0 +1,27 @@
+@import './utils/devices';
+
+.row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+
+  @include medium {
+    flex-direction: column;
+  }
+
+  > * {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @include medium {
+      width: 100%;
+      &:not(picture) {
+        justify-content: start;
+        align-items: start;
+      }
+    }
+  }
+}

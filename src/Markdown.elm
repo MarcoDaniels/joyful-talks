@@ -1,5 +1,6 @@
 module Markdown exposing (markdownRender)
 
+import Context exposing (Element)
 import Html exposing (Html)
 import Markdown.Parser
 import Markdown.Renderer
@@ -9,7 +10,7 @@ import Markdown.Renderer
 -- TODO: markdown should handle links
 
 
-markdownRender : String -> Html msg
+markdownRender : String -> Element
 markdownRender markdownBody =
     Markdown.Parser.parse markdownBody
         |> Result.withDefault []
