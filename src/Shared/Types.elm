@@ -32,7 +32,7 @@ type BaseContentValue
     = BaseContentValueMarkdown String
     | BaseContentValueAsset AssetPath
     | BaseContentValueHero HeroContent
-    | BaseContentValueColumn (List ColumnContentField)
+    | BaseContentValueRow (List ColumnContentField)
     | BaseContentValueUnknown
 
 
