@@ -6,13 +6,14 @@ import Html.Attributes exposing (alt, attribute, media, src)
 
 
 type alias DeviceSizes =
-    { s : String, m : String, l : String, xl : String }
+    { s : Int, m : Int, l : Int, xl : Int }
 
 
 type AssetType
     = AssetFeed
     | AssetPost
     | AssetHero
+    | AssetRow Int
     | AssetDefault
 
 
@@ -24,16 +25,19 @@ assetView : Asset -> AssetType -> Element
 assetView asset assetType =
     case assetType of
         AssetFeed ->
-            imageWithSizes asset { s = "500", m = "300", l = "400", xl = "400" }
+            imageWithSizes asset { s = 500, m = 300, l = 400, xl = 400 }
 
         AssetPost ->
-            imageWithSizes asset { s = "500", m = "700", l = "900", xl = "1200" }
+            imageWithSizes asset { s = 500, m = 700, l = 900, xl = 1200 }
 
         AssetHero ->
-            imageWithSizes asset { s = "500", m = "700", l = "900", xl = "1200" }
+            imageWithSizes asset { s = 500, m = 700, l = 900, xl = 1200 }
+
+        AssetRow count ->
+            imageWithSizes asset { s = 500, m = 700, l = 1000 // count, xl = 1200 // count }
 
         AssetDefault ->
-            imageWithSizes asset { s = "550", m = "750", l = "1000", xl = "1200" }
+            imageWithSizes asset { s = 550, m = 750, l = 1000, xl = 1200 }
 
 
 imageWithSizes : Asset -> DeviceSizes -> Element
@@ -68,11 +72,11 @@ imageWithSizes asset sizes =
         ]
 
 
-imageAPI : String -> Maybe String -> String
+imageAPI : String -> Maybe Int -> String
 imageAPI src maybeDevice =
     case maybeDevice of
         Just device ->
-            "/image/api" ++ src ++ "?w=" ++ device ++ "&o=1&q=60 " ++ device ++ "w"
+            "/image/api" ++ src ++ "?w=" ++ String.fromInt device ++ "&o=1&q=60 " ++ String.fromInt device ++ "w"
 
         Nothing ->
             "/image/api" ++ src ++ "?w=1200&o=1&q=60"
