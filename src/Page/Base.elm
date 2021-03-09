@@ -6,8 +6,8 @@ import Element.Empty exposing (emptyNode)
 import Element.Feed exposing (feedView)
 import Element.Hero exposing (heroView)
 import Element.Row exposing (rowView)
-import Html exposing (div, text)
-import Html.Attributes exposing (class, style)
+import Html exposing (div)
+import Html.Attributes exposing (class)
 import Markdown exposing (markdownRender)
 import OptimizedDecoder exposing (Decoder, andThen, field, list, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, required)
@@ -47,7 +47,7 @@ baseDecoder =
                                                     )
 
                                         ( "repeater", "Column" ) ->
-                                            succeed BaseContentValueColumn
+                                            succeed BaseContentValueRow
                                                 |> required "value" (list columnContentDecoder)
 
                                         _ ->
@@ -69,7 +69,7 @@ baseView base maybeFeed =
                         (\content ->
                             case content.value of
                                 BaseContentValueMarkdown markdown ->
-                                    div [ class "container" ] [ text "markdown -> ", markdownRender markdown ]
+                                    div [ class "container" ] [ markdownRender markdown ]
 
                                 BaseContentValueAsset asset ->
                                     -- assetView { src = asset.path, alt = asset.title } AssetDefault
@@ -78,7 +78,7 @@ baseView base maybeFeed =
                                 BaseContentValueHero hero ->
                                     heroView hero
 
-                                BaseContentValueColumn columns ->
+                                BaseContentValueRow columns ->
                                     div [ class "container" ] [ rowView columns ]
 
                                 _ ->
