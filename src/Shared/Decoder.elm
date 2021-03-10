@@ -1,8 +1,8 @@
-module Shared.Decoder exposing (columnContentDecoder, fieldDecoder, assetDecoder, linkDecoder, linkValueDecoder)
+module Shared.Decoder exposing (rowContentDecoder, fieldDecoder, assetDecoder, linkDecoder, linkValueDecoder)
 
 import OptimizedDecoder exposing (Decoder, andThen, field, int, list, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, optional, required, requiredAt)
-import Shared.Types exposing (ColumnContent(..), ColumnContentField, CookieBanner, Field, AssetPath, Link)
+import Shared.Types exposing (RowContentValue(..), RowContentField, CookieBanner, Field, AssetPath, Link)
 
 
 fieldDecoder : Decoder Field
@@ -32,9 +32,9 @@ linkValueDecoder =
     succeed Link |> requiredAt [ "value", "title" ] string |> requiredAt [ "value", "url" ] string
 
 
-columnContentDecoder : Decoder ColumnContentField
-columnContentDecoder =
-    succeed ColumnContentField
+rowContentDecoder : Decoder RowContentField
+rowContentDecoder =
+    succeed RowContentField
         |> required "field" fieldDecoder
         |> custom
             (field "field" fieldDecoder
@@ -42,12 +42,12 @@ columnContentDecoder =
                     (\field ->
                         case field.fieldType of
                             "markdown" ->
-                                succeed ColumnContentMarkdown |> required "value" string
+                                succeed RowContentMarkdown |> required "value" string
 
                             "asset" ->
-                                succeed ColumnContentAsset |> required "value" assetDecoder
+                                succeed RowContentAsset |> required "value" assetDecoder
 
                             _ ->
-                                succeed ColumnContentUnknown
+                                succeed RowContentUnknown
                     )
             )

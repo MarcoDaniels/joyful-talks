@@ -11,7 +11,7 @@ import Html.Attributes exposing (class)
 import Markdown exposing (markdownRender)
 import OptimizedDecoder exposing (Decoder, andThen, field, list, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, required)
-import Shared.Decoder exposing (assetDecoder, columnContentDecoder, fieldDecoder)
+import Shared.Decoder exposing (assetDecoder, rowContentDecoder, fieldDecoder)
 import Shared.Types exposing (Base, BaseContent, BaseContentValue(..), Feed, Field, HeroContent)
 
 
@@ -46,9 +46,9 @@ baseDecoder =
                                                         |> required "image" assetDecoder
                                                     )
 
-                                        ( "repeater", "Column" ) ->
+                                        ( "repeater", "Row" ) ->
                                             succeed BaseContentValueRow
-                                                |> required "value" (list columnContentDecoder)
+                                                |> required "value" (list rowContentDecoder)
 
                                         _ ->
                                             succeed BaseContentValueUnknown
@@ -78,8 +78,8 @@ baseView base maybeFeed =
                                 BaseContentValueHero hero ->
                                     heroView hero
 
-                                BaseContentValueRow columns ->
-                                    div [ class "container" ] [ rowView columns ]
+                                BaseContentValueRow rowItems ->
+                                    div [ class "container" ] [ rowView rowItems ]
 
                                 _ ->
                                     emptyNode
