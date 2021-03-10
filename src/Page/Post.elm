@@ -1,36 +1,16 @@
 module Page.Post exposing (postDecoder, postView)
 
 import Context exposing (PageData)
-import Element.Empty exposing (emptyNode)
 import Element.Asset exposing (AssetType(..), assetView)
-import Html
-import Html.Attributes
+import Element.Empty exposing (emptyNode)
+import Element.Row exposing (rowView)
+import Html exposing (div)
+import Html.Attributes exposing (class)
 import Markdown exposing (markdownRender)
 import OptimizedDecoder exposing (Decoder, andThen, field, list, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, required)
-import Shared.Decoder exposing (fieldDecoder, assetDecoder)
-import Shared.Types exposing (Field, Post, PostContent, PostContentRepeaterField, PostContentRepeaterType(..), PostContentValue(..))
-
-
-repeaterFieldDecoder : Decoder PostContentRepeaterField
-repeaterFieldDecoder =
-    succeed PostContentRepeaterField
-        |> required "field" fieldDecoder
-        |> custom
-            (field "field" fieldDecoder
-                |> andThen
-                    (\field ->
-                        case field.fieldType of
-                            "markdown" ->
-                                succeed PostContentRepeaterMarkdown |> required "value" string
-
-                            "image" ->
-                                succeed PostContentRepeaterAsset |> required "value" assetDecoder
-
-                            _ ->
-                                succeed PostContentRepeaterUnknown
-                    )
-            )
+import Shared.Decoder exposing (assetDecoder, rowContentDecoder, fieldDecoder)
+import Shared.Types exposing (Field, Post, PostContent, PostContentValue(..))
 
 
 postDecoder : Decoder Post
@@ -46,15 +26,18 @@ postDecoder =
                         (field "field" fieldDecoder
                             |> andThen
                                 (\field ->
-                                    case field.fieldType of
-                                        "markdown" ->
-                                            succeed PostContentValueMarkdown |> required "value" string
+                                    case ( field.fieldType, field.label ) of
+                                        ( "markdown", _ ) ->
+                                            succeed PostContentValueMarkdown
+                                                |> required "value" string
 
-                                        "image" ->
-                                            succeed PostContentValueAsset |> required "value" assetDecoder
+                                        ( "asset", _ ) ->
+                                            succeed PostContentValueAsset
+                                                |> required "value" assetDecoder
 
-                                        "repeater" ->
-                                            succeed PostContentValueRepeater |> required "value" (list repeaterFieldDecoder)
+                                        ( "repeater", "Row" ) ->
+                                            succeed PostContentValueRow
+                                                |> required "value" (list rowContentDecoder)
 
                                         _ ->
                                             succeed PostContentValueUnknown
@@ -79,22 +62,8 @@ postView post =
                             PostContentValueAsset image ->
                                 assetView { src = image.path, alt = "" } AssetPost
 
-                            PostContentValueRepeater repeater ->
-                                Html.div [ Html.Attributes.class "side" ]
-                                    (repeater
-                                        |> List.map
-                                            (\rep ->
-                                                case rep.value of
-                                                    PostContentRepeaterMarkdown markdown ->
-                                                        markdownRender markdown
-
-                                                    PostContentRepeaterAsset image ->
-                                                        assetView { src = image.path, alt = "" } AssetDefault
-
-                                                    PostContentRepeaterUnknown ->
-                                                        emptyNode
-                                            )
-                                    )
+                            PostContentValueRow rowItems ->
+                                div [ class "container" ] [ rowView rowItems ]
 
                             PostContentValueUnknown ->
                                 emptyNode

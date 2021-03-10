@@ -16,9 +16,18 @@
     justify-content: center;
     align-items: center;
 
+    &:not(picture) {
+      padding: 0 25px 0 0;
+      &:not(:first-child) {
+        padding: 0 25px;
+      }
+    }
+
     @include medium {
       width: 100%;
+
       &:not(picture) {
+        padding: 0;
         justify-content: start;
         align-items: start;
       }

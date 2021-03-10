@@ -6,23 +6,23 @@ import Element.Empty exposing (emptyNode)
 import Html exposing (div)
 import Html.Attributes exposing (class)
 import Markdown exposing (markdownRender)
-import Shared.Types exposing (ColumnContent(..), ColumnContentField)
+import Shared.Types exposing (RowContentField, RowContentValue(..))
 
 
-rowView : List ColumnContentField -> Element
-rowView columns =
+rowView : List RowContentField -> Element
+rowView rowItems =
     div [ class "row" ]
-        (columns
+        (rowItems
             |> List.map
-                (\column ->
-                    case column.value of
-                        ColumnContentMarkdown markdown ->
+                (\item ->
+                    case item.value of
+                        RowContentMarkdown markdown ->
                             markdownRender markdown
 
-                        ColumnContentAsset asset ->
-                            assetView { src = asset.path, alt = asset.title } (AssetRow (List.length columns))
+                        RowContentAsset asset ->
+                            assetView { src = asset.path, alt = asset.title } (AssetRow (List.length rowItems))
 
-                        ColumnContentUnknown ->
+                        RowContentUnknown ->
                             emptyNode
                 )
         )

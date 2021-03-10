@@ -18,21 +18,21 @@ type alias HeroContent =
     { title : String, asset : AssetPath }
 
 
-type ColumnContent
-    = ColumnContentMarkdown String
-    | ColumnContentAsset AssetPath
-    | ColumnContentUnknown
+type RowContentValue
+    = RowContentMarkdown String
+    | RowContentAsset AssetPath
+    | RowContentUnknown
 
 
-type alias ColumnContentField =
-    { field : Field, value : ColumnContent }
+type alias RowContentField =
+    { field : Field, value : RowContentValue }
 
 
 type BaseContentValue
     = BaseContentValueMarkdown String
     | BaseContentValueAsset AssetPath
     | BaseContentValueHero HeroContent
-    | BaseContentValueRow (List ColumnContentField)
+    | BaseContentValueRow (List RowContentField)
     | BaseContentValueUnknown
 
 
@@ -48,24 +48,10 @@ type alias Base =
     }
 
 
-type PostContentRepeaterType
-    = PostContentRepeaterMarkdown String
-    | PostContentRepeaterAsset AssetPath
-    | PostContentRepeaterUnknown
-
-
-
--- TODO: update to use ColumnContentField
-
-
-type alias PostContentRepeaterField =
-    { field : Field, value : PostContentRepeaterType }
-
-
 type PostContentValue
     = PostContentValueMarkdown String
     | PostContentValueAsset AssetPath
-    | PostContentValueRepeater (List PostContentRepeaterField)
+    | PostContentValueRow (List RowContentField)
     | PostContentValueUnknown
 
 
