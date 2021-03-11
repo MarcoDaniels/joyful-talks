@@ -4,13 +4,14 @@ import Context exposing (PageData)
 import Element.Asset exposing (AssetType(..), assetView)
 import Element.Empty exposing (emptyNode)
 import Element.Row exposing (rowView)
-import Html exposing (div, h1, text)
-import Html.Attributes exposing (class)
+import Html exposing (a, div, h1, span, text)
+import Html.Attributes exposing (class, href)
 import Markdown exposing (markdownRender)
-import OptimizedDecoder exposing (Decoder, andThen, field, list, string, succeed)
+import OptimizedDecoder exposing (Decoder, andThen, field, list, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, required)
+import Shared.Date exposing (decodeDate, formatDate)
 import Shared.Decoder exposing (assetDecoder, fieldDecoder, rowContentDecoder)
-import Shared.Types exposing (Field, Post, PostContent, PostContentValue(..))
+import Shared.Types exposing (Field, Post, PostContent, PostContentValue(..), Written)
 
 
 postDecoder : Decoder Post
@@ -45,6 +46,12 @@ postDecoder =
                         )
                 )
             )
+        |> required "writtenBy"
+            (succeed Written
+                |> required "name" string
+                |> required "url" (maybe string)
+            )
+        |> required "_modified" decodeDate
 
 
 postView : Post -> PageData
@@ -70,6 +77,20 @@ postView post =
                                 PostContentValueUnknown ->
                                     emptyNode
                         )
+                , List.singleton
+                    (div [ class "post-info font-m" ]
+                        [ div []
+                            [ span [] [ text "written by " ]
+                            , case post.written.url of
+                                Just url ->
+                                    a [ class "link-secondary", href url ] [ text post.written.name ]
+
+                                Nothing ->
+                                    span [] [ text post.written.name ]
+                            ]
+                        , div [] [ text (formatDate post.updated) ]
+                        ]
+                    )
                 ]
             )
     }
