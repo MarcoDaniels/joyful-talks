@@ -1,6 +1,7 @@
 module Shared.Types exposing (..)
 
 
+import Time
 type alias Field =
     { fieldType : String, label : String }
 
@@ -59,10 +60,16 @@ type alias PostContent =
     { field : Field, value : PostContentValue }
 
 
+type alias Written =
+    { name : String, url : Maybe String }
+
+
 type alias Post =
     { title : String
     , description : String
     , content : List PostContent
+    , written : Written
+    , updated: Time.Posix
     }
 
 
