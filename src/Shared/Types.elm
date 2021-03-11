@@ -75,6 +75,8 @@ type alias RelatedItem =
 type alias Post =
     { title : String
     , description : String
+    , url : String
+    , asset : AssetPath
     , content : List PostContent
     , written : Written
     , updated : Posix

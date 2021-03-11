@@ -46,6 +46,10 @@
       justify-content: center;
       align-items: center;
 
+      @include medium {
+        flex-direction: column;
+      }
+
       &-title {
         @include primaryColor;
         position: absolute;
@@ -65,6 +69,11 @@
         flex-direction: column;
         justify-content: flex-end;
 
+        @include medium {
+          max-height: 400px;
+          margin-top: 20px;
+        }
+
         &:hover, &:focus {
           transition: transform .7s;
           transform: scale(1.02);
@@ -72,21 +81,42 @@
 
         &:first-child {
           margin-right: 20px;
+          @include medium {
+            margin-right: 0;
+
+          }
         }
 
         &:last-child {
           margin-left: 20px;
+          @include medium {
+            margin-left: 0;
+          }
         }
 
         > picture {
           width: 100%;
-          height: 200px;
+          max-height: 200px;
           overflow: hidden;
           display: block;
           margin-right: auto;
           margin-left: auto;
+
+          @include medium {
+            max-height: 400px;
+          }
         }
       }
+    }
+  }
+
+  &-share {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    > * {
+      margin-right: 8px;
     }
   }
 }
