@@ -62,7 +62,7 @@ postView post =
                                     markdownRender markdown
 
                                 PostContentValueAsset image ->
-                                    assetView { src = image.path, alt = "" } AssetPost
+                                    assetView { src = image.path, alt = image.title } AssetPost
 
                                 PostContentValueRow rowItems ->
                                     rowView rowItems

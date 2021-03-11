@@ -1,8 +1,19 @@
 .post {
   max-width: 800px;
   margin: 0 auto;
+  padding: 0 15px;
 
   &-title {
     margin-top: 20px;
+  }
+
+  > *:not(h1) {
+    margin-bottom: 20px;
+  }
+
+  > picture {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
