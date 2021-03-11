@@ -21,21 +21,27 @@
 
       &:first-child {
         padding: 0 25px 0 0;
+        @include medium {
+          padding: 0;
+        }
       }
 
       &:last-child {
         padding: 0 0 0 25px;
+        @include medium {
+          padding: 0;
+        }
+      }
+
+      @include medium {
+        justify-content: start;
+        align-items: start;
+        padding: 0;
       }
     }
 
     @include medium {
       width: 100%;
-
-      &:not(picture) {
-        padding: 0;
-        justify-content: start;
-        align-items: start;
-      }
     }
   }
 }

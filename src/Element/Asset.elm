@@ -14,6 +14,7 @@ type AssetType
     | AssetPost
     | AssetHero
     | AssetRow Int
+    | AssetRelated
     | AssetDefault
 
 
@@ -35,6 +36,9 @@ assetView asset assetType =
 
         AssetRow count ->
             imageWithSizes asset { s = 500, m = 700, l = 1000 // count, xl = 1200 // count }
+
+        AssetRelated ->
+            imageWithSizes asset { s = 500, m = 700, l = 300, xl = 350 }
 
         AssetDefault ->
             imageWithSizes asset { s = 550, m = 750, l = 1000, xl = 1200 }

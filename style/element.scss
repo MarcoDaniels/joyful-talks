@@ -18,12 +18,16 @@ a {
     &-primary {
       color: #000;
 
-      &:hover {
-        opacity: 0.5;
-      }
+      &-effect {
+        color: #000;
 
-      &.active {
-        opacity: 0.5;
+        &:hover {
+          opacity: 0.5;
+        }
+
+        &.active {
+          opacity: 0.5;
+        }
       }
     }
 

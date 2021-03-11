@@ -39,7 +39,7 @@ headerView { path, frontmatter } expand =
                                     li
                                         [ class "header-nav-item" ]
                                         [ a
-                                            [ class ("link-primary font-m" ++ ternary (item.url == ("/" ++ PagePath.toString path)) "active" "")
+                                            [ class ("link-primary-effect font-m" ++ ternary (item.url == ("/" ++ PagePath.toString path)) "active" "")
                                             , href item.url
                                             , onClick (MenuExpand False)
                                             ]
@@ -55,7 +55,7 @@ headerView { path, frontmatter } expand =
                                 (\item ->
                                     li [ class "header-nav-item" ]
                                         [ a
-                                            [ href item.url, target "_blank", rel "noopener noreferrer" ]
+                                            [ class "link-primary-effect", href item.url, target "_blank", rel "noopener noreferrer" ]
                                             [ case String.toLower item.text of
                                                 "facebook" ->
                                                     iconView Facebook { size = "12", color = "#000" }
