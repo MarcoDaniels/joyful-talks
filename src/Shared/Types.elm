@@ -1,7 +1,8 @@
 module Shared.Types exposing (..)
 
+import Time exposing (Posix)
 
-import Time
+
 type alias Field =
     { fieldType : String, label : String }
 
@@ -64,12 +65,20 @@ type alias Written =
     { name : String, url : Maybe String }
 
 
+type alias RelatedItem =
+    { title : String
+    , url : String
+    , asset : AssetPath
+    }
+
+
 type alias Post =
     { title : String
     , description : String
     , content : List PostContent
     , written : Written
-    , updated: Time.Posix
+    , updated : Posix
+    , related : Maybe (List RelatedItem)
     }
 
 

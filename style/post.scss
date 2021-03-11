@@ -1,4 +1,5 @@
 @import './utils/devices';
+@import './utils/settings';
 
 .post {
   max-width: 800px;
@@ -24,9 +25,68 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
 
-    @include small {
-      flex-direction: column;
+  &-related {
+    &-headline {
+      width: 100%;
+      text-align: center;
+      border-bottom: $borderPrimary;
+      line-height: .1em;
+      margin: 30px 0;
+
+      > span {
+        @include primaryColor;
+        padding: 0 10px;
+      }
+    }
+
+    &-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &-title {
+        @include primaryColor;
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        padding: 20px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0.8;
+      }
+
+      > a {
+        max-height: 200px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        &:hover, &:focus {
+          transition: transform .7s;
+          transform: scale(1.02);
+        }
+
+        &:first-child {
+          margin-right: 20px;
+        }
+
+        &:last-child {
+          margin-left: 20px;
+        }
+
+        > picture {
+          width: 100%;
+          height: 200px;
+          overflow: hidden;
+          display: block;
+          margin-right: auto;
+          margin-left: auto;
+        }
+      }
     }
   }
 }
