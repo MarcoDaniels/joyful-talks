@@ -1,20 +1,35 @@
-module Layout exposing (view)
+module Layout exposing (layoutView)
 
-import Context exposing (ContentContext, Model, Msg(..), PageData)
+import Context exposing (MetadataContext, Model, Msg(..), PageData, Renderer)
 import Element.Cookie exposing (cookieView)
+import Element.Empty exposing (emptyNode)
+import Element.Feed exposing (feedView)
 import Element.Footer exposing (footerView)
 import Element.Header exposing (headerView)
 import Html exposing (article, div)
 import Html.Attributes exposing (id)
+import Shared.Types exposing (Feed)
 
 
-view : PageData -> ContentContext -> Model -> PageData
-view pageData context model =
-    { title = pageData.title
+layoutView : Renderer -> MetadataContext -> Model -> Maybe Feed -> PageData
+layoutView renderer context model maybeFeed =
+    { title = context.frontmatter.seo.title
     , body =
         div [ id "app" ]
             [ headerView context model.menuExpand
-            , article [ id "content" ] [ pageData.body ]
+            , article [ id "content" ]
+                (List.concat
+                    [ renderer
+                    , List.singleton
+                        (case maybeFeed of
+                            Just feed ->
+                                feedView feed
+
+                            Nothing ->
+                                emptyNode
+                        )
+                    ]
+                )
             , cookieView model.cookieConsent context.frontmatter.meta.cookie
             , footerView context.frontmatter.meta.footer
             ]

@@ -3,10 +3,7 @@ module Metadata exposing (metadataHead)
 import Head
 import Head.Seo as Seo
 import Pages exposing (images)
-
-
-type alias SEO =
-    { title : String, description : String }
+import Shared.Types exposing (SEO)
 
 
 metadataHead : SEO -> List (Head.Tag Pages.PathKey)

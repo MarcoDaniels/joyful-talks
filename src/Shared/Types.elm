@@ -110,6 +110,12 @@ type alias Meta =
     }
 
 
+type alias SEO =
+    { title : String
+    , description : String
+    }
+
+
 type alias FeedItem =
     { title : String
     , description : String

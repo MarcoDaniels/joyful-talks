@@ -1,6 +1,6 @@
 module Element.Header exposing (headerView)
 
-import Context exposing (ContentContext, Element, Model, Msg(..))
+import Context exposing (MetadataContext, Element, Model, Msg(..))
 import Element.Empty exposing (emptyNode)
 import Element.Icon exposing (Icons(..), iconView)
 import Html exposing (a, button, div, header, li, nav, text, ul)
@@ -10,7 +10,7 @@ import Pages.PagePath as PagePath exposing (PagePath)
 import Shared.Ternary exposing (ternary)
 
 
-headerView : ContentContext -> Bool -> Element
+headerView : MetadataContext -> Bool -> Element
 headerView { path, frontmatter } expand =
     header []
         [ div [ class "header" ]

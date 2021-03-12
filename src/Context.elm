@@ -4,7 +4,7 @@ import Head
 import Html exposing (Html)
 import Pages
 import Pages.PagePath exposing (PagePath)
-import Shared.Types exposing (Base, Meta, Post)
+import Shared.Types exposing (Base, Meta, Post, SEO)
 
 
 type CookieMsg
@@ -45,12 +45,16 @@ type Data
 
 
 type alias Content =
-    { collection : String, data : Data, meta : Meta }
+    { collection : String, content : Data }
 
 
-type alias ContentContext =
+type alias Metadata =
+    { seo : SEO, feed : Maybe (List String), meta : Meta }
+
+
+type alias MetadataContext =
     { path : PagePath Pages.PathKey
-    , frontmatter : Content
+    , frontmatter : Metadata
     }
 
 

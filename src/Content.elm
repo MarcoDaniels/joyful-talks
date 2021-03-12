@@ -1,36 +1,25 @@
-module Content exposing (contentDecoder, contentFeed)
+module Content exposing (contentDecoder, contentFeed, metadataDecoder)
 
-import Context exposing (Content, ContentContext, Data(..), PageData, StaticRequest)
-import OptimizedDecoder exposing (Decoder, andThen, field, list, string, succeed)
+import Context exposing (Content, Data(..), Metadata, MetadataContext, PageData, StaticRequest)
+import OptimizedDecoder exposing (Decoder, andThen, field, list, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, required)
 import Page.Base exposing (baseDecoder)
 import Page.Post exposing (postDecoder)
 import Pages.Secrets as Secrets
 import Pages.StaticHttp as StaticHttp
 import Shared.Decoder exposing (assetDecoder, linkDecoder, linkValueDecoder)
-import Shared.Types exposing (Base, CookieBanner, Feed, FeedItem, Footer, AssetPath, Meta, Navigation, Post)
+import Shared.Types exposing (AssetPath, Base, CookieBanner, Feed, FeedItem, Footer, Meta, Navigation, Post, SEO)
 
 
-contentDecoder : Decoder Content
-contentDecoder =
-    succeed Content
-        |> required "collection" string
-        |> custom
-            -- decoding "data" object based on collection
-            (field "collection" string
-                |> andThen
-                    (\collection ->
-                        case collection of
-                            "joyfulPage" ->
-                                succeed BaseData |> required "data" baseDecoder
-
-                            "joyfulPost" ->
-                                succeed PostData |> required "data" postDecoder
-
-                            _ ->
-                                succeed UnknownData
-                    )
+metadataDecoder : Decoder Metadata
+metadataDecoder =
+    succeed Metadata
+        |> required "seo"
+            (succeed SEO
+                |> required "title" string
+                |> required "description" string
             )
+        |> required "feed" (maybe (list string))
         |> required "meta"
             (succeed Meta
                 |> required "navigation"
@@ -48,6 +37,27 @@ contentDecoder =
                     (succeed CookieBanner
                         |> required "title" string
                         |> required "content" string
+                    )
+            )
+
+
+contentDecoder : Decoder Content
+contentDecoder =
+    succeed Content
+        |> required "collection" string
+        |> custom
+            (field "collection" string
+                |> andThen
+                    (\collection ->
+                        case collection of
+                            "joyfulPage" ->
+                                succeed BaseData |> required "content" baseDecoder
+
+                            "joyfulPost" ->
+                                succeed PostData |> required "content" postDecoder
+
+                            _ ->
+                                succeed UnknownData
                     )
             )
 
