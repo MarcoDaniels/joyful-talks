@@ -1,15 +1,16 @@
 port module Main exposing (main)
 
 import Body exposing (bodyView)
-import Content exposing (contentFeed, metadataDecoder)
+import ContentFeed exposing (contentFeed)
 import Context exposing (Content, CookieConsent, CookieMsg(..), Data(..), Metadata, MetadataContext, Model, Msg(..), PageData, Renderer, StaticRequest)
 import Layout exposing (layoutView)
 import Manifest exposing (manifest)
-import Metadata exposing (metadataHead)
+import Metadata exposing (metadataDecoder)
 import OptimizedDecoder exposing (decoder)
 import Pages exposing (PathKey, internals)
 import Pages.Platform exposing (Program)
 import Pages.StaticHttp as StaticHttp
+import SEO exposing (headSEO)
 
 
 main : Pages.Platform.Program Model Msg Metadata Renderer Pages.PathKey
@@ -88,12 +89,12 @@ view metadataContext =
                 |> StaticHttp.map
                     (\feed ->
                         { view = \model body -> layoutView body metadataContext model (Just feed)
-                        , head = metadataHead metadataContext.frontmatter.seo
+                        , head = headSEO metadataContext.frontmatter.seo
                         }
                     )
 
         Nothing ->
             StaticHttp.succeed
                 { view = \model body -> layoutView body metadataContext model Nothing
-                , head = metadataHead metadataContext.frontmatter.seo
+                , head = headSEO metadataContext.frontmatter.seo
                 }

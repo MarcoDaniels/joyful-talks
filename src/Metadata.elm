@@ -1,24 +1,37 @@
-module Metadata exposing (metadataHead)
+module Metadata exposing (metadataDecoder)
 
-import Head
-import Head.Seo as Seo
-import Pages exposing (images)
-import Shared.Types exposing (SEO)
+import Context exposing (Metadata)
+import OptimizedDecoder exposing (Decoder, list, maybe, string, succeed)
+import OptimizedDecoder.Pipeline exposing (required)
+import Shared.Decoder exposing (linkDecoder, linkValueDecoder)
+import Shared.Types exposing (CookieBanner, Footer, Meta, Navigation, SEO)
 
 
-metadataHead : SEO -> List (Head.Tag Pages.PathKey)
-metadataHead seo =
-    Seo.summary
-        { canonicalUrlOverride = Nothing
-        , siteName = ""
-        , image =
-            { url = images.iconPng
-            , alt = seo.title
-            , dimensions = Nothing
-            , mimeType = Nothing
-            }
-        , description = seo.description
-        , locale = Nothing
-        , title = seo.title
-        }
-        |> Seo.website
+metadataDecoder : Decoder Metadata
+metadataDecoder =
+    succeed Metadata
+        |> required "seo"
+            (succeed SEO
+                |> required "title" string
+                |> required "description" string
+            )
+        |> required "feed" (maybe (list string))
+        |> required "meta"
+            (succeed Meta
+                |> required "navigation"
+                    (succeed Navigation
+                        |> required "brand" linkDecoder
+                        |> required "menu" (list linkValueDecoder)
+                        |> required "social" (list linkValueDecoder)
+                    )
+                |> required "footer"
+                    (succeed Footer
+                        |> required "links" (list linkValueDecoder)
+                        |> required "info" string
+                    )
+                |> required "cookie"
+                    (succeed CookieBanner
+                        |> required "title" string
+                        |> required "content" string
+                    )
+            )

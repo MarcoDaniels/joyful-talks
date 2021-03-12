@@ -4,10 +4,10 @@ import Context exposing (Element)
 import Element.Icon exposing (Icons(..), iconView)
 import Html exposing (a, div, span, text)
 import Html.Attributes exposing (class, href, rel, target)
-import Shared.Types exposing (Post)
+import Shared.Types exposing (PostPage)
 
 
-shareView : Post -> Element
+shareView : PostPage -> Element
 shareView post =
     div [ class "post-share font-m" ]
         [ span [] [ text "Be awesome! Let others know about it:" ]

@@ -1,8 +1,8 @@
-module Shared.Decoder exposing (rowContentDecoder, fieldDecoder, assetDecoder, linkDecoder, linkValueDecoder)
+module Shared.Decoder exposing (assetDecoder, contentFieldValueDecoder, fieldDecoder, linkDecoder, linkValueDecoder, rowContentDecoder)
 
 import OptimizedDecoder exposing (Decoder, andThen, field, int, list, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, optional, required, requiredAt)
-import Shared.Types exposing (RowContentValue(..), RowContentField, CookieBanner, Field, AssetPath, Link)
+import Shared.Types exposing (AssetPath, ContentFieldValue, ContentValue(..), CookieBanner, Field, HeroContent, Link, RowContentField, RowContentValue(..))
 
 
 fieldDecoder : Decoder Field
@@ -49,5 +49,40 @@ rowContentDecoder =
 
                             _ ->
                                 succeed RowContentUnknown
+                    )
+            )
+
+
+contentFieldValueDecoder : Decoder ContentFieldValue
+contentFieldValueDecoder =
+    succeed ContentFieldValue
+        |> required "field" fieldDecoder
+        |> custom
+            (field "field" fieldDecoder
+                |> andThen
+                    (\field ->
+                        case ( field.fieldType, field.label ) of
+                            ( "markdown", _ ) ->
+                                succeed ContentValueMarkdown
+                                    |> required "value" string
+
+                            ( "asset", _ ) ->
+                                succeed ContentValueAsset
+                                    |> required "value" assetDecoder
+
+                            ( "set", "Hero" ) ->
+                                succeed ContentValueHero
+                                    |> required "value"
+                                        (succeed HeroContent
+                                            |> required "title" string
+                                            |> required "image" assetDecoder
+                                        )
+
+                            ( "repeater", "Row" ) ->
+                                succeed ContentValueRow
+                                    |> required "value" (list rowContentDecoder)
+
+                            _ ->
+                                succeed ContentValueUnknown
                     )
             )

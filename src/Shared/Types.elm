@@ -30,35 +30,24 @@ type alias RowContentField =
     { field : Field, value : RowContentValue }
 
 
-type BaseContentValue
-    = BaseContentValueMarkdown String
-    | BaseContentValueAsset AssetPath
-    | BaseContentValueHero HeroContent
-    | BaseContentValueRow (List RowContentField)
-    | BaseContentValueUnknown
+type ContentValue
+    = ContentValueMarkdown String
+    | ContentValueAsset AssetPath
+    | ContentValueHero HeroContent
+    | ContentValueRow (List RowContentField)
+    | ContentValueUnknown
 
 
-type alias BaseContent =
-    { field : Field, value : BaseContentValue }
+type alias ContentFieldValue =
+    { field : Field, value : ContentValue }
 
 
-type alias Base =
+type alias BasePage =
     { title : String
     , description : String
     , postsFeed : Maybe (List String)
-    , content : List BaseContent
+    , content : List ContentFieldValue
     }
-
-
-type PostContentValue
-    = PostContentValueMarkdown String
-    | PostContentValueAsset AssetPath
-    | PostContentValueRow (List RowContentField)
-    | PostContentValueUnknown
-
-
-type alias PostContent =
-    { field : Field, value : PostContentValue }
 
 
 type alias Written =
@@ -72,12 +61,12 @@ type alias RelatedItem =
     }
 
 
-type alias Post =
+type alias PostPage =
     { title : String
     , description : String
     , url : String
     , asset : AssetPath
-    , content : List PostContent
+    , content : List ContentFieldValue
     , written : Written
     , updated : Posix
     , related : Maybe (List RelatedItem)

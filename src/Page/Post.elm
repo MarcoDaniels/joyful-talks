@@ -8,47 +8,21 @@ import Element.Share exposing (shareView)
 import Html exposing (a, div, h1, h4, span, text)
 import Html.Attributes exposing (class, href)
 import Markdown exposing (markdownRender)
-import OptimizedDecoder exposing (Decoder, andThen, field, list, maybe, string, succeed)
-import OptimizedDecoder.Pipeline exposing (custom, required)
+import OptimizedDecoder exposing (Decoder, list, maybe, string, succeed)
+import OptimizedDecoder.Pipeline exposing (required)
 import Shared.Date exposing (decodeDate, formatDate)
-import Shared.Decoder exposing (assetDecoder, fieldDecoder, rowContentDecoder)
-import Shared.Types exposing (Field, Post, PostContent, PostContentValue(..), RelatedItem, Written)
+import Shared.Decoder exposing (assetDecoder, contentFieldValueDecoder)
+import Shared.Types exposing (ContentValue(..), Field, PostPage, RelatedItem, Written)
 
 
-postDecoder : Decoder Post
+postDecoder : Decoder PostPage
 postDecoder =
-    succeed Post
+    succeed PostPage
         |> required "title" string
         |> required "description" string
         |> required "url" string
         |> required "image" assetDecoder
-        |> required "content"
-            (list
-                (succeed PostContent
-                    |> required "field" fieldDecoder
-                    |> custom
-                        (field "field" fieldDecoder
-                            |> andThen
-                                (\field ->
-                                    case ( field.fieldType, field.label ) of
-                                        ( "markdown", _ ) ->
-                                            succeed PostContentValueMarkdown
-                                                |> required "value" string
-
-                                        ( "asset", _ ) ->
-                                            succeed PostContentValueAsset
-                                                |> required "value" assetDecoder
-
-                                        ( "repeater", "Row" ) ->
-                                            succeed PostContentValueRow
-                                                |> required "value" (list rowContentDecoder)
-
-                                        _ ->
-                                            succeed PostContentValueUnknown
-                                )
-                        )
-                )
-            )
+        |> required "content" (list contentFieldValueDecoder)
         |> required "writtenBy"
             (succeed Written
                 |> required "name" string
@@ -67,7 +41,7 @@ postDecoder =
             )
 
 
-postView : Post -> Element
+postView : PostPage -> Element
 postView post =
     div [ class "post" ]
         (List.concat
@@ -76,16 +50,16 @@ postView post =
                 |> List.map
                     (\content ->
                         case content.value of
-                            PostContentValueMarkdown markdown ->
+                            ContentValueMarkdown markdown ->
                                 markdownRender markdown
 
-                            PostContentValueAsset image ->
+                            ContentValueAsset image ->
                                 assetView { src = image.path, alt = image.title } AssetPost
 
-                            PostContentValueRow rowItems ->
+                            ContentValueRow rowItems ->
                                 rowView rowItems
 
-                            PostContentValueUnknown ->
+                            _ ->
                                 emptyNode
                     )
             , [ div [ class "post-info font-m" ]
