@@ -4,7 +4,7 @@ import Head
 import Html exposing (Html)
 import Pages
 import Pages.PagePath exposing (PagePath)
-import Shared.Types exposing (Base, Meta, Post, SEO)
+import Shared.Types exposing (BasePage, Meta, PostPage, SEO)
 
 
 type CookieMsg
@@ -39,13 +39,13 @@ type alias PageData =
 
 
 type Data
-    = BaseData Base
-    | PostData Post
+    = BaseData BasePage
+    | PostData PostPage
     | UnknownData
 
 
 type alias Content =
-    { collection : String, content : Data }
+    { collection : String, data : Data }
 
 
 type alias Metadata =

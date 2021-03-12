@@ -36,7 +36,7 @@ type Metadata = {
 
 type Data = {
     collection: string
-    content: unknown
+    data: unknown
 }
 
 export type Config = {
@@ -44,12 +44,12 @@ export type Config = {
     cockpitAPIToken: string
 }
 
-const createFile = (url: string, frontmatter: Metadata, content: Data) => {
+const createFile = (url: string, frontmatter: Metadata, data: Data) => {
     const fileContent = `${contentFolder}${url === '/' ? '/index.md' : url.slice(-1) === '/' ? `/${url.slice(0, -1)}.md` : `/${url}.md`}`
 
     fs.mkdir(path.dirname(fileContent), {recursive: true}, (err) => {
         if (err) return
-        fs.writeFile(fileContent, `---\n${JSON.stringify(frontmatter, null, 2)}\n---\n${JSON.stringify(content, null, 2)}`, () => {
+        fs.writeFile(fileContent, `---\n${JSON.stringify(frontmatter, null, 2)}\n---\n${JSON.stringify(data, null, 2)}`, () => {
         })
     })
 }
@@ -68,7 +68,7 @@ const syncContent = async ({cockpitAPIURL, cockpitAPIToken}: Config) => {
                 feed: entry.postsFeed || null,
                 seo: {title: entry.title, description: entry.description},
                 meta: meta
-            }, {collection: collection, content: entry}))
+            }, {collection: collection, data: entry}))
         })
     }
 }
