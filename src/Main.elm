@@ -1,20 +1,18 @@
 port module Main exposing (main)
 
-import Content exposing (contentDecoder, contentFeed)
-import Context exposing (Content, ContentContext, CookieConsent, CookieMsg(..), Data(..), Model, Msg(..), PageData, Renderer, StaticRequest)
-import Element.Empty exposing (emptyNode)
-import Layout
+import Body exposing (bodyView)
+import Content exposing (contentFeed, metadataDecoder)
+import Context exposing (Content, CookieConsent, CookieMsg(..), Data(..), Metadata, MetadataContext, Model, Msg(..), PageData, Renderer, StaticRequest)
+import Layout exposing (layoutView)
 import Manifest exposing (manifest)
 import Metadata exposing (metadataHead)
 import OptimizedDecoder exposing (decoder)
-import Page.Base exposing (baseView)
-import Page.Post exposing (postView)
-import Pages exposing (internals)
-import Pages.Platform
+import Pages exposing (PathKey, internals)
+import Pages.Platform exposing (Program)
 import Pages.StaticHttp as StaticHttp
 
 
-main : Pages.Platform.Program Model Msg Content Renderer Pages.PathKey
+main : Pages.Platform.Program Model Msg Metadata Renderer Pages.PathKey
 main =
     Pages.Platform.init
         { init = \_ -> init
@@ -23,8 +21,8 @@ main =
         , subscriptions = \_ _ _ -> subscriptions
         , documents =
             [ { extension = "md"
-              , metadata = decoder contentDecoder
-              , body = \_ -> Ok (emptyNode |> List.singleton)
+              , metadata = decoder metadataDecoder
+              , body = bodyView
               }
             ]
         , manifest = manifest
@@ -82,34 +80,20 @@ subscriptions =
     Sub.batch [ Sub.map Cookie (cookieState CookieState) ]
 
 
-view : ContentContext -> StaticHttp.Request StaticRequest
-view contentContext =
-    case contentContext.frontmatter.data of
-        BaseData baseData ->
-            case baseData.postsFeed of
-                Just filterFeed ->
-                    contentFeed filterFeed
-                        |> StaticHttp.map
-                            (\feed ->
-                                { view = \model _ -> Layout.view (baseView baseData (Just feed)) contentContext model
-                                , head = metadataHead { title = baseData.title, description = baseData.description }
-                                }
-                            )
-
-                Nothing ->
-                    StaticHttp.succeed
-                        { view = \model _ -> Layout.view (baseView baseData Nothing) contentContext model
-                        , head = metadataHead { title = baseData.title, description = baseData.description }
+view : MetadataContext -> StaticHttp.Request StaticRequest
+view metadataContext =
+    case metadataContext.frontmatter.feed of
+        Just filterFeed ->
+            contentFeed filterFeed
+                |> StaticHttp.map
+                    (\feed ->
+                        { view = \model body -> layoutView body metadataContext model (Just feed)
+                        , head = metadataHead metadataContext.frontmatter.seo
                         }
+                    )
 
-        PostData postData ->
+        Nothing ->
             StaticHttp.succeed
-                { view = \model _ -> Layout.view (postView postData) contentContext model
-                , head = metadataHead { title = postData.title, description = postData.description }
-                }
-
-        UnknownData ->
-            StaticHttp.succeed
-                { view = \model _ -> Layout.view { title = "", body = emptyNode } contentContext model
-                , head = []
+                { view = \model body -> layoutView body metadataContext model Nothing
+                , head = metadataHead metadataContext.frontmatter.seo
                 }

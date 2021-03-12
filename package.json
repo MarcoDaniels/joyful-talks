@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "cockpit-http-client": "0.0.1",
-    "elm-pages": "1.5.4"
+    "elm-pages": "1.5.5"
   },
   "devDependencies": {
     "@types/express": "4.17.11",
