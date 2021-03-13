@@ -1,9 +1,9 @@
 module Element.Footer exposing (footerView)
 
 import Context exposing (Element)
+import Element.Markdown exposing (markdownView)
 import Html exposing (a, div, footer, text)
 import Html.Attributes exposing (class, href)
-import Markdown exposing (markdownRender)
 import Shared.Types exposing (Footer)
 
 
@@ -18,6 +18,6 @@ footerView footerData =
                             a [ class "link-primary-effect font-m", href link.url ] [ text link.text ]
                         )
                 )
-            , div [ class "footer-info" ] [ markdownRender footerData.info ]
+            , div [ class "footer-info" ] [ markdownView footerData.info ]
             ]
         ]

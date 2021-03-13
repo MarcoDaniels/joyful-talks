@@ -3,10 +3,10 @@ module Page.Base exposing (baseDecoder, baseView)
 import Context exposing (Element, PageData)
 import Element.Empty exposing (emptyNode)
 import Element.Hero exposing (heroView)
+import Element.Markdown exposing (markdownView)
 import Element.Row exposing (rowView)
 import Html exposing (div)
 import Html.Attributes exposing (class)
-import Markdown exposing (markdownRender)
 import OptimizedDecoder exposing (Decoder, list, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (required)
 import Shared.Decoder exposing (contentFieldValueDecoder)
@@ -31,7 +31,7 @@ baseView base =
                     (\content ->
                         case content.value of
                             ContentValueMarkdown markdown ->
-                                div [ class "container" ] [ markdownRender markdown ]
+                                div [ class "container" ] [ markdownView markdown ]
 
                             ContentValueAsset asset ->
                                 -- assetView { src = asset.path, alt = asset.title } AssetDefault

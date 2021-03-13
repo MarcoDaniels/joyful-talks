@@ -3,11 +3,11 @@ module Page.Post exposing (postDecoder, postView)
 import Context exposing (Element, PageData)
 import Element.Asset exposing (AssetType(..), assetView)
 import Element.Empty exposing (emptyNode)
+import Element.Markdown exposing (markdownView)
 import Element.Row exposing (rowView)
 import Element.Share exposing (shareView)
 import Html exposing (a, div, h1, h4, span, text)
 import Html.Attributes exposing (class, href)
-import Markdown exposing (markdownRender)
 import OptimizedDecoder exposing (Decoder, list, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (required)
 import Shared.Date exposing (decodeDate, formatDate)
@@ -51,7 +51,7 @@ postView post =
                     (\content ->
                         case content.value of
                             ContentValueMarkdown markdown ->
-                                markdownRender markdown
+                                markdownView markdown
 
                             ContentValueAsset image ->
                                 assetView { src = image.path, alt = image.title } AssetPost
@@ -67,7 +67,7 @@ postView post =
                         [ span [] [ text "written by " ]
                         , case post.written.url of
                             Just url ->
-                                a [ class "link-secondary", href url ] [ text post.written.name ]
+                                a [ class "link-tertiary", href url ] [ text post.written.name ]
 
                             Nothing ->
                                 span [] [ text post.written.name ]

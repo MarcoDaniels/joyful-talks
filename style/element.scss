@@ -32,6 +32,30 @@ a {
     }
 
     &-secondary {
+      color: #0187ba;
+      position: relative;
+
+      &:before {
+        content: "";
+        position: absolute;
+        margin: 0 auto;
+        height: 1px;
+        width: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #0187ba;
+        visibility: hidden;
+        transition: all 0.3s ease-in-out 0s;
+      }
+
+      &:hover:before {
+        visibility: visible;
+        width: 98%;
+      }
+    }
+
+    &-tertiary {
       color: #ff8cc6;
     }
   }
