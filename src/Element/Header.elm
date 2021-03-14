@@ -1,17 +1,19 @@
 module Element.Header exposing (headerView)
 
-import Context exposing (MetadataContext, Element, Model, Msg(..))
+import Context exposing (Element, MetadataContext, Model, Msg(..))
 import Element.Empty exposing (emptyNode)
 import Element.Icon exposing (Icons(..), iconView)
 import Html exposing (a, button, div, header, li, nav, text, ul)
 import Html.Attributes exposing (class, href, rel, target)
 import Html.Events exposing (onClick)
+import Metadata.Type exposing (Navigation)
+import Pages
 import Pages.PagePath as PagePath exposing (PagePath)
 import Shared.Ternary exposing (ternary)
 
 
-headerView : MetadataContext -> Bool -> Element
-headerView { path, frontmatter } expand =
+headerView : PagePath Pages.PathKey -> Navigation -> Bool -> Element
+headerView path navigation expand =
     header []
         [ div [ class "header" ]
             [ a [ class "header-skip", href (PagePath.toString path ++ "#content") ] [ text "skip to content" ]
@@ -21,10 +23,10 @@ headerView { path, frontmatter } expand =
                         [ li [ class "header-nav-main-brand" ]
                             [ a
                                 [ class "link-primary font-l font-dancing"
-                                , href frontmatter.meta.navigation.brand.url
+                                , href navigation.brand.url
                                 , onClick (MenuExpand False)
                                 ]
-                                [ text frontmatter.meta.navigation.brand.text ]
+                                [ text navigation.brand.text ]
                             , button [ class "header-nav-main-button", onClick (MenuExpand (not expand)) ]
                                 [ ternary expand
                                     (iconView Close { size = "15", color = "#3f3f3f" })
@@ -33,7 +35,7 @@ headerView { path, frontmatter } expand =
                             ]
                         ]
                     , ul [ class ("header-nav-main-items" ++ ternary expand " show" "") ]
-                        (frontmatter.meta.navigation.menu
+                        (navigation.menu
                             |> List.map
                                 (\item ->
                                     li
@@ -50,7 +52,7 @@ headerView { path, frontmatter } expand =
                     ]
                 , nav [ class ("header-nav-extra" ++ ternary expand " show" "") ]
                     [ ul []
-                        (frontmatter.meta.navigation.social
+                        (navigation.social
                             |> List.map
                                 (\item ->
                                     li [ class "header-nav-item" ]

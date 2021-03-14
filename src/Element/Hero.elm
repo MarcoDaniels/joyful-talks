@@ -1,10 +1,10 @@
 module Element.Hero exposing (..)
 
+import Body.Type exposing (HeroContent)
 import Context exposing (Element)
 import Element.Asset exposing (AssetType(..), assetView)
 import Html exposing (div, h1, text)
 import Html.Attributes exposing (class)
-import Shared.Types exposing (HeroContent)
 
 
 heroView : HeroContent -> Element

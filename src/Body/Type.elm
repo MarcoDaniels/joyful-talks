@@ -1,19 +1,7 @@
-module Shared.Types exposing (..)
+module Body.Type exposing (..)
 
+import Shared.Type exposing (AssetPath, Field)
 import Time exposing (Posix)
-
-
-type alias Field =
-    { fieldType : String, label : String }
-
-
-type alias AssetPath =
-    { path : String
-    , title : String
-    , width : Int
-    , height : Int
-    , colors : Maybe (List String)
-    }
 
 
 type alias HeroContent =
@@ -79,49 +67,5 @@ type BodyData
     | BodyDataUnknown
 
 
-type alias BodyContent =
+type alias PageBody =
     { collection : String, data : BodyData }
-
-
-type alias Link =
-    { text : String, url : String }
-
-
-type alias CookieBanner =
-    { title : String, content : String }
-
-
-type alias Footer =
-    { links : List Link, info : String }
-
-
-type alias Navigation =
-    { brand : Link
-    , menu : List Link
-    , social : List Link
-    }
-
-
-type alias Meta =
-    { navigation : Navigation
-    , footer : Footer
-    , cookie : CookieBanner
-    }
-
-
-type alias SEO =
-    { title : String
-    , description : String
-    }
-
-
-type alias FeedItem =
-    { title : String
-    , description : String
-    , url : String
-    , asset : AssetPath
-    }
-
-
-type alias Feed =
-    { entries : List FeedItem }

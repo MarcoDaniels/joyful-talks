@@ -1,12 +1,12 @@
 module Element.Row exposing (rowView)
 
+import Body.Type exposing (RowContentField, RowContentValue(..))
 import Context exposing (Element)
 import Element.Asset exposing (AssetType(..), assetView)
 import Element.Empty exposing (emptyNode)
 import Element.Markdown exposing (markdownView)
 import Html exposing (div)
 import Html.Attributes exposing (class)
-import Shared.Types exposing (RowContentField, RowContentValue(..))
 
 
 rowView : List RowContentField -> Element

@@ -1,5 +1,6 @@
 module Page.Post exposing (postDecoder, postView)
 
+import Body.Type exposing (ContentValue(..), PostPage, RelatedItem, Written)
 import Context exposing (Element)
 import Element.Asset exposing (AssetType(..), assetView)
 import Element.Empty exposing (emptyNode)
@@ -12,7 +13,6 @@ import OptimizedDecoder exposing (Decoder, list, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (required)
 import Shared.Date exposing (decodeDate, formatDate)
 import Shared.Decoder exposing (assetDecoder, contentFieldValueDecoder)
-import Shared.Types exposing (ContentValue(..), Field, PostPage, RelatedItem, Written)
 
 
 postDecoder : Decoder PostPage

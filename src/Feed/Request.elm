@@ -1,15 +1,15 @@
-module ContentFeed exposing (contentFeed)
+module Feed.Request exposing (requestFeed)
 
-import OptimizedDecoder exposing (Decoder, list, string, succeed)
+import Feed.Type exposing (Feed, FeedItem)
+import OptimizedDecoder exposing (list, string, succeed)
 import OptimizedDecoder.Pipeline exposing (required)
 import Pages.Secrets as Secrets
 import Pages.StaticHttp as StaticHttp
 import Shared.Decoder exposing (assetDecoder)
-import Shared.Types exposing (AssetPath, BasePage, CookieBanner, Feed, FeedItem, Footer, Meta, Navigation, PostPage, SEO)
 
 
-contentFeed : List String -> StaticHttp.Request Feed
-contentFeed categoryList =
+requestFeed : List String -> StaticHttp.Request Feed
+requestFeed categoryList =
     let
         buildFilter : List String -> String
         buildFilter filter =
