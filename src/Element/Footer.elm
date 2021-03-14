@@ -4,7 +4,7 @@ import Context exposing (Element)
 import Element.Markdown exposing (markdownView)
 import Html exposing (a, div, footer, text)
 import Html.Attributes exposing (class, href)
-import Shared.Types exposing (Footer)
+import Metadata.Type exposing (Footer)
 
 
 footerView : Footer -> Element

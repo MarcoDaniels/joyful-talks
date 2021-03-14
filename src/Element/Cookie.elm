@@ -6,7 +6,7 @@ import Element.Icon exposing (Icons(..), iconView)
 import Html exposing (button, div, h4, p, text)
 import Html.Attributes exposing (class, tabindex)
 import Html.Events exposing (onClick)
-import Shared.Types exposing (CookieBanner)
+import Metadata.Type exposing (CookieBanner)
 
 
 cookieView : CookieConsent -> CookieBanner -> Element

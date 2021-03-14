@@ -1,11 +1,11 @@
-module Element.Feed exposing (feedView)
+module Feed.View exposing (feedView)
 
 import Context exposing (Element)
 import Element.Asset exposing (AssetType(..), assetView)
+import Feed.Type exposing (Feed)
 import Html exposing (a, div, h2, p, text)
 import Html.Attributes exposing (class, href)
 import Shared.Ternary exposing (ternary)
-import Shared.Types exposing (Feed)
 
 
 feedView : Feed -> Element

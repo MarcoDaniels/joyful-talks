@@ -2,9 +2,9 @@ module Context exposing (..)
 
 import Head
 import Html exposing (Html)
+import Metadata.Type exposing (PageMetadata)
 import Pages
 import Pages.PagePath exposing (PagePath)
-import Shared.Types exposing (BasePage, Meta, PostPage, SEO)
 
 
 type CookieMsg
@@ -34,26 +34,22 @@ type alias Renderer =
     List Element
 
 
-type alias Layout =
+type alias View =
     { title : String, body : Element }
-
-
-type alias Metadata =
-    { seo : SEO, feed : Maybe (List String), meta : Meta }
 
 
 type alias MetadataContext =
     { path : PagePath Pages.PathKey
-    , frontmatter : Metadata
+    , frontmatter : PageMetadata
     }
 
 
 type alias StaticRequest =
-    { view : Model -> Renderer -> Layout, head : List (Head.Tag Pages.PathKey) }
+    { view : Model -> Renderer -> View, head : List (Head.Tag Pages.PathKey) }
 
 
 type alias MetadataGenerate =
-    List { path : PagePath Pages.PathKey, frontmatter : Metadata, body : String }
+    List { path : PagePath Pages.PathKey, frontmatter : PageMetadata, body : String }
 
 
 type alias StaticRequestGenerate =

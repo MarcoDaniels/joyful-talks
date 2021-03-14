@@ -3,22 +3,21 @@ module SEO exposing (headSEO)
 import Head
 import Head.Seo as Seo
 import Pages exposing (images)
-import Shared.Types exposing (SEO)
 
 
-headSEO : SEO -> List (Head.Tag Pages.PathKey)
-headSEO seo =
+headSEO : String -> String -> List (Head.Tag Pages.PathKey)
+headSEO title description =
     Seo.summary
         { canonicalUrlOverride = Nothing
         , siteName = ""
         , image =
             { url = images.iconPng
-            , alt = seo.title
+            , alt = title
             , dimensions = Nothing
             , mimeType = Nothing
             }
-        , description = seo.description
+        , description = description
         , locale = Nothing
-        , title = seo.title
+        , title = title
         }
         |> Seo.website

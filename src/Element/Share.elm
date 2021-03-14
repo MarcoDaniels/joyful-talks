@@ -1,10 +1,10 @@
 module Element.Share exposing (shareView)
 
+import Body.Type exposing (PostPage)
 import Context exposing (Element)
 import Element.Icon exposing (Icons(..), iconView)
 import Html exposing (a, div, span, text)
 import Html.Attributes exposing (class, href, rel, target)
-import Shared.Types exposing (PostPage)
 
 
 shareView : PostPage -> Element

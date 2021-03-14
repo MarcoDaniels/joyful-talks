@@ -1,18 +1,16 @@
-module Body exposing (bodyView)
+module Body.Decoder exposing (bodyDecoder)
 
-import Context exposing (Renderer)
-import Element.Empty exposing (emptyNode)
+import Body.Type exposing (BodyData(..), PageBody)
 import OptimizedDecoder exposing (Error, andThen, decodeString, field, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, required)
-import Page.Base exposing (baseDecoder, baseView)
-import Page.Post exposing (postDecoder, postView)
-import Shared.Types exposing (BodyContent, BodyData(..))
+import Page.Base exposing (baseDecoder)
+import Page.Post exposing (postDecoder)
 
 
-bodyDecoder : String -> Result Error BodyContent
+bodyDecoder : String -> Result Error PageBody
 bodyDecoder input =
     decodeString
-        (succeed BodyContent
+        (succeed PageBody
             |> required "collection" string
             |> custom
                 (field "collection" string
@@ -31,23 +29,3 @@ bodyDecoder input =
                 )
         )
         input
-
-
-bodyView : String -> Result String Renderer
-bodyView cont =
-    case bodyDecoder cont of
-        Ok content ->
-            Ok
-                [ case content.data of
-                    BodyDataBase base ->
-                        baseView base
-
-                    BodyDataPost post ->
-                        postView post
-
-                    _ ->
-                        emptyNode
-                ]
-
-        Err _ ->
-            Ok [ emptyNode ]

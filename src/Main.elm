@@ -1,12 +1,14 @@
 port module Main exposing (main)
 
-import Body exposing (bodyView)
-import ContentFeed exposing (contentFeed)
-import Context exposing (CookieConsent, CookieMsg(..), Metadata, MetadataContext, Model, Msg(..), Renderer, StaticRequest)
+import Body.View exposing (bodyView)
+import Context exposing (CookieConsent, CookieMsg(..), MetadataContext, Model, Msg(..), Renderer, StaticRequest)
+import Element.Empty exposing (emptyNode)
+import Feed.Request exposing (requestFeed)
 import Generate.Rss exposing (generateRss)
 import Layout exposing (layoutView)
 import Manifest exposing (manifest)
-import Metadata exposing (metadataDecoder)
+import Metadata.Decoder exposing (metadataDecoder)
+import Metadata.Type exposing (Metadata(..), PageMetadata)
 import OptimizedDecoder exposing (decoder)
 import Pages exposing (PathKey, internals)
 import Pages.Platform exposing (Program)
@@ -14,7 +16,7 @@ import Pages.StaticHttp as StaticHttp
 import SEO exposing (headSEO)
 
 
-main : Pages.Platform.Program Model Msg Metadata Renderer Pages.PathKey
+main : Pages.Platform.Program Model Msg PageMetadata Renderer Pages.PathKey
 main =
     Pages.Platform.init
         { init = \_ -> init
@@ -81,18 +83,41 @@ subscriptions =
 
 view : MetadataContext -> StaticHttp.Request StaticRequest
 view metadataContext =
-    case metadataContext.frontmatter.feed of
-        Just filterFeed ->
-            contentFeed filterFeed
-                |> StaticHttp.map
-                    (\feed ->
-                        { view = \model body -> layoutView body metadataContext model (Just feed)
-                        , head = headSEO metadataContext.frontmatter.seo
-                        }
-                    )
+    case metadataContext.frontmatter.metadata of
+        MetadataBase base ->
+            case base.feed of
+                Just filterFeed ->
+                    requestFeed filterFeed
+                        |> StaticHttp.map
+                            (\feed ->
+                                { view =
+                                    \model renderedBody ->
+                                        { title = base.title
+                                        , body = layoutView metadataContext.path model base.settings renderedBody (Just feed)
+                                        }
+                                , head = headSEO base.title base.description
+                                }
+                            )
 
-        Nothing ->
+                Nothing ->
+                    StaticHttp.succeed
+                        { view =
+                            \model renderedBody ->
+                                { title = base.title
+                                , body = layoutView metadataContext.path model base.settings renderedBody Nothing
+                                }
+                        , head = headSEO base.title base.description
+                        }
+
+        MetadataPost post ->
             StaticHttp.succeed
-                { view = \model body -> layoutView body metadataContext model Nothing
-                , head = headSEO metadataContext.frontmatter.seo
+                { view =
+                    \model renderedBody ->
+                        { title = post.title
+                        , body = layoutView metadataContext.path model post.settings renderedBody Nothing
+                        }
+                , head = headSEO post.title post.description
                 }
+
+        MetadataUnknown ->
+            StaticHttp.succeed { view = \_ _ -> { title = "", body = emptyNode }, head = [] }

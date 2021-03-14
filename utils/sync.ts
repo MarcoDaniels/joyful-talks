@@ -26,12 +26,7 @@ type Singletons = {
 
 type Metadata = {
     collection: string
-    seo: {
-        title: string
-        description: string
-    }
     meta: unknown
-    feed?: unknown
 }
 
 type Data = {
@@ -65,9 +60,12 @@ const syncContent = async ({cockpitAPIURL, cockpitAPIToken}: Config) => {
         Object.entries(sync.collections).map(([collection, data]) => {
             data.entries.map(entry => createFile(entry.url, {
                 collection: collection,
-                feed: entry.postsFeed || null,
-                seo: {title: entry.title, description: entry.description},
-                meta: meta
+                meta: {
+                    title: entry.title,
+                    description: entry.description,
+                    feed: entry.postsFeed || null,
+                    settings: meta
+                }
             }, {collection: collection, data: entry}))
         })
     }

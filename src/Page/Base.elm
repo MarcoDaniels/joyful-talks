@@ -1,5 +1,6 @@
 module Page.Base exposing (baseDecoder, baseView)
 
+import Body.Type exposing (BasePage, ContentValue(..))
 import Context exposing (Element)
 import Element.Empty exposing (emptyNode)
 import Element.Hero exposing (heroView)
@@ -10,7 +11,6 @@ import Html.Attributes exposing (class)
 import OptimizedDecoder exposing (Decoder, list, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (required)
 import Shared.Decoder exposing (contentFieldValueDecoder)
-import Shared.Types exposing (BasePage, ContentValue(..), Feed, Field, HeroContent)
 
 
 baseDecoder : Decoder BasePage
