@@ -2,7 +2,8 @@ port module Main exposing (main)
 
 import Body exposing (bodyView)
 import ContentFeed exposing (contentFeed)
-import Context exposing (Content, CookieConsent, CookieMsg(..), Data(..), Metadata, MetadataContext, Model, Msg(..), PageData, Renderer, StaticRequest)
+import Context exposing (CookieConsent, CookieMsg(..), Metadata, MetadataContext, Model, Msg(..), Renderer, StaticRequest)
+import Generate.Rss exposing (generateRss)
 import Layout exposing (layoutView)
 import Manifest exposing (manifest)
 import Metadata exposing (metadataDecoder)
@@ -31,14 +32,13 @@ main =
         , onPageChange = Nothing
         , internals = internals
         }
+        |> Pages.Platform.withFileGenerator generateRss
         |> Pages.Platform.toProgram
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( { cookieConsent = { accept = True }, menuExpand = False }
-    , Cmd.none
-    )
+    ( { cookieConsent = { accept = True }, menuExpand = False }, Cmd.none )
 
 
 port cookieState : (CookieConsent -> msg) -> Sub msg
@@ -53,9 +53,7 @@ updateWithPort msg model =
         ( newModel, cmd ) =
             update msg model
     in
-    ( newModel
-    , Cmd.batch [ cookieAccept newModel.cookieConsent, cmd ]
-    )
+    ( newModel, Cmd.batch [ cookieAccept newModel.cookieConsent, cmd ] )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

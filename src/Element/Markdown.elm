@@ -13,7 +13,7 @@ import Shared.Ternary exposing (ternary)
 -}
 linkAttributes : String -> List (Attribute msg) -> List (Attribute msg)
 linkAttributes href attributes =
-    ternary (String.startsWith href "https://" || String.startsWith href "http://")
+    ternary (String.startsWith "https://" href || String.startsWith "http://" href)
         (List.concat
             [ attributes
             , [ Attributes.target "_blank"

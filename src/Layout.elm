@@ -1,6 +1,6 @@
 module Layout exposing (layoutView)
 
-import Context exposing (MetadataContext, Model, Msg(..), PageData, Renderer)
+import Context exposing (MetadataContext, Model, Msg(..), Layout, Renderer)
 import Element.Cookie exposing (cookieView)
 import Element.Empty exposing (emptyNode)
 import Element.Feed exposing (feedView)
@@ -11,7 +11,7 @@ import Html.Attributes exposing (id)
 import Shared.Types exposing (Feed)
 
 
-layoutView : Renderer -> MetadataContext -> Model -> Maybe Feed -> PageData
+layoutView : Renderer -> MetadataContext -> Model -> Maybe Feed -> Layout
 layoutView renderer context model maybeFeed =
     { title = context.frontmatter.seo.title
     , body =

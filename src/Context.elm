@@ -34,18 +34,8 @@ type alias Renderer =
     List Element
 
 
-type alias PageData =
+type alias Layout =
     { title : String, body : Element }
-
-
-type Data
-    = BaseData BasePage
-    | PostData PostPage
-    | UnknownData
-
-
-type alias Content =
-    { collection : String, data : Data }
 
 
 type alias Metadata =
@@ -59,4 +49,12 @@ type alias MetadataContext =
 
 
 type alias StaticRequest =
-    { view : Model -> Renderer -> PageData, head : List (Head.Tag Pages.PathKey) }
+    { view : Model -> Renderer -> Layout, head : List (Head.Tag Pages.PathKey) }
+
+
+type alias MetadataGenerate =
+    List { path : PagePath Pages.PathKey, frontmatter : Metadata, body : String }
+
+
+type alias StaticRequestGenerate =
+    List (Result String { path : List String, content : String })
