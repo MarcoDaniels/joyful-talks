@@ -1,6 +1,6 @@
 module Page.Base exposing (baseDecoder, baseView)
 
-import Context exposing (Element, PageData)
+import Context exposing (Element)
 import Element.Empty exposing (emptyNode)
 import Element.Hero exposing (heroView)
 import Element.Markdown exposing (markdownView)

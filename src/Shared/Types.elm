@@ -73,6 +73,16 @@ type alias PostPage =
     }
 
 
+type BodyData
+    = BodyDataBase BasePage
+    | BodyDataPost PostPage
+    | BodyDataUnknown
+
+
+type alias BodyContent =
+    { collection : String, data : BodyData }
+
+
 type alias Link =
     { text : String, url : String }
 

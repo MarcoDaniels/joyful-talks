@@ -1,6 +1,6 @@
 module Page.Post exposing (postDecoder, postView)
 
-import Context exposing (Element, PageData)
+import Context exposing (Element)
 import Element.Asset exposing (AssetType(..), assetView)
 import Element.Empty exposing (emptyNode)
 import Element.Markdown exposing (markdownView)

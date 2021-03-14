@@ -1,17 +1,18 @@
 module Body exposing (bodyView)
 
-import Context exposing (Content, Data(..), Renderer)
+import Context exposing (Renderer)
 import Element.Empty exposing (emptyNode)
 import OptimizedDecoder exposing (Error, andThen, decodeString, field, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, required)
 import Page.Base exposing (baseDecoder, baseView)
 import Page.Post exposing (postDecoder, postView)
+import Shared.Types exposing (BodyContent, BodyData(..))
 
 
-bodyDecoder : String -> Result Error Content
+bodyDecoder : String -> Result Error BodyContent
 bodyDecoder input =
     decodeString
-        (succeed Content
+        (succeed BodyContent
             |> required "collection" string
             |> custom
                 (field "collection" string
@@ -19,13 +20,13 @@ bodyDecoder input =
                         (\collection ->
                             case collection of
                                 "joyfulPage" ->
-                                    succeed BaseData |> required "data" baseDecoder
+                                    succeed BodyDataBase |> required "data" baseDecoder
 
                                 "joyfulPost" ->
-                                    succeed PostData |> required "data" postDecoder
+                                    succeed BodyDataPost |> required "data" postDecoder
 
                                 _ ->
-                                    succeed UnknownData
+                                    succeed BodyDataUnknown
                         )
                 )
         )
@@ -38,10 +39,10 @@ bodyView cont =
         Ok content ->
             Ok
                 [ case content.data of
-                    BaseData base ->
+                    BodyDataBase base ->
                         baseView base
 
-                    PostData post ->
+                    BodyDataPost post ->
                         postView post
 
                     _ ->
