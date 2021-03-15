@@ -5,6 +5,7 @@ import Context exposing (CookieConsent, CookieMsg(..), MetadataContext, Model, M
 import Element.Empty exposing (emptyNode)
 import Feed.Request exposing (requestFeed)
 import Generate.Rss exposing (generateRss)
+import Generate.Sitemap exposing (generateSitemap)
 import Layout exposing (layoutView)
 import Manifest exposing (manifest)
 import Metadata.Decoder exposing (metadataDecoder)
@@ -35,6 +36,7 @@ main =
         , internals = internals
         }
         |> Pages.Platform.withFileGenerator generateRss
+        |> Pages.Platform.withFileGenerator generateSitemap
         |> Pages.Platform.toProgram
 
 
