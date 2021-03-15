@@ -18,6 +18,7 @@ baseDecoder =
     succeed BasePage
         |> required "title" string
         |> required "description" string
+        |> required "url" string
         |> required "postsFeed" (maybe (list string))
         |> required "content" (list contentFieldValueDecoder)
 
