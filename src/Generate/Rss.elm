@@ -1,26 +1,26 @@
-module Generate.Rss exposing (..)
+module Generate.Rss exposing (generateRss)
 
+import Body.Decoder exposing (bodyDecoder)
+import Body.Type exposing (BodyData(..))
 import Context exposing (MetadataGenerate, StaticRequestGenerate)
 import Dict
-import Generate.Shared exposing (keyValueXML, withCDATA)
+import Generate.Shared exposing (formatDateRss, keyStringXML, withCDATA)
+import Metadata.Type exposing (Metadata(..))
+import Pages exposing (images)
+import Pages.ImagePath as ImagePath
 import Pages.StaticHttp as StaticHttp
-import Xml.Encode exposing (list, object, string)
+import Shared.Ternary exposing (ternary)
+import Xml.Encode exposing (list, null, object, string)
 
 
 generateRss : MetadataGenerate -> StaticHttp.Request StaticRequestGenerate
 generateRss metadata =
     StaticHttp.succeed
-        [ Ok { path = [ "rss.xml" ], content = cont } ]
+        [ Ok { path = [ "rss.xml" ], content = rssChannel metadata } ]
 
 
-items : MetadataGenerate -> List String
-items meta =
-    -- meta |> List.map (\item -> item.frontmatter.seo.title)
-    [ "" ]
-
-
-cont : String
-cont =
+rssChannel : MetadataGenerate -> String
+rssChannel metadata =
     object
         [ ( "rss"
           , Dict.fromList
@@ -32,12 +32,74 @@ cont =
           , object
                 [ ( "channel"
                   , Dict.empty
-                  , [ [ keyValueXML "title" "TODO: title"
-                      , keyValueXML "description" "TODO: description"
-                      , keyValueXML "link" (withCDATA "TODO: link")
-                      , keyValueXML "lastBuildDate" "TODO: last build"
-                      ]
-                    ]
+                  , metadata
+                        |> List.map
+                            (\item ->
+                                case bodyDecoder item.body of
+                                    Ok content ->
+                                        case ( item.frontmatter.metadata, content.data ) of
+                                            ( MetadataBase metaBase, BodyDataBase bodyBase ) ->
+                                                -- create base channel only for landing page
+                                                ternary (bodyBase.url == "/")
+                                                    [ keyStringXML "title" metaBase.settings.site.title
+                                                    , keyStringXML "link" (withCDATA metaBase.settings.site.baseURL)
+                                                    , keyStringXML "description" metaBase.settings.site.description
+                                                    , object
+                                                        [ ( "atom:link"
+                                                          , Dict.fromList
+                                                                [ ( "href", string (metaBase.settings.site.baseURL ++ "/rss") )
+                                                                , ( "rel", string "self" )
+                                                                ]
+                                                          , null
+                                                          )
+                                                        ]
+                                                    , object
+                                                        [ ( "image"
+                                                          , Dict.empty
+                                                          , list
+                                                                [ keyStringXML "url" (metaBase.settings.site.baseURL ++ "/" ++ ImagePath.toString images.iconPng)
+                                                                , keyStringXML "title" metaBase.settings.site.title
+                                                                , keyStringXML "link" metaBase.settings.site.baseURL
+                                                                ]
+                                                          )
+                                                        ]
+                                                    , keyStringXML "language" "en"
+                                                    , keyStringXML "lastBuildDate" (formatDateRss Pages.builtAt)
+                                                    ]
+                                                    [ null ]
+
+                                            ( MetadataPost metaPost, BodyDataPost bodyPost ) ->
+                                                [ object
+                                                    [ ( "item"
+                                                      , Dict.empty
+                                                      , list
+                                                            [ keyStringXML "title" bodyPost.title
+                                                            , keyStringXML "link" (metaPost.settings.site.baseURL ++ bodyPost.url)
+                                                            , object
+                                                                [ ( "guid"
+                                                                  , Dict.singleton "isPermaLink" (string "true")
+                                                                  , string (metaPost.settings.site.baseURL ++ bodyPost.url)
+                                                                  )
+                                                                ]
+                                                            , keyStringXML "description" (withCDATA bodyPost.description)
+                                                            , object
+                                                                [ ( "dc:creator"
+                                                                  , Dict.singleton "xmlns:dc" (string "http://purl.org/dc/elements/1.1/")
+                                                                  , string metaPost.settings.site.title
+                                                                  )
+                                                                ]
+                                                            , keyStringXML "pubDate" (formatDateRss bodyPost.updated)
+                                                            ]
+                                                      )
+                                                    ]
+                                                ]
+
+                                            _ ->
+                                                [ null ]
+
+                                    Err _ ->
+                                        [ null ]
+                            )
                         |> List.concat
                         |> list
                   )

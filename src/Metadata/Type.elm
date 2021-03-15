@@ -18,10 +18,18 @@ type alias Navigation =
     }
 
 
+type alias Site =
+    { title : String
+    , description : String
+    , baseURL : String
+    }
+
+
 type alias Settings =
     { navigation : Navigation
     , footer : Footer
     , cookie : CookieBanner
+    , site : Site
     }
 
 

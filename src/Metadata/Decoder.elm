@@ -1,6 +1,6 @@
 module Metadata.Decoder exposing (metadataDecoder)
 
-import Metadata.Type exposing (BasePageMeta, CookieBanner, Footer, Metadata(..), Navigation, PageMetadata, PostPageMeta, Settings)
+import Metadata.Type exposing (BasePageMeta, CookieBanner, Footer, Metadata(..), Navigation, PageMetadata, PostPageMeta, Settings, Site)
 import OptimizedDecoder exposing (Decoder, andThen, field, list, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, required)
 import Shared.Decoder exposing (linkDecoder, linkValueDecoder)
@@ -24,6 +24,12 @@ settingsDecoder =
             (succeed CookieBanner
                 |> required "title" string
                 |> required "content" string
+            )
+        |> required "site"
+            (succeed Site
+                |> required "title" string
+                |> required "description" string
+                |> required "baseURL" string
             )
 
 

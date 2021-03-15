@@ -33,6 +33,7 @@ type alias ContentFieldValue =
 type alias BasePage =
     { title : String
     , description : String
+    , url : String
     , postsFeed : Maybe (List String)
     , content : List ContentFieldValue
     }
