@@ -62,7 +62,7 @@ type alias PostPage =
     , asset : AssetPath
     , content : List ContentFieldValue
     , written : Written
-    , updated : Posix
+    , published : Maybe Posix
     , related : Maybe (List RelatedItem)
     }
 

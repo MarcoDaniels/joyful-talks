@@ -6,7 +6,7 @@ import Time exposing (Month(..), Posix, toDay, toMonth, toYear, utc)
 
 decodeDate : Decoder Posix
 decodeDate =
-    int |> andThen (\ms -> succeed <| Time.millisToPosix (ms * 1000))
+    int |> andThen (\ms -> succeed <| Time.millisToPosix ms)
 
 
 formatDate : Posix -> String
