@@ -20,6 +20,32 @@
     align-items: center;
   }
 
+  > iframe {
+    border: $borderPrimary;
+  }
+
+  &-frame-square {
+    width: 560px;
+    height: 560px;
+    max-width: 100%;
+
+    @include small {
+      height: 450px;
+    }
+  }
+
+  &-frame-portrait {
+    width: 560px;
+    height: 660px;
+    max-width: 100%;
+  }
+
+  &-frame-landscape {
+    width: 560px;
+    height: 315px;
+    max-width: 100%;
+  }
+
   &-info {
     margin-top: 20px;
     display: flex;

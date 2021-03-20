@@ -7,8 +7,8 @@ import Element.Empty exposing (emptyNode)
 import Element.Markdown exposing (markdownView)
 import Element.Row exposing (rowView)
 import Element.Share exposing (shareView)
-import Html exposing (a, div, h1, h4, span, text)
-import Html.Attributes exposing (class, href)
+import Html exposing (a, div, h1, h4, iframe, span, text)
+import Html.Attributes exposing (class, href, src, title)
 import OptimizedDecoder exposing (Decoder, list, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (required)
 import Shared.Date exposing (decodeDate, formatDate)
@@ -58,6 +58,14 @@ postView post =
 
                             ContentValueRow rowItems ->
                                 rowView rowItems
+
+                            ContentValueIframe frame ->
+                                iframe
+                                    [ src frame.source
+                                    , title frame.title
+                                    , class ("post-frame-" ++ frame.ratio)
+                                    ]
+                                    []
 
                             _ ->
                                 emptyNode

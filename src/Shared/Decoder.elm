@@ -1,6 +1,6 @@
 module Shared.Decoder exposing (assetDecoder, contentFieldValueDecoder, fieldDecoder, linkDecoder, linkValueDecoder, rowContentDecoder)
 
-import Body.Type exposing (ContentFieldValue, ContentValue(..), HeroContent, RowContentField, RowContentValue(..))
+import Body.Type exposing (ContentFieldValue, ContentValue(..), HeroContent, IframeContentField, RowContentField, RowContentValue(..))
 import OptimizedDecoder exposing (Decoder, andThen, field, int, list, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, optional, required, requiredAt)
 import Shared.Type exposing (AssetPath, Field, Link)
@@ -54,6 +54,14 @@ rowContentDecoder =
             )
 
 
+iframeContentDecoder : Decoder IframeContentField
+iframeContentDecoder =
+    succeed IframeContentField
+        |> required "src" string
+        |> required "title" string
+        |> required "ratio" string
+
+
 contentFieldValueDecoder : Decoder ContentFieldValue
 contentFieldValueDecoder =
     succeed ContentFieldValue
@@ -82,6 +90,10 @@ contentFieldValueDecoder =
                             ( "repeater", "Row" ) ->
                                 succeed ContentValueRow
                                     |> required "value" (list rowContentDecoder)
+
+                            ( "set", "Iframe" ) ->
+                                succeed ContentValueIframe
+                                    |> required "value" iframeContentDecoder
 
                             _ ->
                                 succeed ContentValueUnknown

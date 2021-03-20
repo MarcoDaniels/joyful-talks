@@ -5,7 +5,7 @@ import Time exposing (Posix)
 
 
 type alias HeroContent =
-    { asset : AssetPath, text : Maybe String  }
+    { asset : AssetPath, text : Maybe String }
 
 
 type RowContentValue
@@ -18,11 +18,16 @@ type alias RowContentField =
     { field : Field, value : RowContentValue }
 
 
+type alias IframeContentField =
+    { source : String, title : String, ratio: String }
+
+
 type ContentValue
     = ContentValueMarkdown String
     | ContentValueAsset AssetPath
     | ContentValueHero HeroContent
     | ContentValueRow (List RowContentField)
+    | ContentValueIframe IframeContentField
     | ContentValueUnknown
 
 
