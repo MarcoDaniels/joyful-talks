@@ -5,7 +5,7 @@ import Time exposing (Posix)
 
 
 type alias HeroContent =
-    { title : String, asset : AssetPath }
+    { asset : AssetPath, text : Maybe String  }
 
 
 type RowContentValue
