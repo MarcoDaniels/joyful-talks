@@ -88,7 +88,12 @@ rssChannel metadata =
                                                                   , string metaPost.settings.site.title
                                                                   )
                                                                 ]
-                                                            , keyStringXML "pubDate" (formatDateRss bodyPost.updated)
+                                                            , case bodyPost.published of
+                                                                Just published ->
+                                                                    keyStringXML "pubDate" (formatDateRss published)
+
+                                                                Nothing ->
+                                                                    null
                                                             ]
                                                       )
                                                     ]

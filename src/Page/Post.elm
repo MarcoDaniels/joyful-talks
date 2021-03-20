@@ -9,8 +9,8 @@ import Element.Row exposing (rowView)
 import Element.Share exposing (shareView)
 import Html exposing (a, div, h1, h4, iframe, span, text)
 import Html.Attributes exposing (class, href, src, title)
-import OptimizedDecoder exposing (Decoder, list, maybe, string, succeed)
-import OptimizedDecoder.Pipeline exposing (required)
+import OptimizedDecoder exposing (Decoder, list, map, maybe, string, succeed)
+import OptimizedDecoder.Pipeline exposing (optional, required)
 import Shared.Date exposing (decodeDate, formatDate)
 import Shared.Decoder exposing (assetDecoder, contentFieldValueDecoder)
 
@@ -28,7 +28,7 @@ postDecoder =
                 |> required "name" string
                 |> required "url" (maybe string)
             )
-        |> required "_modified" decodeDate
+        |> optional "_publishedAt" (map Just decodeDate) Nothing
         |> required "related"
             (maybe
                 (list
@@ -80,7 +80,12 @@ postView post =
                             Nothing ->
                                 span [] [ text post.written.name ]
                         ]
-                    , div [] [ text (formatDate post.updated) ]
+                    , case post.published of
+                        Just published ->
+                            div [] [ text (formatDate published) ]
+
+                        Nothing ->
+                            emptyNode
                     ]
               , shareView post
               , case post.related of
