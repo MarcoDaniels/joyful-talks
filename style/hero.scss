@@ -30,7 +30,12 @@
     justify-content: flex-end;
     align-items: flex-end;
 
-    &-text {
+    > * {
+      & h1 {
+        @extend .font-dancing;
+        @extend .font-xl;
+      }
+
       padding: 15px 0;
     }
   }

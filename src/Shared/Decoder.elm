@@ -75,8 +75,8 @@ contentFieldValueDecoder =
                                 succeed ContentValueHero
                                     |> required "value"
                                         (succeed HeroContent
-                                            |> required "title" string
                                             |> required "image" assetDecoder
+                                            |> required "text" (maybe string)
                                         )
 
                             ( "repeater", "Row" ) ->
