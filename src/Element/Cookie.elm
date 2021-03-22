@@ -1,12 +1,12 @@
 module Element.Cookie exposing (..)
 
+import Body.Type exposing (CookieBanner)
 import Context exposing (CookieConsent, CookieMsg(..), Element, Msg(..))
 import Element.Empty exposing (emptyNode)
 import Element.Icon exposing (Icons(..), iconView)
 import Html exposing (button, div, h4, p, text)
 import Html.Attributes exposing (class, tabindex)
 import Html.Events exposing (onClick)
-import Metadata.Type exposing (CookieBanner)
 
 
 cookieView : CookieConsent -> CookieBanner -> Element

@@ -1,21 +1,13 @@
-module Generate.Sitemap exposing (generateSitemap)
+module Generate.Sitemap exposing (sitemap)
 
 import Body.Decoder exposing (bodyDecoder)
 import Body.Type exposing (BodyData(..))
 import Context exposing (MetadataGenerate, StaticRequestGenerate)
 import Dict
 import Generate.Shared exposing (keyStringXML)
-import Metadata.Type exposing (Metadata(..))
-import Pages.StaticHttp as StaticHttp
 import Shared.Ternary exposing (ternary)
 import Xml as XML
 import Xml.Encode exposing (list, null, object, string)
-
-
-generateSitemap : MetadataGenerate -> StaticHttp.Request StaticRequestGenerate
-generateSitemap metadata =
-    StaticHttp.succeed
-        [ Ok { path = [ "sitemap.xml" ], content = sitemap metadata } ]
 
 
 sitemapItem : String -> String -> XML.Value
@@ -42,15 +34,15 @@ sitemap metadata =
                     (\item ->
                         case bodyDecoder item.body of
                             Ok content ->
-                                case ( item.frontmatter.metadata, content.data ) of
-                                    ( MetadataBase metaBase, BodyDataBase bodyBase ) ->
+                                case content.data of
+                                    BodyDataBase bodyBase ->
                                         -- only include pages with /about and index in sitemap
                                         ternary (String.contains "/about" bodyBase.url || bodyBase.url == "/")
-                                            (sitemapItem (metaBase.settings.site.baseURL ++ bodyBase.url) "0.9")
+                                            (sitemapItem (content.settings.site.baseURL ++ bodyBase.url) "0.9")
                                             null
 
-                                    ( MetadataPost metaPost, BodyDataPost bodyPost ) ->
-                                        sitemapItem (metaPost.settings.site.baseURL ++ bodyPost.url) "0.7"
+                                    BodyDataPost bodyPost ->
+                                        sitemapItem (content.settings.site.baseURL ++ bodyPost.url) "0.7"
 
                                     _ ->
                                         null

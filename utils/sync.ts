@@ -32,6 +32,7 @@ type Metadata = {
 type Data = {
     collection: string
     data: unknown
+    settings: unknown
 }
 
 export type Config = {
@@ -52,7 +53,7 @@ const createFile = (url: string, frontmatter: Metadata, data: Data) => {
 const syncContent = async ({cockpitAPIURL, cockpitAPIToken}: Config) => {
     const client = cockpitClient({apiURL: cockpitAPIURL, apiToken: cockpitAPIToken})
 
-    const sync = await client.sync<Collections, Singletons>()
+    const sync = await client.sync.all<Collections, Singletons>()
 
     if (sync.collections && sync.singletons) {
         const [meta] = Object.values(sync.singletons)
@@ -64,9 +65,8 @@ const syncContent = async ({cockpitAPIURL, cockpitAPIToken}: Config) => {
                     title: entry.title,
                     description: entry.description,
                     feed: entry.postsFeed || null,
-                    settings: meta
                 }
-            }, {collection: collection, data: entry}))
+            }, {collection: collection, data: entry, settings: meta}))
         })
     }
 }

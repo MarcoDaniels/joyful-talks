@@ -1,23 +1,23 @@
 port module Main exposing (main)
 
-import Body.View exposing (bodyView)
-import Context exposing (CookieConsent, CookieMsg(..), MetadataContext, Model, Msg(..), Renderer, StaticRequest)
+import Body.Decoder exposing (bodyDecoder)
+import Context exposing (Content, CookieConsent, CookieMsg(..), MetadataContext, Model, Msg(..), StaticRequest)
 import Element.Empty exposing (emptyNode)
 import Feed.Request exposing (requestFeed)
-import Generate.Rss exposing (generateRss)
-import Generate.Sitemap exposing (generateSitemap)
+import Generate.Rss exposing (rss)
+import Generate.Sitemap exposing (sitemap)
 import Layout exposing (layoutView)
 import Manifest exposing (manifest)
 import Metadata.Decoder exposing (metadataDecoder)
 import Metadata.Type exposing (Metadata(..), PageMetadata)
-import OptimizedDecoder exposing (decoder)
+import OptimizedDecoder exposing (decoder, errorToString)
 import Pages exposing (PathKey, internals)
-import Pages.Platform exposing (Program)
+import Pages.Platform exposing (Builder, Program)
 import Pages.StaticHttp as StaticHttp
 import SEO exposing (headSEO)
 
 
-main : Pages.Platform.Program Model Msg PageMetadata Renderer Pages.PathKey
+main : Pages.Platform.Program Model Msg PageMetadata Content Pages.PathKey
 main =
     Pages.Platform.init
         { init = \_ -> init
@@ -27,7 +27,14 @@ main =
         , documents =
             [ { extension = "md"
               , metadata = decoder metadataDecoder
-              , body = bodyView
+              , body =
+                    \body ->
+                        case bodyDecoder body of
+                            Ok content ->
+                                Ok content
+
+                            Err error ->
+                                Err (errorToString error)
               }
             ]
         , manifest = manifest
@@ -35,8 +42,13 @@ main =
         , onPageChange = Nothing
         , internals = internals
         }
-        |> Pages.Platform.withFileGenerator generateRss
-        |> Pages.Platform.withFileGenerator generateSitemap
+        |> Pages.Platform.withFileGenerator
+            (\metadata ->
+                StaticHttp.succeed
+                    [ Ok { path = [ "rss.xml" ], content = rss metadata }
+                    , Ok { path = [ "sitemap.xml" ], content = sitemap metadata }
+                    ]
+            )
         |> Pages.Platform.toProgram
 
 
@@ -95,7 +107,7 @@ view metadataContext =
                                 { view =
                                     \model renderedBody ->
                                         { title = base.title
-                                        , body = layoutView metadataContext.path model base.settings renderedBody (Just feed)
+                                        , body = layoutView metadataContext.path model renderedBody (Just feed)
                                         }
                                 , head = headSEO base.title base.description
                                 }
@@ -106,7 +118,7 @@ view metadataContext =
                         { view =
                             \model renderedBody ->
                                 { title = base.title
-                                , body = layoutView metadataContext.path model base.settings renderedBody Nothing
+                                , body = layoutView metadataContext.path model renderedBody Nothing
                                 }
                         , head = headSEO base.title base.description
                         }
@@ -116,7 +128,7 @@ view metadataContext =
                 { view =
                     \model renderedBody ->
                         { title = post.title
-                        , body = layoutView metadataContext.path model post.settings renderedBody Nothing
+                        , body = layoutView metadataContext.path model renderedBody Nothing
                         }
                 , head = headSEO post.title post.description
                 }

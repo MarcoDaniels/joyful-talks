@@ -16,7 +16,7 @@
     "postinstall": "elm-tooling install"
   },
   "dependencies": {
-    "cockpit-http-client": "0.0.1",
+    "cockpit-http-client": "1.0.1",
     "elm-pages": "1.5.5"
   },
   "devDependencies": {

@@ -1,10 +1,10 @@
 module Element.Footer exposing (footerView)
 
+import Body.Type exposing (Footer)
 import Context exposing (Element)
 import Element.Markdown exposing (markdownView)
 import Html exposing (a, div, footer, text)
 import Html.Attributes exposing (class, href)
-import Metadata.Type exposing (Footer)
 
 
 footerView : Footer -> Element

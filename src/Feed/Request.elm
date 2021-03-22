@@ -20,7 +20,7 @@ requestFeed categoryList =
     StaticHttp.request
         (Secrets.succeed
             (\apiURL apiToken ->
-                { url = apiURL ++ "/collections/entries/joyfulPost?" ++ buildFilter categoryList
+                { url = apiURL ++ "/collections/entries/joyfulPost?" ++ buildFilter categoryList ++ "&sort[_publishedAt]=-1"
                 , method = "GET"
                 , headers = [ ( "Cockpit-Token", apiToken ) ]
                 , body = StaticHttp.emptyBody

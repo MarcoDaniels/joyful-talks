@@ -1,6 +1,7 @@
 module Layout exposing (layoutView)
 
-import Context exposing (Element, Model, Renderer)
+import Body.Type exposing (BodyData(..))
+import Context exposing (Content, Element, Model)
 import Element.Cookie exposing (cookieView)
 import Element.Empty exposing (emptyNode)
 import Element.Footer exposing (footerView)
@@ -9,28 +10,37 @@ import Feed.Type exposing (Feed)
 import Feed.View exposing (feedView)
 import Html exposing (article, div)
 import Html.Attributes exposing (id)
-import Metadata.Type exposing (Settings)
+import Page.Base exposing (baseView)
+import Page.Post exposing (postView)
 import Pages exposing (PathKey)
 import Pages.PagePath exposing (PagePath)
 
 
-layoutView : PagePath PathKey -> Model -> Settings -> Renderer -> Maybe Feed -> Element
-layoutView path model settings renderer maybeFeed =
+layoutView : PagePath PathKey -> Model -> Content -> Maybe Feed -> Element
+layoutView path model content maybeFeed =
     div [ id "app" ]
-        [ headerView path settings.navigation model.menuExpand
+        [ headerView path content.settings.navigation model.menuExpand
         , article [ id "content" ]
-            (List.concat
-                [ renderer
-                , List.singleton
-                    (case maybeFeed of
-                        Just feed ->
-                            feedView feed
+            ([ [ case content.data of
+                    BodyDataBase base ->
+                        baseView base
 
-                        Nothing ->
-                            emptyNode
-                    )
-                ]
+                    BodyDataPost post ->
+                        postView post
+
+                    _ ->
+                        emptyNode
+               ]
+             , [ case maybeFeed of
+                    Just feed ->
+                        feedView feed
+
+                    Nothing ->
+                        emptyNode
+               ]
+             ]
+                |> List.concat
             )
-        , cookieView model.cookieConsent settings.cookie
-        , footerView settings.footer
+        , cookieView model.cookieConsent content.settings.cookie
+        , footerView content.settings.footer
         ]
