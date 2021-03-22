@@ -1,6 +1,7 @@
 port module Main exposing (main)
 
 import Body.Decoder exposing (bodyDecoder)
+import Body.View exposing (bodyView)
 import Context exposing (Content, CookieConsent, CookieMsg(..), MetadataContext, Model, Msg(..), StaticRequest)
 import Element.Empty exposing (emptyNode)
 import Feed.Request exposing (requestFeed)
@@ -105,9 +106,12 @@ view metadataContext =
                         |> StaticHttp.map
                             (\feed ->
                                 { view =
-                                    \model renderedBody ->
+                                    \model { data, settings } ->
                                         { title = base.title
-                                        , body = layoutView metadataContext.path model renderedBody (Just feed)
+                                        , body =
+                                            Just feed
+                                                |> bodyView data
+                                                |> layoutView metadataContext.path model settings
                                         }
                                 , head = headSEO base.title base.description
                                 }
@@ -116,9 +120,12 @@ view metadataContext =
                 Nothing ->
                     StaticHttp.succeed
                         { view =
-                            \model renderedBody ->
+                            \model { data, settings } ->
                                 { title = base.title
-                                , body = layoutView metadataContext.path model renderedBody Nothing
+                                , body =
+                                    Nothing
+                                        |> bodyView data
+                                        |> layoutView metadataContext.path model settings
                                 }
                         , head = headSEO base.title base.description
                         }
@@ -126,9 +133,12 @@ view metadataContext =
         MetadataPost post ->
             StaticHttp.succeed
                 { view =
-                    \model renderedBody ->
+                    \model { data, settings } ->
                         { title = post.title
-                        , body = layoutView metadataContext.path model renderedBody Nothing
+                        , body =
+                            Nothing
+                                |> bodyView data
+                                |> layoutView metadataContext.path model settings
                         }
                 , head = headSEO post.title post.description
                 }
