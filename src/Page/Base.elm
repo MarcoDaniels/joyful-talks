@@ -2,6 +2,7 @@ module Page.Base exposing (baseDecoder, baseView)
 
 import Body.Type exposing (BasePage, ContentValue(..))
 import Context exposing (Element)
+import Element.Asset exposing (AssetType(..), assetView)
 import Element.Empty exposing (emptyNode)
 import Element.Hero exposing (heroView)
 import Element.Markdown exposing (markdownView)
@@ -20,32 +21,36 @@ baseDecoder =
         |> required "description" string
         |> required "url" string
         |> required "postsFeed" (maybe (list string))
-        |> required "content" (list contentFieldValueDecoder)
+        |> required "content" (maybe (list contentFieldValueDecoder))
 
 
 baseView : BasePage -> Element
 baseView base =
     div []
-        (List.concat
-            [ base.content
-                |> List.map
-                    (\content ->
-                        case content.value of
-                            ContentValueMarkdown markdown ->
-                                div [ class "container" ] [ markdownView markdown ]
+        (case base.content of
+            Just cont ->
+                List.concat
+                    [ cont
+                        |> List.map
+                            (\content ->
+                                case content.value of
+                                    ContentValueMarkdown markdown ->
+                                        div [ class "container" ] [ markdownView markdown ]
 
-                            ContentValueAsset asset ->
-                                -- assetView { src = asset.path, alt = asset.title } AssetDefault
-                                emptyNode
+                                    ContentValueAsset asset ->
+                                        assetView { src = asset.path, alt = asset.title } AssetDefault
 
-                            ContentValueHero hero ->
-                                heroView hero
+                                    ContentValueHero hero ->
+                                        heroView hero
 
-                            ContentValueRow rowItems ->
-                                div [ class "container" ] [ rowView rowItems ]
+                                    ContentValueRow rowItems ->
+                                        div [ class "container" ] [ rowView rowItems ]
 
-                            _ ->
-                                emptyNode
-                    )
-            ]
+                                    _ ->
+                                        emptyNode
+                            )
+                    ]
+
+            Nothing ->
+                [emptyNode]
         )

@@ -1,5 +1,6 @@
 module Context exposing (..)
 
+import Body.Type exposing (BodyData, Settings)
 import Head
 import Html exposing (Html)
 import Metadata.Type exposing (PageMetadata)
@@ -30,8 +31,8 @@ type alias Model =
     { cookieConsent : CookieConsent, menuExpand : Bool }
 
 
-type alias Renderer =
-    List Element
+type alias Content =
+    { collection : String, data : BodyData, settings : Settings }
 
 
 type alias View =
@@ -45,7 +46,7 @@ type alias MetadataContext =
 
 
 type alias StaticRequest =
-    { view : Model -> Renderer -> View, head : List (Head.Tag Pages.PathKey) }
+    { view : Model -> Content -> View, head : List (Head.Tag Pages.PathKey) }
 
 
 type alias MetadataGenerate =

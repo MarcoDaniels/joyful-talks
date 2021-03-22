@@ -1,6 +1,6 @@
 module Body.Type exposing (..)
 
-import Shared.Type exposing (AssetPath, Field)
+import Shared.Type exposing (AssetPath, Field, Link)
 import Time exposing (Posix)
 
 
@@ -19,7 +19,7 @@ type alias RowContentField =
 
 
 type alias IframeContentField =
-    { source : String, title : String, ratio: String }
+    { source : String, title : String, ratio : String }
 
 
 type ContentValue
@@ -40,7 +40,7 @@ type alias BasePage =
     , description : String
     , url : String
     , postsFeed : Maybe (List String)
-    , content : List ContentFieldValue
+    , content : Maybe (List ContentFieldValue)
     }
 
 
@@ -73,5 +73,32 @@ type BodyData
     | BodyDataUnknown
 
 
-type alias PageBody =
-    { collection : String, data : BodyData }
+type alias CookieBanner =
+    { title : String, content : String }
+
+
+type alias Footer =
+    { links : List Link, info : String }
+
+
+type alias Navigation =
+    { brand : Link
+    , menu : List Link
+    , social : List Link
+    }
+
+
+type alias Site =
+    { title : String
+    , description : String
+    , baseURL : String
+    }
+
+
+type alias Settings =
+    { navigation : Navigation
+    , footer : Footer
+    , cookie : CookieBanner
+    , site : Site
+    }
+

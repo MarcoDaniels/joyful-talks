@@ -1,4 +1,4 @@
-module Shared.Decoder exposing (assetDecoder, contentFieldValueDecoder, fieldDecoder, linkDecoder, linkValueDecoder, rowContentDecoder)
+module Shared.Decoder exposing (assetDecoder, contentFieldValueDecoder, fieldDecoder, linkDecoder, linkValueDecoder)
 
 import Body.Type exposing (ContentFieldValue, ContentValue(..), HeroContent, IframeContentField, RowContentField, RowContentValue(..))
 import OptimizedDecoder exposing (Decoder, andThen, field, int, list, maybe, string, succeed)

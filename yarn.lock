@@ -2696,10 +2696,10 @@ coa@^2.0.2:
     chalk "^2.4.1"
     q "^1.1.2"
 
-cockpit-http-client@0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/cockpit-http-client/-/cockpit-http-client-0.0.1.tgz#a562b8bd5711c68fd2a248fa92b7148342121386"
-  integrity sha512-95l7wOY7MXJwmYynq8X5iZ/1TOAwMe4VQHY+OMulgYrdQIJZdvDgxEgPVyqENIKVyzUaLdnAuUAG09k/k8Oaog==
+cockpit-http-client@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/cockpit-http-client/-/cockpit-http-client-1.0.1.tgz#9b6493b6b420a516e28bc81a78d566ff8f8141d1"
+  integrity sha512-gYNjzGhLAlbGmp3S2IXjtojWIDYCJcRC+y2CaREtebk+coawcjufUySBjwsd/PZ151P9xHdC+T8Ca+zSgoTB0g==
   dependencies:
     got "11.8.1"
 
