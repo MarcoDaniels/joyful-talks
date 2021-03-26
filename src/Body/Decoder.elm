@@ -1,12 +1,12 @@
 module Body.Decoder exposing (bodyDecoder)
 
-import Body.Type exposing (BodyData(..), ContentValue, CookieBanner, Footer, Navigation, Settings, Site)
+import Body.Type exposing (BodyData(..), ContentValue, CookieBanner, Footer, Navigation, Settings)
 import Context exposing (Content)
 import OptimizedDecoder exposing (Decoder, Error, andThen, decodeString, field, list, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, required)
 import Page.Base exposing (baseDecoder)
 import Page.Post exposing (postDecoder)
-import Shared.Decoder exposing (linkDecoder, linkValueDecoder)
+import Shared.Decoder exposing (linkDecoder, linkValueDecoder, siteSettingsDecoder)
 
 
 settingsDecoder : Decoder Settings
@@ -28,12 +28,7 @@ settingsDecoder =
                 |> required "title" string
                 |> required "content" string
             )
-        |> required "site"
-            (succeed Site
-                |> required "title" string
-                |> required "description" string
-                |> required "baseURL" string
-            )
+        |> required "site" siteSettingsDecoder
 
 
 bodyDecoder : String -> Result Error Content

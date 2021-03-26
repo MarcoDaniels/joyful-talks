@@ -4,7 +4,7 @@ import Body.Type exposing (PostPage)
 import Context exposing (Element)
 import Element.Icon exposing (Icons(..), iconView)
 import Html exposing (a, div, span, text)
-import Html.Attributes exposing (class, href, rel, target)
+import Html.Attributes exposing (class, href, rel, target, title)
 
 
 shareView : PostPage -> Element
@@ -21,6 +21,7 @@ shareView post =
                         ++ "&p[title]="
                         ++ post.title
                     )
+                , title ("share " ++ post.title ++ " on facebook")
                 ]
                 [ iconView Facebook { size = "16", color = "#000" }
                 ]
@@ -33,6 +34,7 @@ shareView post =
                         ++ "&url="
                         ++ post.url
                     )
+                , title ("share " ++ post.title ++ " on twitter")
                 ]
                 [ iconView Twitter { size = "16", color = "#000" }
                 ]
@@ -47,6 +49,7 @@ shareView post =
                         ++ "&description="
                         ++ post.description
                     )
+                , title ("share " ++ post.title ++ " on pinterest")
                 ]
                 [ iconView Pinterest { size = "16", color = "#000" }
                 ]
@@ -61,6 +64,7 @@ shareView post =
                         ++ "&summary="
                         ++ post.description
                     )
+                , title ("share " ++ post.title ++ " on linkedin")
                 ]
                 [ iconView LinkedIn { size = "16", color = "#000" }
                 ]

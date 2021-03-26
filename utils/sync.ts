@@ -21,12 +21,13 @@ type Collections = {
 }
 
 type Singletons = {
-    [n: string]: unknown
+    [n: string]: Record<string, unknown>
 }
 
 type Metadata = {
     collection: string
     meta: unknown
+    site: unknown
 }
 
 type Data = {
@@ -65,7 +66,8 @@ const syncContent = async ({cockpitAPIURL, cockpitAPIToken}: Config) => {
                     title: entry.title,
                     description: entry.description,
                     feed: entry.postsFeed || null,
-                }
+                },
+                site: meta!.site
             }, {collection: collection, data: entry, settings: meta}))
         })
     }

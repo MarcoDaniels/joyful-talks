@@ -96,14 +96,14 @@ postView post =
               , case post.related of
                     Just relatedItems ->
                         div [ class "post-related" ]
-                            [ h4 [ class "post-related-headline" ] [ span [] [ text "you might also like" ] ]
+                            [ h3 [ class "post-related-headline" ] [ span [] [ text "you might also like" ] ]
                             , div [ class "post-related-item" ]
                                 (relatedItems
                                     |> List.map
                                         (\item ->
                                             a [ class "link-primary", href item.url ]
                                                 [ assetView { src = item.asset.path, alt = item.asset.title } AssetRelated
-                                                , div [ class "post-related-item-title" ] [ h3 [] [ text item.title ] ]
+                                                , div [ class "post-related-item-title" ] [ h4 [] [ text item.title ] ]
                                                 ]
                                         )
                                 )

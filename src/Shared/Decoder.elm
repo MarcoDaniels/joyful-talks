@@ -1,9 +1,9 @@
-module Shared.Decoder exposing (assetDecoder, contentFieldValueDecoder, fieldDecoder, linkDecoder, linkValueDecoder)
+module Shared.Decoder exposing (assetDecoder, contentFieldValueDecoder, fieldDecoder, linkDecoder, linkValueDecoder, siteSettingsDecoder)
 
 import Body.Type exposing (ContentFieldValue, ContentValue(..), HeroContent, IframeContentField, RowContentField, RowContentValue(..))
 import OptimizedDecoder exposing (Decoder, andThen, field, int, list, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, optional, required, requiredAt)
-import Shared.Type exposing (AssetPath, Field, Link)
+import Shared.Type exposing (AssetPath, Field, Link, SiteSettings)
 
 
 fieldDecoder : Decoder Field
@@ -31,6 +31,15 @@ linkDecoder =
 linkValueDecoder : Decoder Link
 linkValueDecoder =
     succeed Link |> requiredAt [ "value", "title" ] string |> requiredAt [ "value", "url" ] string
+
+
+siteSettingsDecoder : Decoder SiteSettings
+siteSettingsDecoder =
+    succeed SiteSettings
+        |> required "title" string
+        |> required "titlePrefix" string
+        |> required "description" string
+        |> required "baseURL" string
 
 
 rowContentDecoder : Decoder RowContentField

@@ -3,6 +3,7 @@ module Metadata.Decoder exposing (metadataDecoder)
 import Metadata.Type exposing (BasePageMeta, Metadata(..), PageMetadata, PostPageMeta)
 import OptimizedDecoder exposing (Decoder, andThen, field, list, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, required)
+import Shared.Decoder exposing (siteSettingsDecoder)
 
 
 metadataDecoder : Decoder PageMetadata
@@ -35,3 +36,4 @@ metadataDecoder =
                                 succeed MetadataUnknown
                     )
             )
+        |> required "site" siteSettingsDecoder

@@ -5,7 +5,7 @@ import Context exposing (Element, MetadataContext, Model, Msg(..))
 import Element.Empty exposing (emptyNode)
 import Element.Icon exposing (Icons(..), iconView)
 import Html exposing (a, button, div, header, li, nav, text, ul)
-import Html.Attributes exposing (class, href, rel, target)
+import Html.Attributes exposing (class, href, rel, target, title)
 import Html.Events exposing (onClick)
 import Pages
 import Pages.PagePath as PagePath exposing (PagePath)
@@ -27,7 +27,11 @@ headerView path navigation expand =
                                 , onClick (MenuExpand False)
                                 ]
                                 [ text navigation.brand.text ]
-                            , button [ class "header-nav-main-button", onClick (MenuExpand (not expand)) ]
+                            , button
+                                [ class "header-nav-main-button"
+                                , onClick (MenuExpand (not expand))
+                                , title (ternary expand "close menu" "open menu")
+                                ]
                                 [ ternary expand
                                     (iconView Close { size = "15", color = "#3f3f3f" })
                                     (iconView Burger { size = "15", color = "#3f3f3f" })
@@ -57,7 +61,12 @@ headerView path navigation expand =
                                 (\item ->
                                     li [ class "header-nav-item" ]
                                         [ a
-                                            [ class "link-primary-effect", href item.url, target "_blank", rel "noopener noreferrer" ]
+                                            [ class "link-primary-effect"
+                                            , href item.url
+                                            , target "_blank"
+                                            , rel "noopener noreferrer"
+                                            , title item.text
+                                            ]
                                             [ case String.toLower item.text of
                                                 "facebook" ->
                                                     iconView Facebook { size = "12", color = "#000" }
