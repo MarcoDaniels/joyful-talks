@@ -2,21 +2,21 @@ name: Pull Request
 
 on:
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     name: Build and Test
+    env:
+      COCKPIT_API_URL: ${{secrets.COCKPIT_API_URL}}
+      COCKPIT_BASE_URL: ${{secrets.COCKPIT_BASE_URL}}
+      COCKPIT_API_TOKEN: ${{secrets.COCKPIT_API_TOKEN}}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: 14
-        env:
-          COCKPIT_API_URL: ${{secrets.COCKPIT_API_URL}}
-          COCKPIT_BASE_URL: ${{secrets.COCKPIT_BASE_URL}}
-          COCKPIT_API_TOKEN: ${{secrets.COCKPIT_API_TOKEN}}
       - run: yarn --frozen-lockfile
       - run: yarn sync
       - run: yarn build --skip-dist
