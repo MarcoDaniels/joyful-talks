@@ -7,23 +7,13 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: Run Tests
+    name: Build and Test
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: 14
       - run: yarn --frozen-lockfile
+      - run: yarn sync
+      - run: yarn build --skip-dist
       - run: yarn test
-
-  build:
-    runs-on: ubuntu-latest
-    name: Build
-    needs: [test]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 14
-      - run: yarn --frozen-lockfile
-      - run: yarn build
