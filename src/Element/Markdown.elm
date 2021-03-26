@@ -1,8 +1,9 @@
 module Element.Markdown exposing (markdownView)
 
 import Context exposing (Element)
-import Html exposing (Attribute, a)
-import Html.Attributes as Attributes
+import Html exposing (Attribute, a, h1, h2, h3, h4, h5, h6)
+import Html.Attributes as Attributes exposing (id)
+import Markdown.Block as Block
 import Markdown.Parser exposing (parse)
 import Markdown.Renderer exposing (Renderer, defaultHtmlRenderer, render)
 import Result
@@ -32,6 +33,13 @@ linkAttributes href attributes =
         )
 
 
+textToId : String -> String
+textToId text =
+    String.words text
+        |> String.join "-"
+        |> String.toLower
+
+
 markdownRenderer : Renderer Element
 markdownRenderer =
     { defaultHtmlRenderer
@@ -43,6 +51,26 @@ markdownRenderer =
 
                     Nothing ->
                         a (linkAttributes link.destination []) content
+        , heading =
+            \{ level, rawText, children } ->
+                case level of
+                    Block.H1 ->
+                        h1 [ id (textToId rawText) ] children
+
+                    Block.H2 ->
+                        h2 [ id (textToId rawText) ] children
+
+                    Block.H3 ->
+                        h3 [ id (textToId rawText) ] children
+
+                    Block.H4 ->
+                        h4 [ id (textToId rawText) ] children
+
+                    Block.H5 ->
+                        h5 [ id (textToId rawText) ] children
+
+                    Block.H6 ->
+                        h6 [ id (textToId rawText) ] children
     }
 
 

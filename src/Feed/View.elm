@@ -22,7 +22,7 @@ feedView feed =
                             [ assetView { src = item.asset.path, alt = item.title } AssetFeed
                             , div [ class "feed-text" ]
                                 [ h2 [ class "font-l" ] [ text item.title ]
-                                , p [ class "feed-text-description font-m" ] [ text item.description ]
+                                , p [ class "feed-text-description" ] [ text item.description ]
                                 ]
                             ]
                         ]

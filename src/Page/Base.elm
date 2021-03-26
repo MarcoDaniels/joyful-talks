@@ -2,7 +2,7 @@ module Page.Base exposing (baseDecoder, baseView)
 
 import Body.Type exposing (BasePage, ContentValue(..))
 import Context exposing (Element)
-import Element.Asset exposing (AssetType(..), assetView)
+import Element.Asset exposing (AssetDefaultType(..), AssetType(..), assetView)
 import Element.Empty exposing (emptyNode)
 import Element.Hero exposing (heroView)
 import Element.Markdown exposing (markdownView)
@@ -12,6 +12,7 @@ import Html.Attributes exposing (class)
 import OptimizedDecoder exposing (Decoder, list, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (required)
 import Shared.Decoder exposing (contentFieldValueDecoder)
+import Shared.Ternary exposing (ternary)
 
 
 baseDecoder : Decoder BasePage
@@ -35,16 +36,22 @@ baseView base =
                             (\content ->
                                 case content.value of
                                     ContentValueMarkdown markdown ->
-                                        div [ class "container" ] [ markdownView markdown ]
+                                        div [ class "container-s" ] [ markdownView markdown ]
 
-                                    ContentValueAsset asset ->
-                                        assetView { src = asset.path, alt = asset.title } AssetDefault
+                                    ContentValueAsset image ->
+                                        div [ class "container-s center" ]
+                                            [ assetView { src = image.path, alt = image.title }
+                                                (ternary (image.width > image.height)
+                                                    (AssetDefault AssetDefaultLandscape)
+                                                    (AssetDefault AssetDefaultPortrait)
+                                                )
+                                            ]
 
                                     ContentValueHero hero ->
                                         heroView hero
 
                                     ContentValueRow rowItems ->
-                                        div [ class "container" ] [ rowView rowItems ]
+                                        div [ class "container-s" ] [ rowView rowItems ]
 
                                     _ ->
                                         emptyNode
@@ -52,5 +59,5 @@ baseView base =
                     ]
 
             Nothing ->
-                [emptyNode]
+                [ emptyNode ]
         )

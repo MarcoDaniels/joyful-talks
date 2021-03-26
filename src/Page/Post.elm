@@ -2,17 +2,18 @@ module Page.Post exposing (postDecoder, postView)
 
 import Body.Type exposing (ContentValue(..), PostPage, RelatedItem, Written)
 import Context exposing (Element)
-import Element.Asset exposing (AssetType(..), assetView)
+import Element.Asset exposing (AssetDefaultType(..), AssetType(..), assetView)
 import Element.Empty exposing (emptyNode)
 import Element.Markdown exposing (markdownView)
 import Element.Row exposing (rowView)
 import Element.Share exposing (shareView)
-import Html exposing (a, div, h1, h4, iframe, span, text)
+import Html exposing (a, div, h1, h3, h4, iframe, span, text)
 import Html.Attributes exposing (class, href, src, title)
 import OptimizedDecoder exposing (Decoder, list, map, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (optional, required)
 import Shared.Date exposing (decodeDate, formatDate)
 import Shared.Decoder exposing (assetDecoder, contentFieldValueDecoder)
+import Shared.Ternary exposing (ternary)
 
 
 postDecoder : Decoder PostPage
@@ -45,7 +46,7 @@ postView : PostPage -> Element
 postView post =
     div [ class "post" ]
         (List.concat
-            [ List.singleton (h1 [ class "post-title font-xl" ] [ text post.title ])
+            [ List.singleton (h1 [] [ text post.title ])
             , post.content
                 |> List.map
                     (\content ->
@@ -54,7 +55,11 @@ postView post =
                                 markdownView markdown
 
                             ContentValueAsset image ->
-                                assetView { src = image.path, alt = image.title } AssetPost
+                                assetView { src = image.path, alt = image.title }
+                                    (ternary (image.width >= image.height)
+                                        (AssetDefault AssetDefaultLandscape)
+                                        (AssetDefault AssetDefaultPortrait)
+                                    )
 
                             ContentValueRow rowItems ->
                                 rowView rowItems
@@ -98,7 +103,7 @@ postView post =
                                         (\item ->
                                             a [ class "link-primary", href item.url ]
                                                 [ assetView { src = item.asset.path, alt = item.asset.title } AssetRelated
-                                                , div [ class "post-related-item-title" ] [ text item.title ]
+                                                , div [ class "post-related-item-title" ] [ h3 [] [ text item.title ] ]
                                                 ]
                                         )
                                 )

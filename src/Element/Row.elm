@@ -17,7 +17,7 @@ rowView rowItems =
                 (\item ->
                     case item.value of
                         RowContentMarkdown markdown ->
-                            markdownView markdown
+                            div [] [ markdownView markdown ]
 
                         RowContentAsset asset ->
                             assetView { src = asset.path, alt = asset.title } (AssetRow (List.length rowItems))
