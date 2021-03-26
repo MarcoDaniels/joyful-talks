@@ -3,11 +3,13 @@ name: Main
 on:
   push:
     branches: [ main ]
+  repository_dispatch:
+    types: [ publish ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    name: Build and Deploy
+    name: Deploy
     env:
       COCKPIT_API_URL: ${{secrets.COCKPIT_API_URL}}
       COCKPIT_BASE_URL: ${{secrets.COCKPIT_BASE_URL}}
