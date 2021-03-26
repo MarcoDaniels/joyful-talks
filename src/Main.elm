@@ -5,6 +5,7 @@ import Body.View exposing (bodyView)
 import Context exposing (Content, CookieConsent, CookieMsg(..), MetadataContext, Model, Msg(..), StaticRequest)
 import Element.Empty exposing (emptyNode)
 import Feed.Request exposing (requestFeed)
+import Generate.Robots exposing (robots)
 import Generate.Rss exposing (rss)
 import Generate.Sitemap exposing (sitemap)
 import Layout exposing (layoutView)
@@ -48,6 +49,7 @@ main =
                 StaticHttp.succeed
                     [ Ok { path = [ "rss.xml" ], content = rss metadata }
                     , Ok { path = [ "sitemap.xml" ], content = sitemap metadata }
+                    , Ok { path = [ "robots.txt" ], content = robots metadata }
                     ]
             )
         |> Pages.Platform.toProgram
