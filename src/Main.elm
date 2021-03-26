@@ -97,8 +97,8 @@ subscriptions =
 
 
 view : MetadataContext -> StaticHttp.Request StaticRequest
-view metadataContext =
-    case metadataContext.frontmatter.metadata of
+view { frontmatter, path } =
+    case frontmatter.metadata of
         MetadataBase base ->
             case base.feed of
                 Just filterFeed ->
@@ -111,9 +111,9 @@ view metadataContext =
                                         , body =
                                             Just feed
                                                 |> bodyView data
-                                                |> layoutView metadataContext.path model settings
+                                                |> layoutView path model settings
                                         }
-                                , head = headSEO base.title base.description
+                                , head = headSEO ( base.title, base.description ) frontmatter.site
                                 }
                             )
 
@@ -125,22 +125,26 @@ view metadataContext =
                                 , body =
                                     Nothing
                                         |> bodyView data
-                                        |> layoutView metadataContext.path model settings
+                                        |> layoutView path model settings
                                 }
-                        , head = headSEO base.title base.description
+                        , head = headSEO ( base.title, base.description ) frontmatter.site
                         }
 
         MetadataPost post ->
+            let
+                buildTitle =
+                    frontmatter.site.titlePrefix ++ post.title
+            in
             StaticHttp.succeed
                 { view =
                     \model { data, settings } ->
-                        { title = post.title
+                        { title = buildTitle
                         , body =
                             Nothing
                                 |> bodyView data
-                                |> layoutView metadataContext.path model settings
+                                |> layoutView path model settings
                         }
-                , head = headSEO post.title post.description
+                , head = headSEO ( buildTitle, post.description ) frontmatter.site
                 }
 
         MetadataUnknown ->

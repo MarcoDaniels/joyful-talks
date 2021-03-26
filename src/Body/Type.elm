@@ -1,6 +1,6 @@
 module Body.Type exposing (..)
 
-import Shared.Type exposing (AssetPath, Field, Link)
+import Shared.Type exposing (AssetPath, Field, Link, SiteSettings)
 import Time exposing (Posix)
 
 
@@ -88,17 +88,10 @@ type alias Navigation =
     }
 
 
-type alias Site =
-    { title : String
-    , description : String
-    , baseURL : String
-    }
-
-
 type alias Settings =
     { navigation : Navigation
     , footer : Footer
     , cookie : CookieBanner
-    , site : Site
+    , site : SiteSettings
     }
 

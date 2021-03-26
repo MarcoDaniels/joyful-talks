@@ -16,6 +16,6 @@ layoutView path model settings bodyContent =
     div [ id "app" ]
         [ headerView path settings.navigation model.menuExpand
         , bodyContent
-        , cookieView model.cookieConsent settings.cookie
         , footerView settings.footer
+        , cookieView model.cookieConsent settings.cookie
         ]

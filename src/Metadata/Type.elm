@@ -1,5 +1,7 @@
 module Metadata.Type exposing (..)
 
+import Shared.Type exposing (SiteSettings)
+
 
 type alias BasePageMeta =
     { title : String
@@ -21,4 +23,4 @@ type Metadata
 
 
 type alias PageMetadata =
-    { collection : String, metadata : Metadata }
+    { collection : String, metadata : Metadata, site : SiteSettings }
