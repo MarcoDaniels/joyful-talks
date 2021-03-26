@@ -1,12 +1,22 @@
 @font-face {
-  font-family: "Dancing Script";
+  font-family: 'Dancing Script';
   src: url('./fonts/DancingScript.ttf');
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Raleway";
-  src: url('./fonts/Raleway.ttf');
+  font-family: 'Raleway';
+  src: url('./fonts/Raleway-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Raleway';
+  src: url('./fonts/Raleway-Light.ttf');
+  font-weight: 300;
+  font-style: normal;
   font-display: swap;
 }
 
@@ -20,6 +30,16 @@ h1, h2, h3, h4, h5 {
   margin-block-end: unset;
 }
 
+h1 {
+  @extend .font-xl;
+  margin: 10px 0;
+}
+
+p {
+  @extend .font-m;
+  font-weight: 300;
+}
+
 .font {
   &-s {
     font-size: 12px;
@@ -30,7 +50,7 @@ h1, h2, h3, h4, h5 {
   }
 
   &-l {
-    font-size: 30px;
+    font-size: 26px;
   }
 
   &-xl {

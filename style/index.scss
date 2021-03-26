@@ -15,6 +15,15 @@
   @include extra-large {
     padding: 0 15px;
   }
+
+  &-s {
+    max-width: 800px;
+    margin: 0 auto;
+
+    @include extra-large {
+      padding: 0 15px;
+    }
+  }
 }
 
 #app {

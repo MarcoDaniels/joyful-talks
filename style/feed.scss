@@ -15,7 +15,8 @@ $minHeight: 100px;
   }
 
   @include small {
-    grid-template-columns: repeat(1, 1fr);
+    display: flex;
+    flex-direction: column;
   }
 
   > a {
