@@ -14,6 +14,7 @@ import Metadata.Decoder exposing (metadataDecoder)
 import Metadata.Type exposing (Metadata(..), PageMetadata)
 import OptimizedDecoder exposing (decoder, errorToString)
 import Pages exposing (PathKey, internals)
+import Pages.PagePath as PagePath
 import Pages.Platform exposing (Builder, Program)
 import Pages.StaticHttp as StaticHttp
 import SEO exposing (headSEO)
@@ -24,7 +25,7 @@ main =
     Pages.Platform.init
         { init = \_ -> init
         , view = \_ -> view
-        , update = updateWithPort
+        , update = update
         , subscriptions = \_ _ _ -> subscriptions
         , documents =
             [ { extension = "md"
@@ -41,7 +42,7 @@ main =
             ]
         , manifest = manifest
         , canonicalSiteUrl = "https://joyfultalks.com"
-        , onPageChange = Nothing
+        , onPageChange = Just OnPageChange
         , internals = internals
         }
         |> Pages.Platform.withFileGenerator
@@ -66,13 +67,7 @@ port cookieState : (CookieConsent -> msg) -> Sub msg
 port cookieAccept : CookieConsent -> Cmd msg
 
 
-updateWithPort : Msg -> Model -> ( Model, Cmd Msg )
-updateWithPort msg model =
-    let
-        ( newModel, cmd ) =
-            update msg model
-    in
-    ( newModel, Cmd.batch [ cookieAccept newModel.cookieConsent, cmd ] )
+port pageChange : String -> Cmd msg
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -84,10 +79,13 @@ update msg model =
                     ( { model | cookieConsent = state }, Cmd.none )
 
                 CookieAccept ->
-                    ( { model | cookieConsent = { accept = True } }, Cmd.none )
+                    ( { model | cookieConsent = { accept = True } }, cookieAccept { accept = True } )
 
         MenuExpand expand ->
             ( { model | menuExpand = expand }, Cmd.none )
+
+        OnPageChange page ->
+            ( model, pageChange ("/" ++ PagePath.toString page.path) )
 
         NoOp _ ->
             ( model, Cmd.none )
