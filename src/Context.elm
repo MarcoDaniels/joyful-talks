@@ -13,10 +13,19 @@ type CookieMsg
     | CookieAccept
 
 
+type alias PageChange =
+    { path : PagePath Pages.PathKey
+    , query : Maybe String
+    , fragment : Maybe String
+    , metadata : PageMetadata
+    }
+
+
 type Msg
     = NoOp (Html ())
     | Cookie CookieMsg
     | MenuExpand Bool
+    | OnPageChange PageChange
 
 
 type alias Element =
