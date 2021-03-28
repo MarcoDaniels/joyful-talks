@@ -3,6 +3,7 @@ module Element.Asset exposing (AssetDefaultType(..), AssetType(..), assetView)
 import Context exposing (Element)
 import Html exposing (img, node, source)
 import Html.Attributes exposing (alt, attribute, class, media, src)
+import Image exposing (imageAPI)
 
 
 type alias DeviceSizes =
@@ -80,13 +81,3 @@ imageWithSizes asset sizes className =
             []
         , img [ src (imageAPI asset.src Nothing), alt asset.alt, attribute "loading" "lazy" ] []
         ]
-
-
-imageAPI : String -> Maybe Int -> String
-imageAPI src maybeDevice =
-    case maybeDevice of
-        Just device ->
-            "/image/api" ++ src ++ "?w=" ++ String.fromInt device ++ "&o=1&q=60 " ++ String.fromInt device ++ "w"
-
-        Nothing ->
-            "/image/api" ++ src ++ "?w=1200&o=1&q=60"

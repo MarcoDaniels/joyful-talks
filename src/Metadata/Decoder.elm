@@ -21,6 +21,7 @@ metadataDecoder =
                                         (succeed BasePageMeta
                                             |> required "title" string
                                             |> required "description" string
+                                            |> required "image" (maybe string)
                                             |> required "feed" (maybe (list string))
                                         )
 
@@ -30,6 +31,7 @@ metadataDecoder =
                                         (succeed PostPageMeta
                                             |> required "title" string
                                             |> required "description" string
+                                            |> required "image" (maybe string)
                                         )
 
                             _ ->
