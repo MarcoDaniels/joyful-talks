@@ -1,18 +1,34 @@
-module SEO exposing (headSEO)
+module SEO exposing (SEO, headSEO)
 
 import Head
 import Head.Seo as Seo
+import Image exposing (imageAPI)
 import Pages exposing (images)
+import Pages.ImagePath as ImagePath
+import Pages.PagePath exposing (PagePath)
 import Shared.Type exposing (SiteSettings)
 
 
-headSEO : ( String, String ) -> SiteSettings -> List (Head.Tag Pages.PathKey)
-headSEO ( title, description ) settings =
+type alias SEO =
+    { title : String
+    , description : String
+    , image : Maybe String
+    }
+
+
+headSEO : SEO -> PagePath Pages.PathKey -> SiteSettings -> List (Head.Tag Pages.PathKey)
+headSEO { title, description, image } path settings =
     Seo.summary
-        { canonicalUrlOverride = Nothing
+        { canonicalUrlOverride = Just path
         , siteName = settings.title
         , image =
-            { url = images.iconPng
+            { url =
+                case image of
+                    Just img ->
+                        ImagePath.external (settings.baseURL ++ imageAPI img Nothing)
+
+                    Nothing ->
+                        images.iconPng
             , alt = title
             , dimensions = Nothing
             , mimeType = Nothing

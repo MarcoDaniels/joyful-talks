@@ -6,6 +6,7 @@ import Shared.Type exposing (SiteSettings)
 type alias BasePageMeta =
     { title : String
     , description : String
+    , image : Maybe String
     , feed : Maybe (List String)
     }
 
@@ -13,6 +14,7 @@ type alias BasePageMeta =
 type alias PostPageMeta =
     { title : String
     , description : String
+    , image: Maybe String
     }
 
 

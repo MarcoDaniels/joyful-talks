@@ -8,6 +8,7 @@ type Entry = {
     url: string
     title: string
     description: string
+    image?: { path: string }
     postsFeed?: unknown
 }
 
@@ -65,6 +66,7 @@ const syncContent = async ({cockpitAPIURL, cockpitAPIToken}: Config) => {
                 meta: {
                     title: entry.title,
                     description: entry.description,
+                    image: entry.image ? entry.image.path : null,
                     feed: entry.postsFeed || null,
                 },
                 site: meta!.site
