@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>joyful talks preview</title>
+</head>
+<body>
+<div id="preview"></div>
+<script src="dist/preview.js"></script>
+<script type="text/javascript">
+    const app = Elm.Preview.init({
+        node: document.getElementById('preview')
+    })
+
+    window.addEventListener('message', function (event) {
+        console.log('collection: ', event.data.collection)
+        console.log('entry: ', event.data.entry)
+
+        app.ports.updateTitle.send(event.data.entry.title)
+    })
+</script>
+</body>
+</html>
