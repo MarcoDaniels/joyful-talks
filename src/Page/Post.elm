@@ -22,8 +22,8 @@ postDecoder =
         |> required "title" string
         |> required "description" string
         |> required "url" string
-        |> required "image" assetDecoder
-        |> required "content" (list contentFieldValueDecoder)
+        |> required "image" (maybe assetDecoder)
+        |> required "content" (maybe (list contentFieldValueDecoder))
         |> required "writtenBy"
             (succeed Written
                 |> required "name" string
@@ -47,34 +47,39 @@ postView post =
     div [ class "post" ]
         (List.concat
             [ List.singleton (h1 [] [ text post.title ])
-            , post.content
-                |> List.map
-                    (\content ->
-                        case content.value of
-                            ContentValueMarkdown markdown ->
-                                markdownView markdown
+            , case post.content of
+                Just postContent ->
+                    postContent
+                        |> List.map
+                            (\content ->
+                                case content.value of
+                                    ContentValueMarkdown markdown ->
+                                        markdownView markdown
 
-                            ContentValueAsset image ->
-                                assetView { src = image.path, alt = image.title }
-                                    (ternary (image.width >= image.height)
-                                        (AssetDefault AssetDefaultLandscape)
-                                        (AssetDefault AssetDefaultPortrait)
-                                    )
+                                    ContentValueAsset image ->
+                                        assetView { src = image.path, alt = image.title }
+                                            (ternary (image.width >= image.height)
+                                                (AssetDefault AssetDefaultLandscape)
+                                                (AssetDefault AssetDefaultPortrait)
+                                            )
 
-                            ContentValueRow rowItems ->
-                                rowView rowItems
+                                    ContentValueRow rowItems ->
+                                        rowView rowItems
 
-                            ContentValueIframe frame ->
-                                iframe
-                                    [ src frame.source
-                                    , title frame.title
-                                    , class ("post-frame-" ++ frame.ratio)
-                                    ]
-                                    []
+                                    ContentValueIframe frame ->
+                                        iframe
+                                            [ src frame.source
+                                            , title frame.title
+                                            , class ("post-frame-" ++ frame.ratio)
+                                            ]
+                                            []
 
-                            _ ->
-                                emptyNode
-                    )
+                                    _ ->
+                                        emptyNode
+                            )
+
+                Nothing ->
+                    [ emptyNode ]
             , [ div [ class "post-info font-m" ]
                     [ div []
                         [ span [] [ text "written by " ]

@@ -1,10 +1,17 @@
-port module Preview exposing (..)
+port module Preview exposing (main)
 
+import Body.Type exposing (BodyData(..))
 import Browser
-import Html exposing (..)
+import Context exposing (Element, Msg(..))
+import Html exposing (div, text)
+import Html.Attributes exposing (id)
+import OptimizedDecoder exposing (Error, andThen, decodeString, field, string, succeed)
+import OptimizedDecoder.Pipeline exposing (custom, required)
+import Page.Base exposing (baseDecoder, baseView)
+import Page.Post exposing (postDecoder, postView)
 
 
-main : Program () Model Msg
+main : Program () PreviewModel Msg
 main =
     Browser.element
         { init = init
@@ -14,34 +21,76 @@ main =
         }
 
 
-port updateTitle : (String -> msg) -> Sub msg
+port updatePayload : (String -> msg) -> Sub msg
 
 
-type alias Model =
-    { name : String }
+type alias PreviewModel =
+    { collection : String, data : BodyData }
 
 
-type Msg
-    = UpdateTitle String
-
-
-init : () -> ( Model, Cmd Msg )
+init : () -> ( PreviewModel, Cmd Msg )
 init _ =
-    ( { name = "no title" }, Cmd.none )
+    ( { collection = "noContext", data = BodyDataUnknown }, Cmd.none )
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
+payloadDecoder : String -> Result Error PreviewModel
+payloadDecoder input =
+    decodeString
+        (succeed PreviewModel
+            |> required "collection" string
+            |> custom
+                (field "collection" string
+                    |> andThen
+                        (\collection ->
+                            case collection of
+                                "joyfulPage" ->
+                                    succeed BodyDataBase
+                                        |> required "data" baseDecoder
+
+                                "joyfulPost" ->
+                                    succeed BodyDataPost
+                                        |> required "data" postDecoder
+
+                                _ ->
+                                    succeed BodyDataUnknown
+                        )
+                )
+        )
+        input
+
+
+update : Msg -> PreviewModel -> ( PreviewModel, Cmd Msg )
 update msg model =
     case msg of
-        UpdateTitle newTitle ->
-            ( { model | name = newTitle }, Cmd.none )
+        OnPreviewUpdate payload ->
+            ( case payloadDecoder payload of
+                Ok content ->
+                    content
+
+                Err _ ->
+                    { collection = "noContext", data = BodyDataUnknown }
+            , Cmd.none
+            )
+
+        _ ->
+            ( model, Cmd.none )
 
 
-subscriptions : Model -> Sub Msg
+subscriptions : PreviewModel -> Sub Msg
 subscriptions _ =
-    updateTitle UpdateTitle
+    updatePayload OnPreviewUpdate
 
 
-view : Model -> Html Msg
-view model =
-    div [] [ text model.name ]
+view : PreviewModel -> Element
+view { data } =
+    div [ id "app" ]
+        [ case data of
+            BodyDataBase base ->
+                baseView base
+
+            BodyDataPost post ->
+                postView post
+
+            _ ->
+                text "TODO: display err"
+        ]

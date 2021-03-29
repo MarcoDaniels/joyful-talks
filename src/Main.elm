@@ -85,7 +85,7 @@ update msg model =
         OnPageChange page ->
             ( model, pageChange ("/" ++ PagePath.toString page.path) )
 
-        NoOp _ ->
+        _ ->
             ( model, Cmd.none )
 
 

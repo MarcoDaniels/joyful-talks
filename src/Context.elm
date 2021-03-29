@@ -26,6 +26,7 @@ type Msg
     | Cookie CookieMsg
     | MenuExpand Bool
     | OnPageChange PageChange
+    | OnPreviewUpdate String
 
 
 type alias Element =
