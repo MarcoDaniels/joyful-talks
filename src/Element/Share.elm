@@ -45,7 +45,13 @@ shareView post =
                     ("http://pinterest.com/pin/create/button/?url="
                         ++ post.url
                         ++ "&media="
-                        ++ post.asset.path
+                        ++ (case post.asset of
+                                Just asset ->
+                                    asset.path
+
+                                Nothing ->
+                                    ""
+                           )
                         ++ "&description="
                         ++ post.description
                     )

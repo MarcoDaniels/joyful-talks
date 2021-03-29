@@ -59,8 +59,8 @@ type alias PostPage =
     { title : String
     , description : String
     , url : String
-    , asset : AssetPath
-    , content : List ContentFieldValue
+    , asset : Maybe AssetPath
+    , content : Maybe (List ContentFieldValue)
     , written : Written
     , published : Maybe Posix
     , related : Maybe (List RelatedItem)
@@ -94,4 +94,3 @@ type alias Settings =
     , cookie : CookieBanner
     , site : SiteSettings
     }
-

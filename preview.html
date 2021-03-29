@@ -1,22 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8"/>
     <title>joyful talks preview</title>
+    <link rel="stylesheet" type="text/css" href="dist/style.css">
 </head>
 <body>
 <div id="preview"></div>
 <script src="dist/preview.js"></script>
 <script type="text/javascript">
+    // TODO: figure out build preview
+    // TODO: figure out images
+    // TODO: figure out fonts
+
     const app = Elm.Preview.init({
         node: document.getElementById('preview')
     })
 
     window.addEventListener('message', function (event) {
-        console.log('collection: ', event.data.collection)
-        console.log('entry: ', event.data.entry)
+        const payload = {
+            collection: event.data.collection,
+            data: event.data.entry
+        }
+        console.log(payload)
 
-        app.ports.updateTitle.send(event.data.entry.title)
+        app.ports.updatePayload.send(JSON.stringify(payload))
     })
 </script>
 </body>
