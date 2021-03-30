@@ -6,7 +6,7 @@ import OptimizedDecoder exposing (Decoder, Error, andThen, decodeString, field, 
 import OptimizedDecoder.Pipeline exposing (custom, required)
 import Page.Base exposing (baseDecoder)
 import Page.Post exposing (postDecoder)
-import Shared.Decoder exposing (linkDecoder, linkValueDecoder, siteSettingsDecoder)
+import Shared.Decoder exposing (linkDecoder, linkValueDecoder)
 
 
 settingsDecoder : Decoder Settings
@@ -28,7 +28,6 @@ settingsDecoder =
                 |> required "title" string
                 |> required "content" string
             )
-        |> required "site" siteSettingsDecoder
 
 
 bodyDecoder : String -> Result Error Content

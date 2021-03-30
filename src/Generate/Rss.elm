@@ -7,8 +7,38 @@ import Dict
 import Generate.Shared exposing (formatDateRss, keyStringXML, withCDATA)
 import Pages exposing (images)
 import Pages.ImagePath as ImagePath
-import Shared.Ternary exposing (ternary)
+import Settings exposing (settings)
+import Xml
 import Xml.Encode exposing (list, null, object, string)
+
+
+channelInfo : List Xml.Value
+channelInfo =
+    [ keyStringXML "title" settings.title
+    , keyStringXML "link" (withCDATA settings.baseURL)
+    , keyStringXML "description" settings.description
+    , object
+        [ ( "atom:link"
+          , Dict.fromList
+                [ ( "href", string (settings.baseURL ++ "/rss") )
+                , ( "rel", string "self" )
+                ]
+          , null
+          )
+        ]
+    , object
+        [ ( "image"
+          , Dict.empty
+          , list
+                [ keyStringXML "url" (settings.baseURL ++ "/" ++ ImagePath.toString images.iconPng)
+                , keyStringXML "title" settings.title
+                , keyStringXML "link" settings.baseURL
+                ]
+          )
+        ]
+    , keyStringXML "language" "en"
+    , keyStringXML "lastBuildDate" (formatDateRss Pages.builtAt)
+    ]
 
 
 rss : MetadataGenerate -> String
@@ -24,60 +54,31 @@ rss metadata =
           , object
                 [ ( "channel"
                   , Dict.empty
-                  , metadata
+                  , [ [ channelInfo ]
+                    , metadata
                         |> List.map
                             (\item ->
                                 case bodyDecoder item.body of
                                     Ok content ->
                                         case content.data of
-                                            BodyDataBase bodyBase ->
-                                                -- create base channel only for landing page
-                                                ternary (bodyBase.url == "/")
-                                                    [ keyStringXML "title" content.settings.site.title
-                                                    , keyStringXML "link" (withCDATA content.settings.site.baseURL)
-                                                    , keyStringXML "description" content.settings.site.description
-                                                    , object
-                                                        [ ( "atom:link"
-                                                          , Dict.fromList
-                                                                [ ( "href", string (content.settings.site.baseURL ++ "/rss") )
-                                                                , ( "rel", string "self" )
-                                                                ]
-                                                          , null
-                                                          )
-                                                        ]
-                                                    , object
-                                                        [ ( "image"
-                                                          , Dict.empty
-                                                          , list
-                                                                [ keyStringXML "url" (content.settings.site.baseURL ++ "/" ++ ImagePath.toString images.iconPng)
-                                                                , keyStringXML "title" content.settings.site.title
-                                                                , keyStringXML "link" content.settings.site.baseURL
-                                                                ]
-                                                          )
-                                                        ]
-                                                    , keyStringXML "language" "en"
-                                                    , keyStringXML "lastBuildDate" (formatDateRss Pages.builtAt)
-                                                    ]
-                                                    [ null ]
-
                                             BodyDataPost bodyPost ->
                                                 [ object
                                                     [ ( "item"
                                                       , Dict.empty
                                                       , list
                                                             [ keyStringXML "title" bodyPost.title
-                                                            , keyStringXML "link" (content.settings.site.baseURL ++ bodyPost.url)
+                                                            , keyStringXML "link" (settings.baseURL ++ bodyPost.url)
                                                             , object
                                                                 [ ( "guid"
                                                                   , Dict.singleton "isPermaLink" (string "true")
-                                                                  , string (content.settings.site.baseURL ++ bodyPost.url)
+                                                                  , string (settings.baseURL ++ bodyPost.url)
                                                                   )
                                                                 ]
                                                             , keyStringXML "description" (withCDATA bodyPost.description)
                                                             , object
                                                                 [ ( "dc:creator"
                                                                   , Dict.singleton "xmlns:dc" (string "http://purl.org/dc/elements/1.1/")
-                                                                  , string content.settings.site.title
+                                                                  , string settings.title
                                                                   )
                                                                 ]
                                                             , case bodyPost.published of
@@ -97,6 +98,8 @@ rss metadata =
                                     Err _ ->
                                         [ null ]
                             )
+                    ]
+                        |> List.concat
                         |> List.concat
                         |> list
                   )

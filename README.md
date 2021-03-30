@@ -1,8 +1,8 @@
 # joyful talks
 
-work in progress _migration_ of [joyfultalks](https://joyfultalks.com/)
+> joyful talks is a blog about people and all the rest
 
-## Specs
 
-- [Cockpit CMS](https://getcockpit.com/) for content creation.
-- [elm-pages](https://elm-pages.com/) for static site generation.
+[joyful talks](https://joyfultalks.com) uses [Cockpit CMS](https://getcockpit.com/) for content creation, and [elm-pages](https://elm-pages.com/) for static site generation.
+
+All website content is managed by [Živilė Petronytė](https://joyfultalks.com/about)
