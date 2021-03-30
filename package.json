@@ -15,11 +15,11 @@
     "clean": "rm -rf dist",
     "test": "elm-test",
     "preview:copy": "cp -R ___preview dist",
-    "preview:style": "node-sass style/index.scss dist/___preview/preview.css && cp -R style/fonts dist/___preview/",
-    "preview:dev": "elm-live src/Preview.elm --port=3000 --dir=dist --start-page=dist/___preview/index.html -- --output=dist/___preview/preview.js",
+    "preview:style": "node-sass style/index.scss dist/preview.css && cp -R style/fonts dist/",
+    "preview:dev": "elm-live src/Preview.elm --port=3000 --dir=dist --start-page=dist/___preview/index.html -- --output=dist/preview.js",
     "preview:live": "yarn preview:style && yarn preview:copy && yarn preview:dev",
     "preview:start": "npm-run-all --parallel preview:live start:assets",
-    "preview:build": "yarn preview:style && yarn preview:copy && elm make src/Preview.elm --optimize --output=dist/___preview/preview.js",
+    "preview:build": "yarn preview:style && yarn preview:copy && elm make src/Preview.elm --optimize --output=dist/preview.js",
     "postinstall": "elm-tooling install"
   },
   "dependencies": {
