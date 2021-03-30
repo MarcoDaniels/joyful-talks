@@ -14,6 +14,7 @@ robots metadata =
                             ++ item.frontmatter.site.baseURL
                             ++ "/sitemap.xml"
                         , "Host: " ++ item.frontmatter.site.baseURL
+                        , "Disallow: /___preview"
                         ]
                             |> String.join "\n"
 

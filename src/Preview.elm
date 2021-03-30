@@ -3,8 +3,8 @@ port module Preview exposing (main)
 import Body.Type exposing (BodyData(..))
 import Browser
 import Context exposing (Element, Msg(..))
-import Html exposing (div, text)
-import Html.Attributes exposing (id)
+import Html exposing (div, em, h1, p, text)
+import Html.Attributes exposing (class, id)
 import OptimizedDecoder exposing (Error, andThen, decodeString, field, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, required)
 import Page.Base exposing (baseDecoder, baseView)
@@ -92,5 +92,10 @@ view { data } =
                 postView post
 
             _ ->
-                text "TODO: display err"
+                div [ class "center" ]
+                    [ h1 [] [ text "Oops!" ]
+                    , em [] [ text "it seems that you're trying to use the preview page" ]
+                    , em [] [ text "but it only works within the CMS context" ]
+                    , p [] [ text "if this is an issue, please contact your webmaster" ]
+                    ]
         ]

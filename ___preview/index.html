@@ -3,28 +3,22 @@
 <head>
     <meta charset="utf-8"/>
     <title>joyful talks preview</title>
-    <link rel="stylesheet" type="text/css" href="dist/style.css">
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel="stylesheet" type="text/css" href="./preview.css">
 </head>
 <body>
 <div id="preview"></div>
-<script src="dist/preview.js"></script>
+<script src="./preview.js"></script>
 <script type="text/javascript">
-    // TODO: figure out build preview
-    // TODO: figure out images
-    // TODO: figure out fonts
-
     const app = Elm.Preview.init({
         node: document.getElementById('preview')
     })
 
     window.addEventListener('message', function (event) {
-        const payload = {
+        app.ports.updatePayload.send(JSON.stringify({
             collection: event.data.collection,
             data: event.data.entry
-        }
-        console.log(payload)
-
-        app.ports.updatePayload.send(JSON.stringify(payload))
+        }))
     })
 </script>
 </body>
