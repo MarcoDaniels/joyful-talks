@@ -59,24 +59,14 @@ type Settings = {
 }
 
 const createElmSettings = (data: Settings) => {
-    const content = `module Settings exposing (settings, SiteSettings)
+    const module = `modules/Settings.elm`
+    const content = `module Settings exposing (..)
 
-type alias SiteSettings =
-    { title : String
-    , titlePrefix : String
-    , description : String
-    , baseURL : String
-    }
 
-settings : SiteSettings
 settings =
-    { title = "${data.title}"
-    , titlePrefix = "${data.titlePrefix}"
-    , description = "${data.description}"
-    , baseURL = "${data.baseURL}"
+    { ${Object.entries(data).map(([key, value]) => `${key} = "${value}"`).join('\n    , ')}
     }
 `
-    const module = `modules/Settings.elm`
 
     fs.mkdir(path.dirname(module), {recursive: true}, (err) => {
         if (err) return
