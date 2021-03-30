@@ -5,6 +5,7 @@ import Body.Type exposing (BodyData(..))
 import Context exposing (MetadataGenerate, StaticRequestGenerate)
 import Dict
 import Generate.Shared exposing (keyStringXML)
+import Settings exposing (settings)
 import Shared.Ternary exposing (ternary)
 import Xml as XML
 import Xml.Encode exposing (list, null, object, string)
@@ -38,11 +39,11 @@ sitemap metadata =
                                     BodyDataBase bodyBase ->
                                         -- only include pages with /about and index in sitemap
                                         ternary (String.contains "/about" bodyBase.url || bodyBase.url == "/")
-                                            (sitemapItem (content.settings.site.baseURL ++ bodyBase.url) "0.9")
+                                            (sitemapItem (settings.baseURL ++ bodyBase.url) "0.9")
                                             null
 
                                     BodyDataPost bodyPost ->
-                                        sitemapItem (content.settings.site.baseURL ++ bodyPost.url) "0.7"
+                                        sitemapItem (settings.baseURL ++ bodyPost.url) "0.7"
 
                                     _ ->
                                         null

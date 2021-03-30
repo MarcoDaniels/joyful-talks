@@ -10,6 +10,7 @@
     "start": "npm-run-all --parallel start:elm start:assets",
     "serve": "COCKPIT_MODE=serve ts-node utils/serve.ts",
     "build": "elm-pages build && yarn preview:build",
+    "build:pages": "elm-pages build",
     "deploy:build": "ts-node utils/deploy.ts",
     "deploy": "yarn sync && yarn build && yarn deploy:build",
     "clean": "rm -rf dist",
