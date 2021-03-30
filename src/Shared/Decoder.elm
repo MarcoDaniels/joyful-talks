@@ -3,7 +3,8 @@ module Shared.Decoder exposing (assetDecoder, contentFieldValueDecoder, fieldDec
 import Body.Type exposing (ContentFieldValue, ContentValue(..), HeroContent, IframeContentField, RowContentField, RowContentValue(..))
 import OptimizedDecoder exposing (Decoder, andThen, field, int, list, maybe, string, succeed)
 import OptimizedDecoder.Pipeline exposing (custom, optional, required, requiredAt)
-import Shared.Type exposing (AssetPath, Field, Link, SiteSettings)
+import Settings exposing (SiteSettings)
+import Shared.Type exposing (AssetPath, Field, Link)
 
 
 fieldDecoder : Decoder Field

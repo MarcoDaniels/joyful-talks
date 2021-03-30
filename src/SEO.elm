@@ -6,7 +6,7 @@ import Image exposing (imageAPI)
 import Pages exposing (images)
 import Pages.ImagePath as ImagePath
 import Pages.PagePath exposing (PagePath)
-import Shared.Type exposing (SiteSettings)
+import Settings exposing (settings)
 
 
 type alias SEO =
@@ -16,8 +16,8 @@ type alias SEO =
     }
 
 
-headSEO : SEO -> PagePath Pages.PathKey -> SiteSettings -> List (Head.Tag Pages.PathKey)
-headSEO { title, description, image } path settings =
+headSEO : SEO -> PagePath Pages.PathKey -> List (Head.Tag Pages.PathKey)
+headSEO { title, description, image } path =
     Seo.summary
         { canonicalUrlOverride = Just path
         , siteName = settings.title

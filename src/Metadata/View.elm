@@ -6,6 +6,7 @@ import Feed.Type exposing (Feed)
 import Layout exposing (layoutView)
 import Metadata.Type exposing (BasePageMeta, PostPageMeta)
 import SEO exposing (SEO, headSEO)
+import Settings exposing (settings)
 
 
 baseViewMeta : MetadataContext -> BasePageMeta -> Maybe Feed -> StaticRequest
@@ -25,7 +26,6 @@ baseViewMeta meta base maybeFeed =
             , image = base.image
             }
             meta.path
-            meta.frontmatter.site
     }
 
 
@@ -33,7 +33,7 @@ postViewMeta : MetadataContext -> PostPageMeta -> StaticRequest
 postViewMeta meta post =
     let
         buildTitle =
-            meta.frontmatter.site.titlePrefix ++ post.title
+            settings.titlePrefix ++ post.title
     in
     { view =
         \model { data, settings } ->
@@ -50,5 +50,4 @@ postViewMeta meta post =
             , image = post.image
             }
             meta.path
-            meta.frontmatter.site
     }

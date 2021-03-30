@@ -16,11 +16,3 @@ type alias AssetPath =
 
 type alias Link =
     { text : String, url : String }
-
-
-type alias SiteSettings =
-    { title : String
-    , titlePrefix : String
-    , description : String
-    , baseURL : String
-    }
