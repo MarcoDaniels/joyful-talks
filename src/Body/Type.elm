@@ -1,6 +1,7 @@
 module Body.Type exposing (..)
 
-import Shared.Type exposing (AssetPath, Field, Link, SiteSettings)
+import Settings exposing (SiteSettings)
+import Shared.Type exposing (AssetPath, Field, Link)
 import Time exposing (Posix)
 
 

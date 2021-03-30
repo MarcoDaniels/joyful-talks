@@ -16,6 +16,7 @@ import Pages exposing (PathKey, internals)
 import Pages.PagePath as PagePath
 import Pages.Platform exposing (Builder, Program)
 import Pages.StaticHttp as StaticHttp
+import Settings exposing (settings)
 
 
 main : Pages.Platform.Program Model Msg PageMetadata Content Pages.PathKey
@@ -39,7 +40,7 @@ main =
               }
             ]
         , manifest = manifest
-        , canonicalSiteUrl = "https://joyfultalks.com"
+        , canonicalSiteUrl = settings.baseURL
         , onPageChange = Just OnPageChange
         , internals = internals
         }

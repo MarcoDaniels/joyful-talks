@@ -4,6 +4,7 @@ import Color
 import Pages exposing (images, pages)
 import Pages.Manifest as Manifest
 import Pages.Manifest.Category
+import Settings exposing (settings)
 
 
 manifest : Manifest.Config Pages.PathKey
@@ -12,12 +13,12 @@ manifest =
     , categories = [ Pages.Manifest.Category.lifestyle ]
     , displayMode = Manifest.Standalone
     , orientation = Manifest.Portrait
-    , description = "joyful talks about people and all the rest"
+    , description = settings.description
     , iarcRatingId = Nothing
-    , name = "joyful talks"
+    , name = settings.title
     , themeColor = Just Color.white
     , startUrl = pages.index
-    , shortName = Just "joyful talks"
+    , shortName = Just settings.title
     , sourceIcon = images.iconPng
     , icons = []
     }

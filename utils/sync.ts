@@ -28,7 +28,6 @@ type Singletons = {
 type Metadata = {
     collection: string
     meta: unknown
-    site: unknown
 }
 
 type Data = {
@@ -42,12 +41,46 @@ export type Config = {
     cockpitAPIToken: string
 }
 
-const createFile = (url: string, frontmatter: Metadata, data: Data) => {
+const createContentFile = (url: string, frontmatter: Metadata, data: Data) => {
     const fileContent = `${contentFolder}${url === '/' ? '/index.md' : url.slice(-1) === '/' ? `/${url.slice(0, -1)}.md` : `/${url}.md`}`
 
     fs.mkdir(path.dirname(fileContent), {recursive: true}, (err) => {
         if (err) return
         fs.writeFile(fileContent, `---\n${JSON.stringify(frontmatter, null, 2)}\n---\n${JSON.stringify(data, null, 2)}`, () => {
+        })
+    })
+}
+
+type Settings = {
+    title: string
+    titlePrefix: string
+    description: string
+    baseURL: string
+}
+
+const createElmSettings = (data: Settings) => {
+    const content = `module Settings exposing (settings, SiteSettings)
+
+type alias SiteSettings =
+    { title : String
+    , titlePrefix : String
+    , description : String
+    , baseURL : String
+    }
+
+settings : SiteSettings
+settings =
+    { title = "${data.title}"
+    , titlePrefix = "${data.titlePrefix}"
+    , description = "${data.description}"
+    , baseURL = "${data.baseURL}"
+    }
+`
+    const module = `modules/Settings.elm`
+
+    fs.mkdir(path.dirname(module), {recursive: true}, (err) => {
+        if (err) return
+        fs.writeFile(module, content, () => {
         })
     })
 }
@@ -60,16 +93,17 @@ const syncContent = async ({cockpitAPIURL, cockpitAPIToken}: Config) => {
     if (sync.collections && sync.singletons) {
         const [meta] = Object.values(sync.singletons)
 
+        if (meta) createElmSettings(meta.site as Settings)
+
         Object.entries(sync.collections).map(([collection, data]) => {
-            data.entries.map(entry => createFile(entry.url, {
+            data.entries.map(entry => createContentFile(entry.url, {
                 collection: collection,
                 meta: {
                     title: entry.title,
                     description: entry.description,
                     image: entry.image ? entry.image.path : null,
                     feed: entry.postsFeed || null,
-                },
-                site: meta!.site
+                }
             }, {collection: collection, data: entry, settings: meta}))
         })
     }
