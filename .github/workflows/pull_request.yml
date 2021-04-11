@@ -17,7 +17,11 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14
-      - run: yarn --frozen-lockfile
-      - run: yarn sync
-      - run: yarn build
-      - run: yarn test
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile
+      - name: Sync Content
+        run: yarn sync
+      - name: Build Application
+        run: yarn build
+      - name: Run Tests
+        run: yarn test
