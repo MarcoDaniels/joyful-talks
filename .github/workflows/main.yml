@@ -23,8 +23,13 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14
-      - run: yarn --frozen-lockfile
-      - run: yarn sync
-      - run: yarn build
-      - run: aws s3 sync ./dist s3://${{secrets.AWS_S3_BUCKET}}
-      - run: aws cloudfront create-invalidation --distribution-id ${{secrets.AWS_DISTRIBUTION_ID}} --paths "/main.js"
+      - name: Install Dependencies
+        run: yarn --frozen-lockfile
+      - name: Sync Content
+        run: yarn sync
+      - name: Build Application
+        run: yarn build
+      - name: Sync Build
+        run: aws s3 sync ./dist s3://${{secrets.AWS_S3_BUCKET}}
+      - name: Invalidate Cache
+        run: aws cloudfront create-invalidation --distribution-id ${{secrets.AWS_DISTRIBUTION_ID}} --paths "/main.js"
