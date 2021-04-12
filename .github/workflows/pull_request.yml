@@ -19,7 +19,7 @@ jobs:
           path: |
             **/node_modules
             ~/.elm
-          key: modules-${{ hashFiles('**/package.json') }}-${{ hashFiles('**/elm.json') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package.json', '**/elm.json') }}
       - uses: actions/setup-node@v1
         with:
           node-version: 14
