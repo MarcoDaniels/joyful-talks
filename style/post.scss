@@ -6,16 +6,12 @@
   margin: 0 auto;
   padding: 0 15px;
 
-  p {
+  p, em, ul {
     @extend .font-m;
   }
 
   h2 {
     @extend .font-l;
-  }
-
-  em {
-    @extend .font-s;
   }
 
   > *:not(h1) {
