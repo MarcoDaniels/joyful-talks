@@ -7,6 +7,7 @@ import Feed.Request exposing (requestFeed)
 import Generate.Robots exposing (robots)
 import Generate.Rss exposing (rss)
 import Generate.Sitemap exposing (sitemap)
+import Head
 import Manifest exposing (manifest)
 import Metadata.Decoder exposing (metadataDecoder)
 import Metadata.Type exposing (Metadata(..), PageMetadata)
@@ -44,6 +45,7 @@ main =
         , onPageChange = Just OnPageChange
         , internals = internals
         }
+        |> Pages.Platform.withGlobalHeadTags [ Head.metaProperty "fb:app_id" (Head.raw "1741501822731940") ]
         |> Pages.Platform.withFileGenerator
             (\metadata ->
                 StaticHttp.succeed
